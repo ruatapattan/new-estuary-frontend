@@ -19,6 +19,10 @@ html {
 	flex-direction: column;
 }
 
+a {
+	text-decoration: none;
+}
+
 /* overlap */
 
 .carouselBox {
@@ -27,7 +31,7 @@ html {
 	display: flex;
 	justify-content: center;
 	height: 70vh;
-	outline: 2px solid deepskyblue;
+	/* outline: 2px solid deepskyblue; */
 	display: flex;
 	justify-content: center;
 	/* text-align: center; */
@@ -60,7 +64,7 @@ html {
 	transition: transform 300ms;
 	z-index: -10;
 	opacity: 0.5;
-	border: 1px dashed deeppink;
+	/* border: 1px dashed deeppink; */
 }
 
 .activeSlide {
@@ -84,7 +88,7 @@ html {
 	justify-content: center;
 	align-items: center;
 
-	border: 1px salmon dashed;
+	/* border: 1px salmon dashed; */
 	/* display: grid; */
 	/* place-items: center; */
 	/* width: 90%; */
@@ -108,7 +112,7 @@ html {
 .expSlider {
 	width: 500px;
 	height: 500px;
-	border: 1px navy solid;
+	/* border: 1px navy solid; */
 
 	display: flex !important;
 	align-items: center;
