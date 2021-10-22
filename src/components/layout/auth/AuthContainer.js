@@ -1,4 +1,5 @@
 import { Box } from "@mui/system";
+import SideBar from "../sidebar/SideBarL";
 import AuthContent from "./AuthContent";
 
 function AuthContainer({ pageType }) {

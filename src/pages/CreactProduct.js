@@ -1,9 +1,9 @@
 import React from "react";
+
 import { Box } from "@mui/system";
 import Banner from "../components/layout/profile/Banner";
-import ProfileContainer from "../components/layout/profile/ProfileContainer";
-
-function Profile() {
+import CreactProductContainer from "../components/layout/product/CreactProductContainer";
+function CreactProduct() {
   return (
     <>
       <Box
@@ -14,10 +14,10 @@ function Profile() {
         width="100%"
       >
         <Banner />
-        <ProfileContainer />
+        <CreactProductContainer />
       </Box>
     </>
   );
 }
 
-export default Profile;
+export default CreactProduct;
