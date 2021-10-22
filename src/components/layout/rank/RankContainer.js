@@ -22,13 +22,14 @@ function RankContainer() {
         backgroundColor: '#EFF1F3'
       }}
     >
-      <Grid item sx={{ display: { md: 'flex', xs: 'none' } }}>
+      <Grid item sx={{ width: { md: '25%', lg: '18%' }, display: { md: 'flex', xs: 'none' } }}>
         <SideBarL />
       </Grid>
 
       <Box
         sx={{
-          border: '1px solid blue',
+          // border: '1px solid blue',
+          right: '0',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
