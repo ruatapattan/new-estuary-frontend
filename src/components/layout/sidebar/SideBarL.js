@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { styled } from "@mui/system";
 import { Button } from "@mui/material";
 
-const drawerWidth = "20vw";
+const drawerWidth = "240px";
 
 const StyledDrawer = styled(Drawer)`
 	& > div {
@@ -28,7 +28,7 @@ const StyledDrawer = styled(Drawer)`
 
 export default function SideBar() {
 	return (
-		<Box sx={{ display: "flex", zIndex: "1", marginRight: "500px" }} className="BoxBarrrrrr">
+		<Box sx={{ display: { sm: "none", md: "flex" }, zIndex: "1", marginRight: "500px" }} className="BoxBarrrrrr">
 			<CssBaseline />
 
 			<StyledDrawer
