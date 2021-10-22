@@ -5,11 +5,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import { Box } from "@mui/system";
-
+import CardActions from "@mui/material/CardActions";
 function CreateComment() {
 	return (
 		<Box sx={{ p: "5px 0", mb: "20px" }}>
-			<cardActionsClasses>
+			<CardActions>
 				<Grid container justifyContent="space-evenly">
 					<Grid item>
 						<Avatar
@@ -25,7 +25,7 @@ function CreateComment() {
 						<Button variant="contained" endIcon={<SendIcon />} color="success" />
 					</Grid>
 				</Grid>
-			</cardActionsClasses>
+			</CardActions>
 		</Box>
 	);
 }
