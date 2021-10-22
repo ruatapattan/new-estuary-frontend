@@ -8,13 +8,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-
-import OutlinedInput from "@mui/material/OutlinedInput";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import TuneIcon from "@mui/icons-material/Tune";
-import { Button, Container } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -83,6 +76,8 @@ function ProfileForm() {
       display="flex"
       flexWrap="wrap"
       flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
       sx={{ width: { xs: "90%", sm: "90%", md: "90%" } }}
       border="5px solid pink"
     >
@@ -153,6 +148,7 @@ function ProfileForm() {
                 </IconButton>
               }
             />
+
             <CardMedia
               component="img"
               height="194"

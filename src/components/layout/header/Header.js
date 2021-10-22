@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -15,6 +15,15 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { Avatar } from "@mui/material";
+import { linkStyle } from "../../../style";
+import TextsmsIcon from "@mui/icons-material/Textsms";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Link from "@mui/material/Link";
+import { removeToken } from "../../../services/localStorage";
+import { useHistory } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { useContext, useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -57,11 +66,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-	const [anchorEl, setAnchorEl] = React.useState(null);
-	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+	const history = useHistory();
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+	console.log(userRole);
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -80,12 +92,21 @@ export default function Header() {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
 
+	const handleClickSignOut = async (e) => {
+		e.preventDefault();
+		removeToken();
+		setUser(null);
+		setUserRole("guest");
+		history.push("/marketplace");
+		window.location.reload();
+	};
+
 	const menuId = "primary-search-account-menu";
 	const renderMenu = (
 		<Menu
 			anchorEl={anchorEl}
 			anchorOrigin={{
-				vertical: "top",
+				vertical: "bottom",
 				horizontal: "right",
 			}}
 			id={menuId}
@@ -97,8 +118,34 @@ export default function Header() {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+			<MenuItem onClick={handleMenuClose}>
+				<Link href="/profile" underline="none" display="flex" alignItems="center">
+					<IconButton
+						size="large"
+						aria-label="account of current user"
+						aria-controls="primary-search-account-menu"
+						aria-haspopup="true"
+						color="inherit"
+					>
+						<AccountCircle />
+					</IconButton>
+					<p>Profile</p>
+				</Link>
+			</MenuItem>
+			<MenuItem onClick={handleClickSignOut}>
+				{/* <Link href="#" underline="none" display="flex" alignItems="center"> */}
+				<IconButton
+					size="large"
+					aria-label="account of current user"
+					aria-controls="primary-search-account-menu"
+					aria-haspopup="true"
+					color="inherit"
+				>
+					<LogoutIcon />
+				</IconButton>
+				<p>Sign Out</p>
+				{/* </Link> */}
+			</MenuItem>
 		</Menu>
 	);
 
@@ -107,7 +154,7 @@ export default function Header() {
 		<Menu
 			anchorEl={mobileMoreAnchorEl}
 			anchorOrigin={{
-				vertical: "top",
+				vertical: "bottom",
 				horizontal: "right",
 			}}
 			id={mobileMenuId}
@@ -120,14 +167,6 @@ export default function Header() {
 			onClose={handleMobileMenuClose}
 		>
 			<MenuItem>
-				<IconButton size="large" aria-label="show 4 new mails" color="inherit">
-					<Badge badgeContent={4} color="error">
-						<MailIcon />
-					</Badge>
-				</IconButton>
-				<p>Messages</p>
-			</MenuItem>
-			<MenuItem>
 				<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
 					<Badge badgeContent={17} color="error">
 						<NotificationsIcon />
@@ -135,17 +174,41 @@ export default function Header() {
 				</IconButton>
 				<p>Notifications</p>
 			</MenuItem>
-			<MenuItem onClick={handleProfileMenuOpen}>
-				<IconButton
-					size="large"
-					aria-label="account of current user"
-					aria-controls="primary-search-account-menu"
-					aria-haspopup="true"
-					color="inherit"
-				>
-					<AccountCircle />
+			<MenuItem>
+				<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+					<Badge badgeContent={17} color="error">
+						<TextsmsIcon />
+					</Badge>
 				</IconButton>
-				<p>Profile</p>
+				<p>Chat</p>
+			</MenuItem>
+			<MenuItem>
+				<Link href="/profile" underline="none" display="flex" color="text.primary" alignItems="center">
+					<IconButton
+						size="large"
+						aria-label="account of current user"
+						aria-controls="primary-search-account-menu"
+						aria-haspopup="true"
+						color="inherit"
+					>
+						<AccountCircle />
+					</IconButton>
+					<p>Profile</p>
+				</Link>
+			</MenuItem>
+			<MenuItem onClick={handleClickSignOut}>
+				<Link href="#" underline="none" display="flex" color="text.primary" alignItems="center">
+					<IconButton
+						size="large"
+						aria-label="account of current user"
+						aria-controls="primary-search-account-menu"
+						aria-haspopup="true"
+						color="inherit"
+					>
+						<LogoutIcon />
+					</IconButton>
+					<Typography>Sign Out</Typography>
+				</Link>
 			</MenuItem>
 		</Menu>
 	);
@@ -155,12 +218,20 @@ export default function Header() {
 		<>
 			<AppBar className="bar" position="sticky" sx={{ height: "10vh" }}>
 				<Toolbar>
-					<IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
+					<IconButton
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="open drawer"
+						sx={{ mr: 2, display: { sm: "flex", md: "none" } }}
+					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
-						Estuary
-					</Typography>
+					<Link to="/" style={{ color: "white" }}>
+						<Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+							Estuary
+						</Typography>
+					</Link>
 					<Search>
 						<SearchIconWrapper>
 							<SearchIcon />
@@ -169,14 +240,14 @@ export default function Header() {
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { xs: "none", md: "flex" } }}>
-						<IconButton size="large" aria-label="show 4 new mails" color="inherit">
-							<Badge badgeContent={4} color="error">
-								<MailIcon />
-							</Badge>
-						</IconButton>
 						<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
 							<Badge badgeContent={17} color="error">
 								<NotificationsIcon />
+							</Badge>
+						</IconButton>
+						<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+							<Badge badgeContent={1} color="error">
+								<TextsmsIcon />
 							</Badge>
 						</IconButton>
 						<IconButton
@@ -188,7 +259,8 @@ export default function Header() {
 							onClick={handleProfileMenuOpen}
 							color="inherit"
 						>
-							<AccountCircle />
+							{/* <AccountCircle /> */}
+							<Avatar src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634039431/euopnlkdkag488x5l8jc.png" />
 						</IconButton>
 					</Box>
 					<Box sx={{ display: { xs: "flex", md: "none" } }}>
