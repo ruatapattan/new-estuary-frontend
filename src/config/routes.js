@@ -3,10 +3,10 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import ProfileEdit from "../pages/ProfileEdit";
 import Profile from "../pages/Profile";
-import MarketPlace from "../pages/MarketPlace";
+import Rank from "../pages/Rank";
 const allPages = [
+	{ path: "/rank", component: Rank },
 	{ path: "/profile/:id", component: ProfileEdit },
-	{ path: "/marketplace", component: MarketPlace },
 	{ path: "/profile", component: Profile },
 	{ path: "/login", component: Login },
 	{ path: "/signup", component: Signup },
