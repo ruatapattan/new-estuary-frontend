@@ -16,7 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { styled } from "@mui/system";
 import { Button } from "@mui/material";
 
-const drawerWidth = 240;
+const drawerWidth = "20vw";
 
 const StyledDrawer = styled(Drawer)`
 	& > div {
@@ -28,12 +28,13 @@ const StyledDrawer = styled(Drawer)`
 
 export default function SideBar() {
 	return (
-		<Box sx={{ display: "flex", zIndex: "1" }}>
+		<Box sx={{ display: "flex", zIndex: "1", marginRight: "500px" }} className="BoxBarrrrrr">
 			<CssBaseline />
 
 			<StyledDrawer
 				className="drawerDiv"
 				sx={{
+					// marginTop: "5vh",
 					width: drawerWidth,
 					flexShrink: 0,
 					"& .MuiDrawer-paper": {
@@ -46,15 +47,24 @@ export default function SideBar() {
 				anchor="left"
 			>
 				<Toolbar />
-				<Box sx={{ overflow: "auto" }}>
+				<Box sx={{ overflow: "auto", marginTop: "5vh" }}>
 					<List
 						className="listttttttttt"
 						sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignitem: "center" }}
 					>
 						{["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
 							<ListItem className="itemmmmmmmm" button key={text} sx={{ justifyContent: "center" }}>
-								<Button variant="gradient" sx={{ width: "100%" }}>
-									<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+								<Button
+									variant="gradient2"
+									sx={{ width: "100%", color: "primary", "&:hover": { color: "#fff" } }}
+								>
+									<ListItemIcon
+										sx={{
+											color: "inherit",
+										}}
+									>
+										{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+									</ListItemIcon>
 									<ListItemText primary={text} />
 								</Button>
 							</ListItem>

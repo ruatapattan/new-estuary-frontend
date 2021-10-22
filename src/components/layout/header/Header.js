@@ -153,7 +153,7 @@ export default function Header() {
 	return (
 		// <Box sx={{ flexGrow: 1, zIndex: 1500 }}>
 		<>
-			<AppBar className="bar" position="sticky">
+			<AppBar className="bar" position="sticky" sx={{ height: "10vh" }}>
 				<Toolbar>
 					<IconButton size="large" edge="start" color="inherit" aria-label="open drawer" sx={{ mr: 2 }}>
 						<MenuIcon />
