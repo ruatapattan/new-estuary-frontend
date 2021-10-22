@@ -43,7 +43,7 @@ const menu = [
 
 export default function SideBarProfileL() {
   return (
-    <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'flex' } }}>
+    <Grid item sx={{ display: { xs: 'none', md: 'flex' } }}>
       <Box sx={{ display: 'flex' }}>
         {/* <CssBaseline /> */}
 
