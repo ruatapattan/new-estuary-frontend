@@ -72,9 +72,9 @@ const theme = createTheme({
 		primary: {
 			main: "#242A38",
 		},
-		// secondary: {
-		// 	main: "#22BDCD",
-		// },
+		secondary: {
+			main: "#22BDCD",
+		},
 	},
 	zIndex: {
 		drawer: 1,
