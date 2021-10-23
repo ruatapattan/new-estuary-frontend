@@ -222,6 +222,7 @@ function ProfileEditFrom() {
           alignItems: 'center',
           justifyContent: 'center',
           border: '1px solid red'
+
           // backgroundColor: '#EFF1F3'
         }}
       >
