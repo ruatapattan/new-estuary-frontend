@@ -25,7 +25,7 @@ function SubComment() {
         <Grid container spacing={3}>
           <Grid item>
             <ThumbUpOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               5
             </Typography>
           </Grid>

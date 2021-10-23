@@ -29,14 +29,14 @@ function MainComment() {
         <Grid container spacing={5} mb='5px'>
           <Grid item>
             <ThumbUpOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               5
             </Typography>
           </Grid>
 
           <Grid item>
             <ChatBubbleOutlineOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               2
             </Typography>
           </Grid>
