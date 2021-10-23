@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { setToken } from "../../../../services/localStorage";
 import jwtDecode from "jwt-decode";
 
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, TextField, Typography } from "@mui/material";
 import { Box, display, Grid } from "@mui/system";
 import Input from "@mui/material/Input";
 import InputLabel from "@mui/material/InputLabel";
@@ -15,6 +15,7 @@ import { AuthContext } from "../../../../contexts/AuthContext";
 import { useHistory } from "react-router";
 function LoginInputForm() {
 	const history = useHistory();
+	const [inProgress, setInProgress] = useState(false);
 	const [userInput, setUserInput] = useState({
 		username: "",
 		password: "",
@@ -34,18 +35,22 @@ function LoginInputForm() {
 	const handleSubmitLogin = async (e) => {
 		try {
 			e.preventDefault();
+			setInProgress(true);
 			const result = await axios.post("/login", {
 				username: userInput.username,
 				password: userInput.password,
 			});
 			setToken(result.data.token);
 			setUser(jwtDecode(result.data.token)); //obj from authcontroller
-			const decoded = jwtDecode(result.data.token).userType;
+			const decoded = jwtDecode(result.data.token);
+			// console.log(decoded);
 			setUserRole(decoded);
 			console.log(result.data.token);
-			// history.push("/");
-			// window.location.reload();
+			setInProgress(false);
+			history.push("/");
+			window.location.reload();
 		} catch (err) {
+			setInProgress(false);
 			console.dir(err);
 			if (err.response && err.response.status === 400 && err.response.data.name === "loginError") {
 				setError(err.response.data.message);
@@ -112,9 +117,15 @@ function LoginInputForm() {
 				</p>
 			)}
 			{/* <Box className='buttonBox' sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}> */}
-			<Button type="submit" variant="gradient" sx={{ mt: ".8rem" }}>
-				Log In
-			</Button>
+			{inProgress ? (
+				<Box sx={{ display: "flex" }}>
+					<CircularProgress sx={{ color: "text.primary" }} />
+				</Box>
+			) : (
+				<Button type="submit" variant="gradient" sx={{ mt: ".8rem" }}>
+					Log In
+				</Button>
+			)}
 			{/* </Box> */}
 		</Box>
 		// </Box>

@@ -1,16 +1,18 @@
 import { display } from "@mui/system";
 import { useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import { allPages } from "../../config/routes";
+import { SidebarContextProvider } from "../../contexts/SidebarContext";
 import Footer from "../layout/footer/Footer";
 import Header from "../layout/header/Header";
 
 function RouteContainer() {
-	const [noHeader, setNoHeader] = useState(false);
+	const location = useLocation();
+	const path = location.pathname;
 	return (
 		<>
-			<Header />
-			<Switch>
+			<SidebarContextProvider>
+				{path !== "/login" && path !== "/signup" && <Header />}
 				<div
 					style={{
 						flexGrow: 1,
@@ -23,12 +25,23 @@ function RouteContainer() {
 						height: "100%",
 					}}
 				>
-					{allPages.map((item, idx) => {
-						return <Route key={idx} exact path={item.path} component={item.component} />;
-					})}
+					<Switch>
+						{allPages.map((item, idx) => {
+							return (
+								<Route
+									key={idx}
+									exact
+									path={item.path}
+									component={item.component}
+									// handleDrawerToggle={handleDrawerToggle}
+									// mobileOpen={mobileOpen}
+								/>
+							);
+						})}
+					</Switch>
 				</div>
-			</Switch>
-			<Footer />
+			</SidebarContextProvider>
+			{path !== "/login" && path !== "/signup" && <Footer />}
 		</>
 	);
 }

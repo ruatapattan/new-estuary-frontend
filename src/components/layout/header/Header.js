@@ -12,11 +12,9 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Avatar } from "@mui/material";
-import { linkStyle } from "../../../style";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "@mui/material/Link";
@@ -24,6 +22,10 @@ import { removeToken } from "../../../services/localStorage";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useContext, useState } from "react";
+import LoginIcon from "@mui/icons-material/Login";
+import WavesIcon from "@mui/icons-material/Waves";
+import { useLocation } from "react-router-dom";
+import { SidebarContext } from "../../../contexts/SidebarContext";
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -66,14 +68,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+	const { handleDrawerToggle } = useContext(SidebarContext);
 	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const history = useHistory();
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+	const location = useLocation();
+	const path = location.pathname;
 
-	console.log(userRole);
+	console.log(location.pathname);
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -119,7 +124,7 @@ export default function Header() {
 			onClose={handleMenuClose}
 		>
 			<MenuItem onClick={handleMenuClose}>
-				<Link href="/profile" underline="none" display="flex" alignItems="center">
+				<Link href="/profile" color="text.primary" underline="none" display="flex" alignItems="center">
 					<IconButton
 						size="large"
 						aria-label="account of current user"
@@ -219,6 +224,7 @@ export default function Header() {
 			<AppBar className="bar" position="sticky" sx={{ height: "10vh" }}>
 				<Toolbar>
 					<IconButton
+						onClick={handleDrawerToggle}
 						size="large"
 						edge="start"
 						color="inherit"
@@ -239,42 +245,75 @@ export default function Header() {
 						<StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
-					<Box sx={{ display: { xs: "none", md: "flex" } }}>
-						<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-							<Badge badgeContent={17} color="error">
-								<NotificationsIcon />
-							</Badge>
-						</IconButton>
-						<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-							<Badge badgeContent={1} color="error">
-								<TextsmsIcon />
-							</Badge>
-						</IconButton>
-						<IconButton
-							size="large"
-							edge="end"
-							aria-label="account of current user"
-							aria-controls={menuId}
-							aria-haspopup="true"
-							onClick={handleProfileMenuOpen}
-							color="inherit"
-						>
-							{/* <AccountCircle /> */}
-							<Avatar src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634039431/euopnlkdkag488x5l8jc.png" />
-						</IconButton>
-					</Box>
-					<Box sx={{ display: { xs: "flex", md: "none" } }}>
-						<IconButton
-							size="large"
-							aria-label="show more"
-							aria-controls={mobileMenuId}
-							aria-haspopup="true"
-							onClick={handleMobileMenuOpen}
-							color="inherit"
-						>
-							<MoreIcon />
-						</IconButton>
-					</Box>
+					{userRole === "guest" ? (
+						<>
+							<Box sx={{ display: { xs: "none", md: "flex" } }}>
+								<Link href="/login" underline="none" display="flex" color="white" alignItems="center">
+									<IconButton
+										size="large"
+										aria-label="account of current user"
+										aria-controls="primary-search-account-menu"
+										aria-haspopup="true"
+										color="inherit"
+									>
+										<LoginIcon />
+									</IconButton>
+									<Typography>Sign In</Typography>
+								</Link>
+								<Link href="/signup" underline="none" display="flex" color="white" alignItems="center">
+									<IconButton
+										size="large"
+										aria-label="account of current user"
+										aria-controls="primary-search-account-menu"
+										aria-haspopup="true"
+										color="inherit"
+									>
+										<WavesIcon />
+									</IconButton>
+									<Typography>Sign Up</Typography>
+								</Link>
+							</Box>
+						</>
+					) : (
+						<>
+							<Box sx={{ display: { xs: "none", md: "flex" } }}>
+								<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+									<Badge badgeContent={17} color="error">
+										<NotificationsIcon />
+									</Badge>
+								</IconButton>
+								<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
+									<Badge badgeContent={1} color="error">
+										<TextsmsIcon />
+									</Badge>
+								</IconButton>
+								<IconButton
+									size="large"
+									edge="end"
+									aria-label="account of current user"
+									aria-controls={menuId}
+									aria-haspopup="true"
+									onClick={handleProfileMenuOpen}
+									color="inherit"
+								>
+									{/* <AccountCircle /> */}
+									<Avatar src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634039431/euopnlkdkag488x5l8jc.png" />
+								</IconButton>
+							</Box>
+							<Box sx={{ display: { xs: "flex", md: "none" } }}>
+								<IconButton
+									size="large"
+									aria-label="show more"
+									aria-controls={mobileMenuId}
+									aria-haspopup="true"
+									onClick={handleMobileMenuOpen}
+									color="inherit"
+								>
+									<MoreIcon />
+								</IconButton>
+							</Box>
+						</>
+					)}
 				</Toolbar>
 			</AppBar>
 			{renderMobileMenu}

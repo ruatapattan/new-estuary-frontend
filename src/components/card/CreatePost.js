@@ -39,7 +39,7 @@ function CreatePost() {
           </Typography>
         </label>
 
-        <label htmlFor='icon-button-file'>
+        {/* <label htmlFor='icon-button-file'>
           <Input accept='image/*' id='icon-button-file' type='file' />
           <IconButton color='primary' aria-label='upload picture' component='span'>
             <VideoCameraFrontIcon sx={{ fontSize: 40, color: green[500] }} />
@@ -47,7 +47,7 @@ function CreatePost() {
           <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
             Video
           </Typography>
-        </label>
+        </label> */}
       </Stack>
     </Paper>
   );

@@ -5,8 +5,10 @@ import ProfileEdit from '../pages/ProfileEdit';
 import Profile from '../pages/Profile';
 import Rank from '../pages/Rank';
 import MarketPlace from '../pages/MarketPlace';
-import CreactProduct from '../pages/CreactProduct';
+import TestPhoto from '../pages/TestPhoto';
 import Product from '../pages/Product';
+import CreactProduct from '../pages/CreactProduct';
+
 const allPages = [
   { path: '/product/:id', component: Product },
   { path: '/marketplace', component: MarketPlace },
@@ -17,7 +19,8 @@ const allPages = [
 
   { path: '/login', component: Login },
   { path: '/signup', component: Signup },
-  { path: '/', component: Home }
+  { path: '/', component: Home },
+  { path: '/test', component: TestPhoto }
 ];
 
 export { allPages };

@@ -38,14 +38,11 @@ function HomeContainer() {
               </Paper>
             </Box> */}
         <CreatePost />
-        <Post
+        <Post />
+        {/* <Post
           type='img'
           link='https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80'
-        />
-        <Post
-          type='img'
-          link='https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80'
-        />
+        /> */}
       </Box>
     </>
   );
