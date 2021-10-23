@@ -20,7 +20,7 @@ function MainComment() {
         C
       </Avatar>
 
-      <Paper sx={{ padding: '10px' }}>
+      <Paper sx={{ padding: '10px' }} elevation={3}>
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
           {' '}
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque possimus perferendis ea aut molestias
@@ -29,14 +29,14 @@ function MainComment() {
         <Grid container spacing={5} mb='5px'>
           <Grid item>
             <ThumbUpOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               5
             </Typography>
           </Grid>
 
           <Grid item>
             <ChatBubbleOutlineOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               2
             </Typography>
           </Grid>

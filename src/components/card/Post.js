@@ -149,13 +149,13 @@ function Post() {
         <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
           <Grid item>
             <ThumbUpOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               2
             </Typography>
           </Grid>
           <Grid item>
             <ChatBubbleOutlineOutlinedIcon />
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               5
             </Typography>
           </Grid>
