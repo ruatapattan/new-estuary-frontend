@@ -2,24 +2,27 @@ import React from "react";
 import { Box, minWidth } from "@mui/system";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
+
 import SearchIcon from "@mui/icons-material/Search";
 
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+
+import TextField from "@mui/material/TextField";
 
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
-import InputLabel from "@mui/material/InputLabel";
 
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 function ProfileForm() {
+  // seach
+
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -40,6 +43,7 @@ function ProfileForm() {
     padding: theme.spacing(0, 2),
     height: "100%",
     position: "absolute",
+    left: "50px",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
@@ -60,16 +64,16 @@ function ProfileForm() {
     },
   }));
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
+  // button edit delete
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Box
       className="BOXXXXXXXXX"
@@ -80,6 +84,7 @@ function ProfileForm() {
       alignItems="center"
       sx={{ width: { xs: "90%", sm: "90%", md: "90%" } }}
       border="5px solid pink"
+      backgroundColor="#EFF1F3"
     >
       <Box
         display="flex"
@@ -91,38 +96,37 @@ function ProfileForm() {
 
         // height="5vh"
       >
-        <Search>
+        <Search border="1px solid pink">
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
+
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
             sx={{
               width: "250px",
               height: "48px",
-              margin: "2rem",
+              margin: "3rem",
+              border: "1px groove  ",
             }}
           />
         </Search>
-        <FormControl sx={{ margin: "2rem", width: 250 }}>
-          <InputLabel id="demo-simple-select-label">Single items</InputLabel>
-          <Select>
-            <MenuItem>1</MenuItem>
-            <MenuItem>2</MenuItem>
-          </Select>
-        </FormControl>
 
-        <FormControl sx={{ m: "2rem", width: 250 }}>
-          <InputLabel id="demo-simple-select-label">
-            Recently Received
-          </InputLabel>
-          <Select>
-            <MenuItem>1</MenuItem>
-            <MenuItem>2</MenuItem>
-          </Select>
-        </FormControl>
+        <TextField
+          id="outlined-select-currency"
+          select
+          label="Single items"
+          sx={{ margin: "2rem", width: 250 }}
+        />
+        <TextField
+          id="outlined-select-currency"
+          select
+          label="Recently Received"
+          sx={{ margin: "2rem", width: 250 }}
+        />
       </Box>
+
       <Box
         display="flex"
         flexWrap="wrap"
@@ -143,9 +147,35 @@ function ProfileForm() {
           <CardActionArea>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreHorizIcon />
-                </IconButton>
+                <div>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </div>
               }
             />
 
@@ -164,6 +194,7 @@ function ProfileForm() {
             </CardContent>
           </CardActionArea>
         </Card>
+
         <Card
           sx={{
             width: { xs: "10%", sm: "20%", md: "30%" },
@@ -177,11 +208,38 @@ function ProfileForm() {
           <CardActionArea>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreHorizIcon />
-                </IconButton>
+                <div>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </div>
               }
             />
+
             <CardMedia
               component="img"
               height="194"
@@ -197,6 +255,7 @@ function ProfileForm() {
             </CardContent>
           </CardActionArea>
         </Card>
+
         <Card
           sx={{
             width: { xs: "10%", sm: "20%", md: "30%" },
@@ -210,11 +269,38 @@ function ProfileForm() {
           <CardActionArea>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreHorizIcon />
-                </IconButton>
+                <div>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </div>
               }
             />
+
             <CardMedia
               component="img"
               height="194"
@@ -230,6 +316,7 @@ function ProfileForm() {
             </CardContent>
           </CardActionArea>
         </Card>
+
         <Card
           sx={{
             width: { xs: "10%", sm: "20%", md: "30%" },
@@ -243,11 +330,38 @@ function ProfileForm() {
           <CardActionArea>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreHorizIcon />
-                </IconButton>
+                <div>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </div>
               }
             />
+
             <CardMedia
               component="img"
               height="194"
@@ -263,6 +377,7 @@ function ProfileForm() {
             </CardContent>
           </CardActionArea>
         </Card>
+
         <Card
           sx={{
             width: { xs: "10%", sm: "20%", md: "30%" },
@@ -276,11 +391,38 @@ function ProfileForm() {
           <CardActionArea>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreHorizIcon />
-                </IconButton>
+                <div>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
+                    }}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={handleClose}>Delete</MenuItem>
+                  </Menu>
+                </div>
               }
             />
+
             <CardMedia
               component="img"
               height="194"
