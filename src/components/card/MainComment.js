@@ -40,6 +40,11 @@ function MainComment() {
               2
             </Typography>
           </Grid>
+          <Grid item>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+              September 14, 2016
+            </Typography>
+          </Grid>
         </Grid>
         <CreateComment />
       </Paper>
