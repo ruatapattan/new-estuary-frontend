@@ -150,13 +150,6 @@ function ChatContainer({ chatRoomId, setChatRoomId }) {
 					backgroundColor: "white",
 				}}
 			>
-				{/* <Badge
-					className="BADGEEEE"
-					badgeContent={"x"}
-					color="error"
-					sx={{ width: "100%", cursor: "pointer" }}
-					onClick={() => setChatRoomId("")}
-				> */}
 				<Button
 					sx={{ borderRadius: 0, width: "100%" }}
 					height="5vh"
