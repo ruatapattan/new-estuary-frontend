@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -14,31 +13,61 @@ import Avatar from '@mui/material/Avatar';
 import MainComment from './MainComment';
 import SubComment from './SubComment';
 import CreatComment from './CreateComment';
-import Slider from 'react-slick';
+
 import { dividerClasses } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import Slider from 'react-slick';
 
-// const photos = [
-//   {
-//     name: 'Photo 1',
-//     url: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80',
-//   },
-//   {
-//     name: 'Photo 2',
-//     url: 'https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=945&q=80',
-//   },
-//   {
-//     name: 'Photo 3',
-//     url: 'https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=435&q=80',
-//   },
-// ];
+const photos = [
+  {
+    name: 'Photo 1',
+    url: 'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80',
+  },
+  {
+    name: 'Photo 2',
+    url: 'https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=945&q=80',
+  },
+  {
+    name: 'Photo 3',
+    url: 'https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=435&q=80',
+  },
+];
 
-function PostImg({ type, link }) {
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <ArrowForwardIosIcon
+      style={{ ...style, color: '#242A38' }}
+      className={className}
+      onClick={onClick}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <ArrowBackIosIcon
+      style={{ ...style, color: '#242A38' }}
+      className={className}
+      onClick={onClick}
+      onClick={onClick}
+    />
+  );
+}
+
+function Post() {
+  // setting
   const settings = {
     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
   };
 
   return (
@@ -64,6 +93,12 @@ function PostImg({ type, link }) {
               sx={{ width: 40, height: 40 }}></Avatar>
           }
           title='Shrimp and Chorizo Paella'
+          // subheader='September 14, 2016'
+          subheader={
+            <Typography color='text.disabled' variant='body2'>
+              September 14, 2016
+            </Typography>
+          }
         />
 
         {/* Card content*/}
@@ -75,18 +110,40 @@ function PostImg({ type, link }) {
         </CardContent>
 
         {/* Card media*/}
-        <Box sx={{ width: '100%', margin: 'auto', height: '300px', backgroundColor: '#EFF1F3' }}>
-          <CardMedia
-            sx={{ objectFit: 'contain' }}
-            // component='img'
-            component={type}
-            height='100%'
-            // image='https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80'
-            image={link}
-            frameborder='0'
-            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-            allowfullscreen
-          />
+
+        <Box
+          sx={{
+            margin: 'auto',
+            backgroundColor: '#EFF1F3',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '300px',
+            // height: '350px',
+          }}>
+          <Box
+            style={{
+              width: '500px',
+              backgroundColor: '#EFF1F3',
+            }}>
+            <Slider {...settings}>
+              {photos.map((item) => (
+                <CardMedia
+                  sx={{ width: '100%', objectFit: 'cover' }}
+                  component='img'
+                  // component={type}
+                  height='300px'
+                  width='100%'
+                  image={item.url}
+                  // image='https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80'
+                  frameborder='0'
+                  // image={link}
+                  allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                  allowfullscreen
+                />
+              ))}
+            </Slider>
+          </Box>
         </Box>
 
         <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
@@ -117,4 +174,4 @@ function PostImg({ type, link }) {
   );
 }
 
-export default PostImg;
+export default Post;
