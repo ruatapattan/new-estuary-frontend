@@ -61,6 +61,13 @@ const linkStyle = {
 
 const theme = createTheme({
 	palette: {
+		primary: {
+			main: "#242A38",
+		},
+		secondary: {
+			main: "#22BDCD",
+			light: "#73C282",
+		},
 		text: {
 			//blueish
 			// secondary: "#708198",
@@ -68,12 +75,6 @@ const theme = createTheme({
 
 			secondary: "#242A38",
 			// primary: "#242A38",
-		},
-		primary: {
-			main: "#242A38",
-		},
-		secondary: {
-			main: "#22BDCD",
 		},
 	},
 	zIndex: {
@@ -112,15 +113,55 @@ const theme = createTheme({
 				},
 			],
 		},
+		MuiCssBaseline: {
+			styleOverrides: {
+				body: {
+					// scrollbarGutter: "stable both-edges",
+					scrollbarColor: "#6b6b6b #2b2b2b",
+					"&::-webkit-scrollbar, & *::-webkit-scrollbar": {
+						backgroundColor: "transparent",
+						width: "0.5em",
+					},
+					"&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb": {
+						borderRadius: 8,
+						background: "rgb(115, 194, 130)",
+						background: "linear-gradient(180deg, rgba(64,169,223,1) 20%,rgba(115,194,130,1) 100%)",
+						minHeight: 24,
+						border: "1px solid #242A38",
+					},
+					"&::-webkit-scrollbar-thumb:focus, & *::-webkit-scrollbar-thumb:focus": {
+						backgroundColor: "rgba(64,169,223,1)",
+					},
+					"&::-webkit-scrollbar-thumb:active, & *::-webkit-scrollbar-thumb:active": {
+						backgroundColor: "rgba(64,169,223,1)",
+					},
+					"&::-webkit-scrollbar-thumb:hover, & *::-webkit-scrollbar-thumb:hover": {
+						backgroundColor: "rgba(64,169,223,1)",
+					},
+					"&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
+						backgroundColor: "rgba(64,169,223,1)",
+					},
+				},
+			},
+		},
 	},
 });
 
-const GradientDrawer = styled(Drawer)`
-	& > div {
-		background: rgb(115, 194, 130);
-		background: linear-gradient(360deg, rgba(64, 169, 223, 1) 0%, rgba(115, 194, 130, 0.5) 100%);
-	}
-`;
+// const GradientDrawer = styled(Drawer)`
+// 	& > div {
+// 		background: rgb(115, 194, 130);
+// 		background: linear-gradient(360deg, rgba(64, 169, 223, 1) 0%, rgba(115, 194, 130, 0.5) 100%);
+// 	}
+// `;
+const GradientDrawer = styled(Drawer)({
+	"& > div": {
+		background: "rgb(115, 194, 130)",
+		background: "linear-gradient(360deg, rgba(64, 169, 223, 1) 0%, rgba(115, 194, 130, 0.5) 100%)",
+	},
+	// "& paper": {
+	// 	height: "500px",
+	// },
+});
 
 const CenterTypography = styled(Typography)({
 	textAlign: "center",

@@ -6,26 +6,71 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { Avatar } from "@mui/material";
-import TextsmsIcon from "@mui/icons-material/Textsms";
-import LogoutIcon from "@mui/icons-material/Logout";
 import Link from "@mui/material/Link";
 import { removeToken } from "../../../services/localStorage";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useContext, useState } from "react";
-import LoginIcon from "@mui/icons-material/Login";
-import WavesIcon from "@mui/icons-material/Waves";
+
 import { useLocation } from "react-router-dom";
 import { SidebarContext } from "../../../contexts/SidebarContext";
+import DesktopMenu from "./headerMenus/DesktopMenu";
+import GuestNav from "./headerDesktopNavs/GuestNav";
+import UserNav from "./headerDesktopNavs/UserNav";
+import LogMenu from "./headerMenus/LogMenu";
+
+const MOCK_CHAT = [
+	{
+		name: "Jane",
+		content:
+			" — I'll be in your neighborhood doing errands this I'll be in your neighborhood	doing errands this I'll be in your neighborhood doing errands this",
+		profilePic: "",
+	},
+	{
+		name: "Andy",
+		content:
+			" — Wish I could come, but I'm out of town this I'll be in your neighborhood doing errands this I'll be in your neighborhood doing errands this",
+		profilePic: "",
+	},
+	{
+		name: "Jane",
+		content: " — Do you have Paris recommendations? Have you ever…",
+		profilePic: "",
+	},
+];
+const MOCK_NOTIFIACTION = [
+	{
+		name: "Jane",
+		content:
+			" — I'll be in your neighborhood doing errands this I'll be in your neighborhood	doing errands this I'll be in your neighborhood doing errands this",
+		profilePic: "",
+		actionType: "commented",
+		actionOn: "post",
+	},
+	{
+		name: "Andy",
+		content: "Very cool painting bruv",
+		profilePic: "",
+		actionType: "commented",
+		actionOn: "product",
+	},
+	{
+		name: "Jane",
+		// content: " — Do you have Paris recommendations? Have you ever…",
+		profilePic: "",
+		actionType: "liked",
+		actionOn: "post",
+	},
+	{
+		name: "Alexia",
+		// content: " — Do you have Paris recommendations? Have you ever…",
+		profilePic: "",
+		actionType: "followed",
+		actionOn: "account",
+	},
+];
 
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
@@ -71,14 +116,16 @@ export default function Header() {
 	const { handleDrawerToggle } = useContext(SidebarContext);
 	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorChatLogEl, setAnchorChatLogEl] = useState(null);
+	const [anchorNotificationLogEl, setAnchorNotificationLogEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const history = useHistory();
-	const isMenuOpen = Boolean(anchorEl);
+	// const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 	const location = useLocation();
 	const path = location.pathname;
 
-	console.log(location.pathname);
+	console.log(anchorChatLogEl);
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -97,6 +144,24 @@ export default function Header() {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
 
+	//chat toggle
+	const handleChatLogMenuOpen = (event) => {
+		setAnchorChatLogEl(event.currentTarget);
+	};
+
+	const handleChatLogMenuClose = () => {
+		setAnchorChatLogEl(null);
+	};
+
+	//notification toggle
+	const handleNotificationMenuOpen = (event) => {
+		setAnchorNotificationLogEl(event.currentTarget);
+	};
+
+	const handleNotificationMenuClose = () => {
+		setAnchorNotificationLogEl(null);
+	};
+
 	const handleClickSignOut = async (e) => {
 		e.preventDefault();
 		removeToken();
@@ -105,118 +170,6 @@ export default function Header() {
 		history.push("/marketplace");
 		window.location.reload();
 	};
-
-	const menuId = "primary-search-account-menu";
-	const renderMenu = (
-		<Menu
-			anchorEl={anchorEl}
-			anchorOrigin={{
-				vertical: "bottom",
-				horizontal: "right",
-			}}
-			id={menuId}
-			keepMounted
-			transformOrigin={{
-				vertical: "top",
-				horizontal: "right",
-			}}
-			open={isMenuOpen}
-			onClose={handleMenuClose}
-		>
-			<MenuItem onClick={handleMenuClose}>
-				<Link href="/profile" color="text.primary" underline="none" display="flex" alignItems="center">
-					<IconButton
-						size="large"
-						aria-label="account of current user"
-						aria-controls="primary-search-account-menu"
-						aria-haspopup="true"
-						color="inherit"
-					>
-						<AccountCircle />
-					</IconButton>
-					<p>Profile</p>
-				</Link>
-			</MenuItem>
-			<MenuItem onClick={handleClickSignOut}>
-				{/* <Link href="#" underline="none" display="flex" alignItems="center"> */}
-				<IconButton
-					size="large"
-					aria-label="account of current user"
-					aria-controls="primary-search-account-menu"
-					aria-haspopup="true"
-					color="inherit"
-				>
-					<LogoutIcon />
-				</IconButton>
-				<p>Sign Out</p>
-				{/* </Link> */}
-			</MenuItem>
-		</Menu>
-	);
-
-	const mobileMenuId = "primary-search-account-menu-mobile";
-	const renderMobileMenu = (
-		<Menu
-			anchorEl={mobileMoreAnchorEl}
-			anchorOrigin={{
-				vertical: "bottom",
-				horizontal: "right",
-			}}
-			id={mobileMenuId}
-			keepMounted
-			transformOrigin={{
-				vertical: "top",
-				horizontal: "right",
-			}}
-			open={isMobileMenuOpen}
-			onClose={handleMobileMenuClose}
-		>
-			<MenuItem>
-				<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-					<Badge badgeContent={17} color="error">
-						<NotificationsIcon />
-					</Badge>
-				</IconButton>
-				<p>Notifications</p>
-			</MenuItem>
-			<MenuItem>
-				<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-					<Badge badgeContent={17} color="error">
-						<TextsmsIcon />
-					</Badge>
-				</IconButton>
-				<p>Chat</p>
-			</MenuItem>
-			<MenuItem>
-				<Link href="/profile" underline="none" display="flex" color="text.primary" alignItems="center">
-					<IconButton
-						size="large"
-						aria-label="account of current user"
-						aria-controls="primary-search-account-menu"
-						aria-haspopup="true"
-						color="inherit"
-					>
-						<AccountCircle />
-					</IconButton>
-					<p>Profile</p>
-				</Link>
-			</MenuItem>
-			<MenuItem onClick={handleClickSignOut}>
-				<Link href="#" underline="none" display="flex" color="text.primary" alignItems="center">
-					<IconButton
-						size="large"
-						aria-label="account of current user"
-						aria-controls="primary-search-account-menu"
-						aria-haspopup="true"
-						color="inherit"
-					>
-						<LogoutIcon />
-					</IconButton>
-					<Typography>Sign Out</Typography>
-				</Link>
-			</MenuItem>
-		</Menu>
-	);
 
 	return (
 		// <Box sx={{ flexGrow: 1, zIndex: 1500 }}>
@@ -246,78 +199,47 @@ export default function Header() {
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					{userRole === "guest" ? (
-						<>
-							<Box sx={{ display: { xs: "none", md: "flex" } }}>
-								<Link href="/login" underline="none" display="flex" color="white" alignItems="center">
-									<IconButton
-										size="large"
-										aria-label="account of current user"
-										aria-controls="primary-search-account-menu"
-										aria-haspopup="true"
-										color="inherit"
-									>
-										<LoginIcon />
-									</IconButton>
-									<Typography>Sign In</Typography>
-								</Link>
-								<Link href="/signup" underline="none" display="flex" color="white" alignItems="center">
-									<IconButton
-										size="large"
-										aria-label="account of current user"
-										aria-controls="primary-search-account-menu"
-										aria-haspopup="true"
-										color="inherit"
-									>
-										<WavesIcon />
-									</IconButton>
-									<Typography>Sign Up</Typography>
-								</Link>
-							</Box>
-						</>
+						<GuestNav />
 					) : (
-						<>
-							<Box sx={{ display: { xs: "none", md: "flex" } }}>
-								<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-									<Badge badgeContent={17} color="error">
-										<NotificationsIcon />
-									</Badge>
-								</IconButton>
-								<IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-									<Badge badgeContent={1} color="error">
-										<TextsmsIcon />
-									</Badge>
-								</IconButton>
-								<IconButton
-									size="large"
-									edge="end"
-									aria-label="account of current user"
-									aria-controls={menuId}
-									aria-haspopup="true"
-									onClick={handleProfileMenuOpen}
-									color="inherit"
-								>
-									{/* <AccountCircle /> */}
-									<Avatar src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634039431/euopnlkdkag488x5l8jc.png" />
-								</IconButton>
-							</Box>
-							<Box sx={{ display: { xs: "flex", md: "none" } }}>
-								<IconButton
-									size="large"
-									aria-label="show more"
-									aria-controls={mobileMenuId}
-									aria-haspopup="true"
-									onClick={handleMobileMenuOpen}
-									color="inherit"
-								>
-									<MoreIcon />
-								</IconButton>
-							</Box>
-						</>
+						<UserNav
+							handleProfileMenuOpen={handleProfileMenuOpen}
+							// handleMobileMenuOpen={handleMobileMenuOpen}
+							handleChatLogMenuOpen={handleChatLogMenuOpen}
+							handleNotificationMenuOpen={handleNotificationMenuOpen}
+						/>
 					)}
 				</Toolbar>
 			</AppBar>
-			{renderMobileMenu}
-			{renderMenu}
+
+			{/* currently unused */}
+			{/* <MobileMenu
+				mobileMoreAnchorEl={mobileMoreAnchorEl}
+				isMobileMenuOpen={isMobileMenuOpen}
+				handleMobileMenuClose={handleMobileMenuClose}
+				handleClickSignOut={handleClickSignOut}
+				handleChatLogMenuOpen={handleChatLogMenuOpen}
+			/> */}
+			<DesktopMenu
+				anchorEl={anchorEl}
+				handleMenuClose={handleMenuClose}
+				handleClickSignOut={handleClickSignOut}
+			/>
+
+			{/* for chat */}
+			<LogMenu
+				anchorLogEl={anchorChatLogEl}
+				handleLogMenuClose={handleChatLogMenuClose}
+				type="chat"
+				log={MOCK_CHAT}
+			/>
+
+			{/* for notification */}
+			<LogMenu
+				anchorLogEl={anchorNotificationLogEl}
+				handleLogMenuClose={handleNotificationMenuClose}
+				type="notification"
+				log={MOCK_NOTIFIACTION}
+			/>
 		</>
 		// </Box>
 	);
