@@ -7,9 +7,7 @@ import Rank from '../pages/Rank';
 import MarketPlace from '../pages/MarketPlace';
 import TestPhoto from '../pages/TestPhoto';
 import Product from '../pages/Product';
-import CreactProduct from '../pages/CreactProduct';
 import EditProductForm from '../components/layout/product/EditProductForm';
-import Community from '../pages/Comunity';
 
 const allPages = [
   { path: '/product/:id', component: Product },
@@ -17,14 +15,12 @@ const allPages = [
   { path: '/rank', component: Rank },
   { path: '/profile/:id', component: ProfileEdit },
   { path: '/profile', component: Profile },
-  { path: '/creactproduct', component: CreactProduct },
   { path: '/editproduct/:id', component: EditProductForm },
-  { path: '/community', component: Community },
 
   { path: '/login', component: Login },
   { path: '/signup', component: Signup },
   { path: '/', component: Home },
-  { path: '/test', component: TestPhoto },
+  { path: '/test', component: TestPhoto }
 ];
 
 export { allPages };

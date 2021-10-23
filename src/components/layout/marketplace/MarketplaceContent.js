@@ -14,6 +14,7 @@ const imgArr = [
 	"https://picsum.photos/id/142/400/300",
 	"https://picsum.photos/id/34/400/300",
 ];
+
 function MarketplaceContent({ title }) {
 	return (
 		<>
