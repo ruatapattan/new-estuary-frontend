@@ -1,7 +1,8 @@
 import React from 'react';
+import ProductContainer from '../components/layout/product/ProductContainer';
 
 function Product() {
-  return <div></div>;
+  return <ProductContainer />;
 }
 
 export default Product;

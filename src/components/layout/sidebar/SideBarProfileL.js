@@ -21,7 +21,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ForumIcon from '@mui/icons-material/Forum';
 import StarsIcon from '@mui/icons-material/Stars';
 
-const drawerWidth = '20vw';
+const drawerWidth = '240px';
 
 const StyledDrawer = styled(Drawer)`
   & > div {
@@ -44,7 +44,7 @@ const menu = [
 export default function SideBarProfileL() {
   return (
     <Grid item sx={{ display: { xs: 'none', md: 'flex' } }}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', position: 'relative' }}>
         {/* <CssBaseline /> */}
 
         <StyledDrawer
@@ -52,21 +52,30 @@ export default function SideBarProfileL() {
           sx={{
             width: drawerWidth,
             flexShrink: 0,
+
+            top: '0',
             '& .MuiDrawer-paper': {
               width: drawerWidth,
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
+              height: '100vh',
+              // position: '-webkit-sticky',
+              position: 'sticky',
+              top: '0'
             }
           }}
           variant="permanent"
           anchor="left"
         >
-          <Toolbar />
+          <Toolbar sx={{ height: '10vh' }} />
+
           <Box sx={{ overflow: 'auto' }}>
             <Divider />
             <List>
+              {/* <ListItem />
+              <ListItem /> */}
               {menu.map(item => (
-                <ListItem button key={item.text}>
-                  <ListItemIcon>
+                <ListItem button key={item.text} sx={{ color: 'rgba(35, 40, 54, 1)' }}>
+                  <ListItemIcon sx={{ color: 'rgba(35, 40, 54, 1)' }}>
                     <item.icon />
                   </ListItemIcon>
                   <ListItemText primary={item.text} />
