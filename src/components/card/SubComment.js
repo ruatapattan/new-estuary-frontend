@@ -16,7 +16,7 @@ function SubComment() {
         sx={{ width: 40, height: 40 }}>
         C
       </Avatar>
-      <Paper sx={{ padding: '10px' }}>
+      <Paper sx={{ padding: '10px' }} elevation={3}>
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
           {' '}
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque possimus perferendis ea aut molestias
