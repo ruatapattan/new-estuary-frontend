@@ -4,21 +4,39 @@ import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 
 import SearchIcon from "@mui/icons-material/Search";
-
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
 import TextField from "@mui/material/TextField";
+import CardProfile from "./cardprofile/CardProfile";
 
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import { CardActionArea } from "@mui/material";
-
-import Typography from "@mui/material/Typography";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+const mook = [
+  {
+    productName: "product1",
+    picProduct: "https://picsum.photos/id/20/200/300",
+    price: 100,
+    description:
+      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+  },
+  {
+    productName: "product2",
+    picProduct: "https://picsum.photos/id/49/200/300",
+    price: 200,
+    description:
+      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+  },
+  {
+    productName: "product3",
+    picProduct: "https://picsum.photos/id/145/200/300",
+    price: 30000,
+    description:
+      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+  },
+  {
+    productName: "product4",
+    picProduct: "https://picsum.photos/id/145/200/300",
+    price: 30000000,
+    description:
+      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
+  },
+];
 
 function ProfileForm() {
   // seach
@@ -63,16 +81,6 @@ function ProfileForm() {
       },
     },
   }));
-
-  // button edit delete
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Box
@@ -134,310 +142,19 @@ function ProfileForm() {
         alignItems="center"
         sx={{ width: { xs: "90%", sm: "90%", md: "90%" } }}
       >
-        <Card
-          sx={{
-            width: { xs: "10%", sm: "20%", md: "30%" },
-            height: { xs: "10%", sm: "20%", md: "30%" },
-            margin: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            minWidth: "250px",
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              action={
-                <div>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
-                  </Menu>
-                </div>
-              }
-            />
+        {/*productName: 'product2',
+    picProduct:'https://picsum.photos/id/49/200/300',
+    price: 200,
+    description:'testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest' */}
 
-            <CardMedia
-              component="img"
-              height="194"
-              image="https://picsum.photos/id/237/200/300"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card
-          sx={{
-            width: { xs: "10%", sm: "20%", md: "30%" },
-            height: { xs: "10%", sm: "20%", md: "30%" },
-            margin: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            minWidth: "250px",
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              action={
-                <div>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
-                  </Menu>
-                </div>
-              }
-            />
-
-            <CardMedia
-              component="img"
-              height="194"
-              image="https://picsum.photos/id/237/200/300"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card
-          sx={{
-            width: { xs: "10%", sm: "20%", md: "30%" },
-            height: { xs: "10%", sm: "20%", md: "30%" },
-            margin: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            minWidth: "250px",
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              action={
-                <div>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
-                  </Menu>
-                </div>
-              }
-            />
-
-            <CardMedia
-              component="img"
-              height="194"
-              image="https://picsum.photos/id/237/200/300"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card
-          sx={{
-            width: { xs: "10%", sm: "20%", md: "30%" },
-            height: { xs: "10%", sm: "20%", md: "30%" },
-            margin: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            minWidth: "250px",
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              action={
-                <div>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
-                  </Menu>
-                </div>
-              }
-            />
-
-            <CardMedia
-              component="img"
-              height="194"
-              image="https://picsum.photos/id/237/200/300"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-
-        <Card
-          sx={{
-            width: { xs: "10%", sm: "20%", md: "30%" },
-            height: { xs: "10%", sm: "20%", md: "30%" },
-            margin: 2,
-            display: "flex",
-            flexWrap: "wrap",
-            minWidth: "250px",
-          }}
-        >
-          <CardActionArea>
-            <CardHeader
-              action={
-                <div>
-                  <Button
-                    id="demo-positioned-button"
-                    aria-controls="demo-positioned-menu"
-                    aria-haspopup="true"
-                    aria-expanded={open ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <MoreHorizIcon />
-                  </Button>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem onClick={handleClose}>Delete</MenuItem>
-                  </Menu>
-                </div>
-              }
-            />
-
-            <CardMedia
-              component="img"
-              height="194"
-              image="https://picsum.photos/id/237/200/300"
-              alt="Paella dish"
-            />
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                This impressive paella is a perfect party dish and a fun meal to
-                cook together with your guests. Add 1 cup of frozen peas along
-                with the mussels, if you like.
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+        {mook.map((item) => (
+          <CardProfile
+            productName={item.productName}
+            picProduct={item.picProduct}
+            price={item.price}
+            description={item.description}
+          />
+        ))}
       </Box>
     </Box>
   );

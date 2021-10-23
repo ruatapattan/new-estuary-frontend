@@ -17,7 +17,7 @@ const allPages = [
   { path: "/profile/:id", component: ProfileEdit },
   { path: "/profile", component: Profile },
   { path: "/creactproduct", component: CreactProduct },
-  { path: "/editproduct", component: EditProductForm },
+  { path: "/editproduct/:id", component: EditProductForm },
 
   { path: "/login", component: Login },
   { path: "/signup", component: Signup },
