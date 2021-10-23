@@ -10,7 +10,7 @@ function CreateComment() {
   return (
     <Box sx={{ p: '5px 0', mb: '20px' }}>
       <CardActions>
-        <Grid container justifyContent='space-evenly'>
+        <Grid container justifyContent='space-around'>
           <Grid item>
             <Avatar
               aria-label='recipe'
