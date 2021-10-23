@@ -20,6 +20,7 @@ import DesktopMenu from "./headerMenus/DesktopMenu";
 import GuestNav from "./headerDesktopNavs/GuestNav";
 import UserNav from "./headerDesktopNavs/UserNav";
 import LogMenu from "./headerMenus/LogMenu";
+import ChatContainer from "../../chat/ChatContainer";
 
 const MOCK_CHAT = [
 	{
@@ -27,17 +28,20 @@ const MOCK_CHAT = [
 		content:
 			" — I'll be in your neighborhood doing errands this I'll be in your neighborhood	doing errands this I'll be in your neighborhood doing errands this",
 		profilePic: "",
+		chatRoomId: "1",
 	},
 	{
 		name: "Andy",
 		content:
 			" — Wish I could come, but I'm out of town this I'll be in your neighborhood doing errands this I'll be in your neighborhood doing errands this",
 		profilePic: "",
+		chatRoomId: "2",
 	},
 	{
-		name: "Jane",
+		name: "Sarah",
 		content: " — Do you have Paris recommendations? Have you ever…",
 		profilePic: "",
+		chatRoomId: "3",
 	},
 ];
 const MOCK_NOTIFIACTION = [
@@ -119,13 +123,14 @@ export default function Header() {
 	const [anchorChatLogEl, setAnchorChatLogEl] = useState(null);
 	const [anchorNotificationLogEl, setAnchorNotificationLogEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+	const [chatRoomId, setChatRoomId] = useState("");
 	const history = useHistory();
 	// const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 	const location = useLocation();
 	const path = location.pathname;
 
-	console.log(anchorChatLogEl);
+	// console.log(chatRoomId);
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -229,6 +234,7 @@ export default function Header() {
 			<LogMenu
 				anchorLogEl={anchorChatLogEl}
 				handleLogMenuClose={handleChatLogMenuClose}
+				setChatRoomId={setChatRoomId}
 				type="chat"
 				log={MOCK_CHAT}
 			/>
@@ -240,6 +246,7 @@ export default function Header() {
 				type="notification"
 				log={MOCK_NOTIFIACTION}
 			/>
+			{chatRoomId !== "" && <ChatContainer chatRoomId={chatRoomId} setChatRoomId={setChatRoomId} />}
 		</>
 		// </Box>
 	);

@@ -139,7 +139,7 @@ const theme = createTheme({
 						backgroundColor: "rgba(64,169,223,1)",
 					},
 					"&::-webkit-scrollbar-corner, & *::-webkit-scrollbar-corner": {
-						backgroundColor: "rgba(64,169,223,1)",
+						backgroundColor: "none",
 					},
 				},
 			},

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { allPages } from "../../config/routes";
 import { SidebarContextProvider } from "../../contexts/SidebarContext";
+import ChatContainer from "../chat/ChatContainer";
 import Footer from "../layout/footer/Footer";
 import Header from "../layout/header/Header";
 
@@ -41,6 +42,7 @@ function RouteContainer() {
 					</Switch>
 				</div>
 			</SidebarContextProvider>
+			{/* <ChatContainer /> */}
 			{path !== "/login" && path !== "/signup" && <Footer />}
 		</>
 	);

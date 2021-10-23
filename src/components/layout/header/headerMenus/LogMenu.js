@@ -8,12 +8,18 @@ import Typography from "@mui/material/Typography";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import limitStringLength from "../../../../services/limitStringLength";
 
-function LogMenu({ anchorLogEl, handleLogMenuClose, type, log }) {
+function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) {
 	const menuId = "primary-chatLog-menu";
 
 	const isChatLogMenuOpen = Boolean(anchorLogEl);
 
-	console.log(isChatLogMenuOpen);
+	// console.log(log);
+
+	const handleClickStartChat = (id) => {
+		handleLogMenuClose();
+		setChatRoomId(id);
+	};
+
 	return (
 		<Menu
 			anchorEl={anchorLogEl}
@@ -41,7 +47,18 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log }) {
 				sx={{ width: { xs: "100vw", sm: "50vw", md: "25vw", maxHeight: "50vh" }, bgcolor: "background.paper" }}
 			>
 				{log.map((item) => (
-					<ListItem alignItems="flex-start" width="100%">
+					<ListItem
+						{...(type === "chat" && { onClick: () => handleClickStartChat(item.chatRoomId) })}
+						alignItems="flex-start"
+						width="100%"
+						sx={{
+							"&:hover": {
+								background:
+									"linear-gradient(90deg, rgba(64, 169, 223, 1) 0%, rgba(115, 194, 130, 0.5) 100%)",
+								color: "white",
+							},
+						}}
+					>
 						<ListItemAvatar>
 							<Avatar src="/static/images/avatar/1.jpg" />
 						</ListItemAvatar>
@@ -51,12 +68,12 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log }) {
 								<>
 									{type === "notification" && (
 										<Typography
-											sx={{ display: "inline" }}
+											sx={{ display: "inline", fontWeight: "bold" }}
 											component="span"
 											variant="body2"
-											color="text.primary"
 										>
 											Has {item.actionType} your {item.actionOn}
+											{item.content && ":"}
 										</Typography>
 									)}
 
