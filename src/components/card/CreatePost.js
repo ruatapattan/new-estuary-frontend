@@ -33,7 +33,7 @@ function CreatePost() {
           aria-label='recipe'
           src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80'
           sx={{ width: 40, height: 40, mr: '16px' }}></Avatar>
-        <TextField id='standard-basic' label='Create post' variant='filled' sx={{ width: '100%' }} />
+        <TextField id='standard-basic' label='Create post' size='small' variant='filled' sx={{ width: '100%' }} />
         <Button variant='contained' endIcon={<SendIcon />} color='success' sx={{ height: '50%' }} />
       </Stack>
       <Stack justifyContent='space-evenly' direction='row' alignItems='center' spacing={2} mt='10px'>

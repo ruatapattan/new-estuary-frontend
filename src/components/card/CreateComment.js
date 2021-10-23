@@ -10,7 +10,7 @@ function CreateComment() {
   return (
     <Box sx={{ p: '5px 0', mb: '20px' }}>
       <CardActions>
-        <Grid container justifyContent='space-around'>
+        <Grid container justifyContent='space-evenly'>
           <Grid item>
             <Avatar
               aria-label='recipe'
@@ -18,7 +18,7 @@ function CreateComment() {
               sx={{ width: 40, height: 40 }}></Avatar>
           </Grid>
           <Grid item xs={6} md={5}>
-            <TextField id='standard-basic' label='comment' variant='filled' sx={{ width: '100%' }} />
+            <TextField id='standard-basic' label='comment' size='small' variant='filled' sx={{ width: '100%' }} />
           </Grid>
           <Grid item xs={2} md={2}>
             <Button variant='contained' endIcon={<SendIcon />} color='success' />
