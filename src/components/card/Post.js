@@ -93,7 +93,12 @@ function Post() {
               sx={{ width: 40, height: 40 }}></Avatar>
           }
           title='Shrimp and Chorizo Paella'
-          subheader='September 14, 2016'
+          // subheader='September 14, 2016'
+          subheader={
+            <Typography color='text.disabled' variant='body2'>
+              September 14, 2016
+            </Typography>
+          }
         />
 
         {/* Card content*/}

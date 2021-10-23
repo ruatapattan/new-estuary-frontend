@@ -11,7 +11,6 @@ function SubComment() {
   return (
     <Stack justifyContent='space-between' direction='row' spacing={1} ml='30px' mb='10px'>
       <Avatar
-        sx={{ bgcolor: purple[500] }}
         aria-label='recipe'
         src='https://images.unsplash.com/photo-1494354145959-25cb82edf23d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80'
         sx={{ width: 40, height: 40 }}>
@@ -31,7 +30,7 @@ function SubComment() {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               September 14, 2016
             </Typography>
           </Grid>

@@ -41,7 +41,7 @@ function MainComment() {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'>
+            <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               September 14, 2016
             </Typography>
           </Grid>
