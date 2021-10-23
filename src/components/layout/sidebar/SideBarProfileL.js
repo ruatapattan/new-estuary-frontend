@@ -64,9 +64,11 @@ export default function SideBarProfileL() {
           <Box sx={{ overflow: 'auto' }}>
             <Divider />
             <List>
+              <ListItem />
+              <ListItem />
               {menu.map(item => (
-                <ListItem button key={item.text}>
-                  <ListItemIcon>
+                <ListItem button key={item.text} sx={{ color: 'rgba(35, 40, 54, 1)' }}>
+                  <ListItemIcon sx={{ color: 'rgba(35, 40, 54, 1)' }}>
                     <item.icon />
                   </ListItemIcon>
                   <ListItemText primary={item.text} />

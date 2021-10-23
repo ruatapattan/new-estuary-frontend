@@ -8,7 +8,7 @@ import MarketPlace from '../pages/MarketPlace';
 import CreactProduct from '../pages/CreactProduct';
 import Product from '../pages/Product';
 const allPages = [
-  { path: '/product', component: Product },
+  { path: '/product/:id', component: Product },
   { path: '/marketplace', component: MarketPlace },
   { path: '/rank', component: Rank },
   { path: '/profile/:id', component: ProfileEdit },
