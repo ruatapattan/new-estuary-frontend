@@ -22,6 +22,9 @@ import UserNav from "./headerDesktopNavs/UserNav";
 import LogMenu from "./headerMenus/LogMenu";
 import ChatContainer from "../../chat/ChatContainer";
 
+import CreateCommunityBackdrop from "./createCommunity/CreateCommunityBackdrop";
+import { Button } from "@mui/material";
+
 const MOCK_CHAT = [
 	{
 		name: "Jane",
@@ -124,6 +127,7 @@ export default function Header() {
 	const [anchorNotificationLogEl, setAnchorNotificationLogEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const [chatRoomId, setChatRoomId] = useState("");
+	const [openBackdrop, setOpenBackdrop] = useState(false);
 	const history = useHistory();
 	// const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -167,6 +171,14 @@ export default function Header() {
 		setAnchorNotificationLogEl(null);
 	};
 
+	const handleCloseBackdrop = () => {
+		setOpenBackdrop(false);
+	};
+	const handleToggleBackdrop = () => {
+		handleMenuClose();
+		setOpenBackdrop(!openBackdrop);
+	};
+
 	const handleClickSignOut = async (e) => {
 		e.preventDefault();
 		removeToken();
@@ -191,7 +203,7 @@ export default function Header() {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Link to="/" style={{ color: "white" }}>
+					<Link href="/" style={{ color: "white", textDecoration: "none" }}>
 						<Typography variant="h6" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
 							Estuary
 						</Typography>
@@ -228,6 +240,7 @@ export default function Header() {
 				anchorEl={anchorEl}
 				handleMenuClose={handleMenuClose}
 				handleClickSignOut={handleClickSignOut}
+				handleToggleBackdrop={handleToggleBackdrop}
 			/>
 
 			{/* for chat */}
@@ -247,6 +260,7 @@ export default function Header() {
 				log={MOCK_NOTIFIACTION}
 			/>
 			{chatRoomId !== "" && <ChatContainer chatRoomId={chatRoomId} setChatRoomId={setChatRoomId} />}
+			<CreateCommunityBackdrop openBackdrop={openBackdrop} handleCloseBackdrop={handleCloseBackdrop} />
 		</>
 		// </Box>
 	);
