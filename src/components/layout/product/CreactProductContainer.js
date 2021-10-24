@@ -1,17 +1,17 @@
-import React from 'react';
-import { Box } from '@mui/system';
-import CreateProductForm from './CreateProductForm';
-import SideBarProfileL from '../sidebar/SideBarProfileL';
+import React from "react";
+import { Box } from "@mui/system";
+import CreateProductForm from "./CreateProductForm";
+import SideBarProfileL from "../sidebar/SideBarProfileL";
 function CreactProductContainer() {
   return (
     <Box
       flexWrap="wrap"
       sx={{
-        width: { md: '72%', xs: '100%' },
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-        // backgroundColor: 'white'
+        width: "80%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#EFF1F3",
       }}
     >
       {/* <SideBarProfileL /> */}
