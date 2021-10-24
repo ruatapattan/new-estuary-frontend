@@ -8,6 +8,24 @@ import SideBarL from '../sidebar/SideBarL';
 import ProductDetail from './ProductDetail';
 import ProductShow from './ProductShow';
 
+// const Product = [
+//   {
+//     coverPic:
+//       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80',
+//     name: 'Product 1',
+//     externalLink: '',
+//     description: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+//     price: '100.00',
+//     hashtag: ['aaa1', 'aaa2', 'aaa3'],
+//     createAt: '20-11-2021',
+//     User: {
+//       userName: 'Anna',
+//       profilePic:
+//         'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
+//     }
+//   }
+// ];
+
 function ProductContainer() {
   return (
     <Box

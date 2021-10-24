@@ -1,5 +1,5 @@
 import { Box } from '@mui/system';
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Button } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -8,6 +8,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function ProductDetail() {
   const iconHeartStyle = { color: '#e91e63', ml: '10px' };
+  const [like, setLike] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
+  const [isSubscribe, setIsSubscribe] = useState(false);
+  const tags = [{ name: 'aaa' }, { name: 'bbb' }, { name: 'ccc' }];
 
   return (
     <Box
@@ -25,8 +29,9 @@ function ProductDetail() {
           textAlign: 'end'
         }}
       >
-        {/* <FavoriteBorderIcon sx={iconHeartStyle} /> */}
-        <FavoriteIcon sx={iconHeartStyle} />
+        <Button sx={{ p: '0', m: '0' }} onClick={() => setLike(curr => !curr)}>
+          {like ? <FavoriteIcon sx={iconHeartStyle} /> : <FavoriteBorderIcon sx={iconHeartStyle} />}
+        </Button>
       </Box>
 
       {/* /////////Creater Detail///////////////  */}
@@ -106,21 +111,11 @@ function ProductDetail() {
           // border: '1px solid blue',
         }}
       >
-        <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          Tag
-        </Button>
-        <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          Tag
-        </Button>
-        <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          Tag
-        </Button>
-        <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          Tag
-        </Button>
-        <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          Tag
-        </Button>
+        {tags.map(item => (
+          <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
+            {item.name}
+          </Button>
+        ))}
       </Box>
 
       {/* /////////Product Detail///////////////  */}
@@ -137,7 +132,7 @@ function ProductDetail() {
         dolore magna aliqua. Ut enim ad minim veniam
       </Box>
 
-      {/* /////////Doeload Detail///////////////  */}
+      {/* /////////Purchasing Detail///////////////  */}
       <Box
         sx={{
           width: '100%',
@@ -187,11 +182,9 @@ function ProductDetail() {
             <p>1234 x900px 10MB</p>
           </Box>
         </Box>
-        <Button variant="gradient" sx={{ p: '5px 15px', mt: '20px' }}>
-          {/* <FileDownloadIcon /> */}
-          {/* Dowload */}
-          <ShoppingCartIcon />
-          Buy now
+        <Button onClick={() => setPurchasing(curr => !curr)} variant="gradient" sx={{ p: '5px 15px', mt: '20px' }}>
+          {purchasing ? <FileDownloadIcon /> : <ShoppingCartIcon />}
+          {purchasing ? 'Dowload' : 'Buy now'}
         </Button>
       </Box>
     </Box>

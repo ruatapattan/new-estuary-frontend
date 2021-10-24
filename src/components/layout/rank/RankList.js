@@ -16,6 +16,13 @@ function RankList({ color }) {
     }
   };
 
+  const countLikeStyle = {
+    ml: { md: '0', xs: '30px' },
+    background: '-webkit-linear-gradient( rgba(115, 194, 130, 1) 0%, rgba(64, 169, 223, 1) 100%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent'
+  };
+
   //   const linkStyle = { color: 'rgb(34, 189, 205, 1) ' };
 
   return (
@@ -60,16 +67,19 @@ function RankList({ color }) {
           //   border: '1px solid green'
         }}
       >
-        <Link href="#" underline="hover" sx={linkStyle}>
+        {/* <Link href="#" underline="hover" sx={linkStyle}>
           community
-        </Link>
-        <Link href="#" underline="hover" sx={linkStyle}>
+        </Link> */}
+        {/* <Link href="#" underline="hover" sx={linkStyle}>
           collection
+        </Link> */}
+        <Link href="#" underline="hover" sx={linkStyle}>
+          Profile
         </Link>
         <Link href="#" underline="hover" sx={linkStyle}>
-          profile
+          Product
         </Link>
-        <Link href="#" underline="hover" sx={linkStyle}>
+        <Link underline="hover" sx={countLikeStyle}>
           170k
         </Link>
       </Box>
