@@ -1,8 +1,10 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { IconButton, Link, Menu, MenuItem } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import AddIcon from "@mui/icons-material/Add";
+import { Box } from "@mui/system";
 
-function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut }) {
+function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleToggleBackdrop }) {
 	const menuId = "primary-search-account-menu";
 	const isMenuOpen = Boolean(anchorEl);
 
@@ -35,6 +37,20 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut }) {
 					</IconButton>
 					<p>Profile</p>
 				</Link>
+			</MenuItem>
+			<MenuItem onClick={handleToggleBackdrop}>
+				<Box color="text.primary" underline="none" display="flex" alignItems="center">
+					<IconButton
+						size="large"
+						aria-label="account of current user"
+						aria-controls="primary-search-account-menu"
+						aria-haspopup="true"
+						color="inherit"
+					>
+						<AddIcon />
+					</IconButton>
+					<p>Create Community</p>
+				</Box>
 			</MenuItem>
 			<MenuItem onClick={handleClickSignOut}>
 				{/* <Link href="#" underline="none" display="flex" alignItems="center"> */}
