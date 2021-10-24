@@ -15,12 +15,26 @@ import { useState } from "react";
 import SidebarNavHeader from "./SidebarNavHeader";
 import SidebarNavigation from "./sidebarContentItems/SidebarNavigation";
 import SidebarPeople from "./sidebarContentItems/SidebarPeople";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import SidebarCommunity from "./sidebarContentItems/SidebarCommunity";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import SettingsIcon from "@mui/icons-material/Settings";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ForumIcon from "@mui/icons-material/Forum";
+import StarsIcon from "@mui/icons-material/Stars";
+import SidebarFilter from "./sidebarContentItems/SidebarFilter";
 
 // const navArr = ["Home", "Marketplace", "Ranking", "Community"];
+const menu = [
+	// { text: "Favorite", icon: FavoriteIcon },
+	{ text: "Create", icon: NoteAddIcon },
+	{ text: "Editprofile", icon: SettingsIcon },
+	{ text: "Wallet", icon: AccountBalanceWalletIcon },
+];
 
-function SidebarContentContainer() {
+function SidebarContentContainer({ type }) {
 	const [isShowing, setIsShowing] = useState("Navigation");
 	const location = useLocation();
 	const path = location.pathname;
@@ -39,12 +53,57 @@ function SidebarContentContainer() {
 		<>
 			<Toolbar />
 			<Box sx={{ overflow: "overlay" }}>
+				{type === "profile" && (
+					<>
+						<List>
+							<ListItem>
+								<ListItemText
+									sx={{ textAlign: "center", color: "text.secondary" }}
+									primary="Manage Profile"
+								/>
+							</ListItem>
+							{menu.map((item) => (
+								<ListItem button key={item.text} sx={{ color: "rgba(35, 40, 54, 1)" }}>
+									{/* <ListItemIcon sx={{ color: "rgba(35, 40, 54, 1)" }}>
+								<item.icon />
+							</ListItemIcon>
+							<ListItemText primary={item.text} /> */}
+
+									<Button
+										variant="gradient2"
+										sx={{
+											textTransform: "none",
+											width: "100%",
+											color: "primary",
+											"&:hover": { color: "#fff" },
+										}}
+									>
+										<ListItemIcon
+											sx={{
+												color: "inherit",
+											}}
+										>
+											<item.icon />
+										</ListItemIcon>
+										<ListItemText primary={item.text} />
+									</Button>
+								</ListItem>
+							))}
+						</List>
+						<Divider />
+					</>
+				)}
+				{type === "marketplace" && (
+					<>
+						<SidebarFilter />
+					</>
+				)}
 				<List
 					className="listttttttttt"
 					sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignitem: "center" }}
 				>
 					<SidebarNavHeader isShowing={isShowing} setIsShowing={setIsShowing} />
-					<Divider />
+					{/* <Divider /> */}
 					{isShowing === "Navigation" ? (
 						<SidebarNavigation />
 					) : isShowing === "People" ? (

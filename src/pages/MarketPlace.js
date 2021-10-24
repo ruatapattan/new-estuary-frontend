@@ -6,7 +6,7 @@ import SideBar from "../components/layout/sidebar/SideBarL";
 function MarketPlace() {
 	return (
 		<Box width="100%">
-			<SideBar />
+			<SideBar type="marketplace" />
 			<Box boxSizing="border-box" marginLeft={{ sm: 0, md: "240px" }} minHeight="80vh">
 				<MarketplaceContent />
 			</Box>

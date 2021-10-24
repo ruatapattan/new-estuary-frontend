@@ -9,7 +9,7 @@ import { GradientDrawer } from "../../../style";
 
 const drawerWidth = "240px";
 
-export default function SideBar() {
+export default function SideBar({ type }) {
 	const { handleDrawerToggle, mobileOpen } = useContext(SidebarContext);
 
 	return (
@@ -21,7 +21,9 @@ export default function SideBar() {
 				className="drawerDiv"
 				sx={{
 					// marginTop: "5vh",
-					width: drawerWidth,
+					// width: drawerWidth,
+					width: { xs: "100vw", sm: drawerWidth },
+
 					flexShrink: 0,
 					"& .MuiDrawer-paper": {
 						width: drawerWidth,
@@ -39,7 +41,7 @@ export default function SideBar() {
 				}}
 				// anchor="left"
 			>
-				<SidebarContentContainer />
+				<SidebarContentContainer type={type} />
 			</GradientDrawer>
 			<GradientDrawer
 				className="drawerDiv"
@@ -51,13 +53,13 @@ export default function SideBar() {
 						width: drawerWidth,
 						boxSizing: "border-box",
 					},
-					display: { sm: "none", md: "flex" },
+					display: { xs: "none", sm: "none", md: "flex" },
 					// background: "red !important",
 				}}
 				variant="permanent"
 				anchor="left"
 			>
-				<SidebarContentContainer />
+				<SidebarContentContainer type={type} />
 			</GradientDrawer>
 		</>
 		//</Box>

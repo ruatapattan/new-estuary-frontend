@@ -34,7 +34,7 @@ function MarketplaceContent({ title }) {
 				<Box display="flex" justifyContent="center">
 					<Grid container spacing={6} sx={{ width: "100%", p: "1rem" }}>
 						{imgArr.map((item, idx) => (
-							<Grid item xs={4}>
+							<Grid item xs={12} sm={6} md={4} sx={{ display: "flex", justifyContent: "center" }}>
 								<Link to="#" key={idx} style={{ textDecoration: "none" }}>
 									<Card sx={{ maxWidth: 345 }}>
 										<CardActionArea>
