@@ -11,7 +11,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import WavesIcon from "@mui/icons-material/Waves";
 import { useLocation } from "react-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import SidebarNavHeader from "./SidebarNavHeader";
 import SidebarNavigation from "./sidebarContentItems/SidebarNavigation";
 import SidebarPeople from "./sidebarContentItems/SidebarPeople";
@@ -24,22 +24,37 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ForumIcon from "@mui/icons-material/Forum";
 import StarsIcon from "@mui/icons-material/Stars";
+import PersonIcon from "@mui/icons-material/Person";
 import SidebarFilter from "./sidebarContentItems/SidebarFilter";
-import DesktopMenu from "../../header/headerMenus/DesktopMenu";
+import { SidebarContext } from "../../../../contexts/SidebarContext";
 
 // const navArr = ["Home", "Marketplace", "Ranking", "Community"];
-const menu = [
-	// { text: "Favorite", icon: FavoriteIcon },
-	{ text: "Create", icon: NoteAddIcon },
-	{ text: "Editprofile", icon: SettingsIcon },
-	{ text: "Wallet", icon: AccountBalanceWalletIcon },
-];
 
 function SidebarContentContainer({ type }) {
-	const [isShowing, setIsShowing] = useState("Navigation");
+	const { chooseNavProfile, setChooseNavProfile } = useContext(SidebarContext);
 
+	const menu = [
+		// { text: "Favorite", icon: FavoriteIcon },
+		{
+			text: chooseNavProfile === "Create" ? "Profile" : "Create",
+			icon: chooseNavProfile === "Create" ? PersonIcon : NoteAddIcon,
+		},
+		{
+			text: chooseNavProfile === "Editprofile" ? "Profile" : "Editprofile",
+			icon: chooseNavProfile === "Editprofile" ? PersonIcon : SettingsIcon,
+		},
+		{
+			text: chooseNavProfile === "Wallet" ? "Profile" : "Wallet",
+			icon: chooseNavProfile === "Wallet" ? PersonIcon : AccountBalanceWalletIcon,
+		},
+	];
+
+	const [isShowing, setIsShowing] = useState("Navigation");
 	const location = useLocation();
 	const path = location.pathname;
+
+	// console.log("sidebarpath", path);
+
 	function handleClickScrollBottom() {
 		window.scroll({
 			top: document.body.offsetHeight,
@@ -69,6 +84,17 @@ function SidebarContentContainer({ type }) {
 							<ListItemText primary={item.text} /> */}
 
 									<Button
+										onClick={() =>
+											setChooseNavProfile(
+												item.text === "Create"
+													? "Create"
+													: item.text === "Editprofile"
+													? "Editprofile"
+													: item.text === "Wallet"
+													? "Wallet"
+													: ""
+											)
+										}
 										variant="gradient2"
 										sx={{
 											textTransform: "none",
