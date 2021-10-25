@@ -4,7 +4,7 @@ const SidebarContext = createContext();
 
 function SidebarContextProvider(props) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [chooseNavProfile, setChooseNavProfile] = useState('');
+  const [chooseNavProfile, setChooseNavProfile] = useState('Profile');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

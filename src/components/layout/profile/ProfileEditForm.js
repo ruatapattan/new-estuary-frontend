@@ -220,8 +220,8 @@ function ProfileEditFrom() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          border: '1px solid red'
+          justifyContent: 'center'
+          // border: '1px solid red'
 
           // backgroundColor: '#EFF1F3'
         }}

@@ -89,7 +89,7 @@ function SidebarContentContainer({ type }) {
                           ? 'Editprofile'
                           : item.text === 'Wallet'
                           ? 'Wallet'
-                          : ''
+                          : 'Profile'
                       )
                     }
                     variant="gradient2"
