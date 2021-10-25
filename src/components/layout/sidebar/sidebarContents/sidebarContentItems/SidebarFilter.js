@@ -62,6 +62,7 @@ function SidebarFilter() {
 						if (item.name !== currentTag) {
 							return (
 								<ListItem
+									key={item}
 									sx={{ display: "flex", justifyContent: "center" }}
 									onClick={() => handleClickNavType(item.name)}
 								>

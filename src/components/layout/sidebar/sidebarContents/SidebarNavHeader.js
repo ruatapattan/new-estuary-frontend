@@ -46,6 +46,7 @@ function SidebarNavHeader({ isShowing, setIsShowing }) {
 						if (item.name !== isShowing) {
 							return (
 								<ListItem
+									key={item}
 									sx={{ display: "flex", justifyContent: "center" }}
 									onClick={() => handleClickNavType(item.name)}
 								>

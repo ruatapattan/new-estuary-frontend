@@ -25,6 +25,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ForumIcon from "@mui/icons-material/Forum";
 import StarsIcon from "@mui/icons-material/Stars";
 import SidebarFilter from "./sidebarContentItems/SidebarFilter";
+import DesktopMenu from "../../header/headerMenus/DesktopMenu";
 
 // const navArr = ["Home", "Marketplace", "Ranking", "Community"];
 const menu = [
@@ -36,11 +37,9 @@ const menu = [
 
 function SidebarContentContainer({ type }) {
 	const [isShowing, setIsShowing] = useState("Navigation");
+
 	const location = useLocation();
 	const path = location.pathname;
-
-	// console.log("sidebarpath", path);
-
 	function handleClickScrollBottom() {
 		window.scroll({
 			top: document.body.offsetHeight,
