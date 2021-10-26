@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Avatar, Link } from '@mui/material';
 import axios from '../../../config/axios';
 import { useParams, useHistory } from 'react-router-dom';
+import amountCreditCardValidate from '../../../services/amountCreditCardValidate';
+import Swal from 'sweetalert2';
 
 function WalletForm() {
   const param = useParams();
   const [user, setUser] = useState([]);
-  const [amount, setAmount] = useState(1000000);
+  const [amount, setAmount] = useState();
+  const [isAddWallet, setIsAddWallet] = useState(false);
+  const [toggle, setToggle] = useState(false);
+  const [error, setError] = useState({ amount: 'Amount is required' });
+
+  const handleInputAmount = e => {
+    setAmount(e.target.value);
+
+    if (e.target.value == '') {
+      setError(cur => ({ ...cur, amount: 'Amount is required' }));
+    } else if (!amountCreditCardValidate.validateCharacter(e.target.value)) {
+      setError(cur => ({ ...cur, amount: 'Amount must contain number' }));
+    } else {
+      setError(cur => ({ ...cur, amount: '' }));
+    }
+  };
 
   useEffect(() => {
     const callUser = async () => {
@@ -22,19 +39,28 @@ function WalletForm() {
         });
     };
     callUser();
-  }, []);
-  console.dir(user);
+  }, [toggle]);
 
   /////////////////Omise connect backend///////////////////////
-  const createCreditCardCharge = async (username, amount, token) => {
-    await axios.post('/checkout-credit-card');
+  const createCreditCardCharge = async (username, wallet, amount, token) => {
+    await axios.post('/checkout-credit-card', { username, wallet, amount, token }).then(res => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Your top-up is successful',
+        showConfirmButton: false,
+        timer: 1500
+      });
+
+      setIsAddWallet(curr => !curr);
+      setToggle(curr => !curr);
+      setAmount('');
+      setError(cur => ({ ...cur, amount: 'Amount is required' }));
+    });
   };
 
   /////////////////Omise///////////////////////
 
   let OmiseCard = window.OmiseCard;
-  // let button = document.querySelector('#checkoutButton');
-  // let form = document.querySelector('#checkoutForm');
 
   const creditCardConfigure = e => {
     OmiseCard.configure({
@@ -42,8 +68,8 @@ function WalletForm() {
     });
 
     OmiseCard.configureButton('#credit-card', {
-      amount: 300000,
-      currency: 'USD'
+      // amount: 300000,
+      // currency: 'USD'
       // buttonLabel: 'Pay 30 USD'
     });
     OmiseCard.attach();
@@ -51,21 +77,31 @@ function WalletForm() {
 
   const handleOpenOmise = e => {
     OmiseCard.open({
-      amount: amount,
-      // submitFormTarget: '#checkout-form',
+      amount: +amount * 100,
+      submitFormTarget: '#checkout-form',
+      // defaultPaymentMethod:'installment',
+      // otherPaymentMethods: 'alipay',
+      // otherPaymentMethods: 'installment',
       onCreateTokenSuccess: token => {
-        console.log(token);
-        // createCreditCardCharge(user.username, amount, token);
+        // console.log(token);
+        createCreditCardCharge(user.username, user.wallet, amount, token);
       },
       onFormClosed: () => {}
     });
   };
 
-  const handleClickPurchase = e => {
+  const handleClickPurchase = async e => {
     e.preventDefault();
-    // setPurchasing(curr => !curr);
-    creditCardConfigure();
-    handleOpenOmise();
+    try {
+      if (error.amount) {
+        setError(cur => ({ ...cur, amount: 'Amount is incorrect' }));
+      } else {
+        await creditCardConfigure();
+        await handleOpenOmise();
+      }
+    } catch (err) {
+      console.dir(err);
+    }
   };
 
   ///////////////////////////////////////////
@@ -76,9 +112,8 @@ function WalletForm() {
         width: { md: '72%', sm: '100%', xs: '100%' },
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
         // justifyContent: 'center',
-        border: '1px solid red'
       }}
     >
       <Box
@@ -90,9 +125,14 @@ function WalletForm() {
           display: 'flex',
           alignItems: 'center',
           padding: '20px 50px',
-          mt: '80px',
-          '& > p,h2,div': {
-            mb: '10px'
+          m: '80px 0px',
+          '& hr': {
+            color: 'white',
+            width: '100%',
+            m: '10px 0px'
+          },
+          '& p,h2,hr,Button': {
+            m: '20px 0px'
           }
         }}
       >
@@ -101,8 +141,7 @@ function WalletForm() {
             display: 'flex',
             flexDirection: 'row',
             width: '100%',
-            alignItems: 'center',
-            border: '1px solid red'
+            alignItems: 'center'
           }}
         >
           <Avatar
@@ -114,11 +153,12 @@ function WalletForm() {
               mr: { md: '15px', xs: '20px' }
             }}
           ></Avatar>
-          <h2>USERNAME</h2>
+          <h3>USERNAME</h3>
         </Box>
+        <hr />
 
         <p>Total balance</p>
-        <h2>{amount} USD</h2>
+        <h2>{user.wallet} Bath</h2>
 
         {/* ////////////////Omise/////////////////// */}
         {/* <form id="checkoutForm" method="POST" action="/charge">
@@ -131,11 +171,80 @@ function WalletForm() {
             data-default-payment-method="credit_card"
           ></script>
         </form> */}
-        <form>
-          <Button id="credit-card" onClick={handleClickPurchase} variant="gradient">
+
+        {!isAddWallet && (
+          <Button onClick={() => setIsAddWallet(curr => !curr)} variant="gradient">
             Add Wallet
           </Button>
-        </form>
+        )}
+
+        {isAddWallet && (
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              '& hr': {
+                color: 'white',
+                width: '100%',
+                m: '10px 0px'
+              },
+              '& label.Mui-focused': {
+                color: 'white'
+              },
+              '& .MuiInput-underline:after': {
+                borderBottomColor: 'white'
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'white'
+                },
+                '&:hover fieldset': {
+                  borderColor: 'white'
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'white'
+                }
+              }
+            }}
+          >
+            <hr />
+            <h2>Input Amount</h2>
+            <TextField
+              sx={{
+                color: 'white',
+                width: '100%',
+                m: '10px 0px',
+                multilineColor: { color: 'white' }
+              }}
+              // label="Amount"
+              defaultValue=""
+              error={error.amount !== '' ? true : false}
+              helperText={error.amount}
+              value={amount}
+              onChange={handleInputAmount}
+            />
+
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <Button
+                variant="gradient3"
+                onClick={() => {
+                  setIsAddWallet(curr => !curr);
+                  setAmount('');
+                }}
+              >
+                Cancle
+              </Button>
+              <form>
+                <Button id="credit-card" onClick={handleClickPurchase} variant="gradient">
+                  Confirm
+                </Button>
+              </form>
+            </Box>
+          </Box>
+        )}
 
         {/* /////////////////////////////////// */}
       </Box>

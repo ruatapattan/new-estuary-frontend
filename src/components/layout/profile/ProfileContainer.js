@@ -25,11 +25,10 @@ function ProfileContainer() {
       <Banner />
 
       <SideBarProfileL />
-      {/* {chooseNavProfile === 'Create' && <CreactProductContainer />}
+      {chooseNavProfile === 'Create' && <CreactProductContainer />}
       {chooseNavProfile === 'Editprofile' && <ProfileEditForm />}
       {chooseNavProfile === 'Wallet' && <WalletForm />}
-      {chooseNavProfile === 'Profile' && <ProfileForm />} */}
-      <WalletForm />
+      {chooseNavProfile === 'Profile' && <ProfileForm />}
     </Box>
   );
 }
