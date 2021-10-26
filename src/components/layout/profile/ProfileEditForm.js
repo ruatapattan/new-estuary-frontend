@@ -12,6 +12,8 @@ function ProfileEditFrom() {
   const param = useParams();
   const history = useHistory();
   const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
+  const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217695/headshot_default_utpjzp.gif';
+  const defaulfBanner = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
 
   const [isFocus, setIsFocus] = useState({
     firstName: false,
@@ -368,13 +370,7 @@ function ProfileEditFrom() {
             }}
           >
             <img
-              src={
-                previewProfile
-                  ? previewProfile
-                  : userInput.profilePic
-                  ? userInput.profilePic
-                  : 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1633073970/l6y8yhzctblrttmt2xpp.png'
-              }
+              src={previewProfile ? previewProfile : userInput.profilePic ? userInput.profilePic : defaulfProfile}
               alt=""
               sx={{ mb: '25px' }}
             />
@@ -399,13 +395,7 @@ function ProfileEditFrom() {
             </label>
 
             <img
-              src={
-                previewBanner
-                  ? previewBanner
-                  : userInput.bannerPic
-                  ? userInput.bannerPic
-                  : 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1633073970/l6y8yhzctblrttmt2xpp.png'
-              }
+              src={previewBanner ? previewBanner : userInput.bannerPic ? userInput.bannerPic : defaulfBanner}
               alt=""
               sx={{ mb: '25px' }}
             />

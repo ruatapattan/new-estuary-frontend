@@ -20,6 +20,8 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 		setChatRoomId(id);
 	};
 
+	console.log(anchorLogEl);
+
 	return (
 		<Menu
 			anchorEl={anchorLogEl}
@@ -29,12 +31,10 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 			}}
 			id={menuId}
 			keepMounted
-			transformOrigin={
-				{
-					// vertical: "top",
-					// horizontal: "right",
-				}
-			}
+			transformOrigin={{
+				vertical: "top",
+				horizontal: "right",
+			}}
 			open={isChatLogMenuOpen}
 			onClose={handleLogMenuClose}
 		>
@@ -46,8 +46,9 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 			<List
 				sx={{ width: { xs: "100vw", sm: "50vw", md: "25vw", maxHeight: "50vh" }, bgcolor: "background.paper" }}
 			>
-				{log.map((item) => (
+				{log.map((item, index) => (
 					<ListItem
+						key={index}
 						{...(type === "chat" && { onClick: () => handleClickStartChat(item.chatRoomId) })}
 						alignItems="flex-start"
 						width="100%"

@@ -23,7 +23,6 @@ function ProfileContainer() {
       }}
     >
       <Banner />
-
       <SideBarProfileL />
       {chooseNavProfile === 'Create' && <CreactProductContainer />}
       {chooseNavProfile === 'Editprofile' && <ProfileEditForm />}

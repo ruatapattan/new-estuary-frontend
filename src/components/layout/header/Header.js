@@ -24,6 +24,7 @@ import ChatContainer from "../../chat/ChatContainer";
 
 import CreateCommunityBackdrop from "./createCommunity/CreateCommunityBackdrop";
 import { Button } from "@mui/material";
+import { ChatContext } from "../../../contexts/ChatContext";
 
 const MOCK_CHAT = [
 	{
@@ -120,13 +121,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+	const { chatRoomId, setChatRoomId } = useContext(ChatContext);
 	const { handleDrawerToggle } = useContext(SidebarContext);
 	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [anchorChatLogEl, setAnchorChatLogEl] = useState(null);
 	const [anchorNotificationLogEl, setAnchorNotificationLogEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-	const [chatRoomId, setChatRoomId] = useState("");
 	const [openBackdrop, setOpenBackdrop] = useState(false);
 	const history = useHistory();
 	// const isMenuOpen = Boolean(anchorEl);
@@ -140,13 +141,12 @@ export default function Header() {
 		setAnchorEl(event.currentTarget);
 	};
 
-	const handleMobileMenuClose = () => {
-		setMobileMoreAnchorEl(null);
-	};
-
 	const handleMenuClose = () => {
 		setAnchorEl(null);
 		handleMobileMenuClose();
+	};
+	const handleMobileMenuClose = () => {
+		setMobileMoreAnchorEl(null);
 	};
 
 	const handleMobileMenuOpen = (event) => {

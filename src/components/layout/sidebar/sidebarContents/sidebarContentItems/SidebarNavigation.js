@@ -22,7 +22,7 @@ function SidebarNavigation() {
 	return (
 		<>
 			{navArr.map((item, index) => (
-				<ListItem className="itemmmmmmmm" button key={item} sx={{ justifyContent: "center" }}>
+				<ListItem className="itemmmmmmmm" button key={index} sx={{ justifyContent: "center" }}>
 					<Button
 						variant="gradient2"
 						sx={{

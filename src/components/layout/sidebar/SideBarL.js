@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -11,6 +11,17 @@ const drawerWidth = "240px";
 
 export default function SideBar({ type }) {
 	const { handleDrawerToggle, mobileOpen } = useContext(SidebarContext);
+	// const [anchorEl, setAnchorEl] = useState(null);
+
+	// const handleProfileMenuOpen = (event) => {
+	// 	setAnchorEl(event.currentTarget);
+	// };
+
+	// const handleMenuClose = () => {
+	// 	setAnchorEl(null);
+	// };
+
+	// console.log(handleProfileMenuOpen);
 
 	return (
 		// <Box sx={{ zIndex: "1", marginRight: "500px" }} className="BoxBarrrrrr">
@@ -41,7 +52,11 @@ export default function SideBar({ type }) {
 				}}
 				// anchor="left"
 			>
-				<SidebarContentContainer type={type} />
+				<SidebarContentContainer
+					type={type}
+					// anchorEl={anchorEl}
+					// handleProfileMenuOpen={handleProfileMenuOpen}
+				/>
 			</GradientDrawer>
 			<GradientDrawer
 				className="drawerDiv"
