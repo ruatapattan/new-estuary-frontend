@@ -110,6 +110,8 @@ function ProfileEditFrom() {
     }
   };
 
+  console.log(userInput.birthDate);
+
   //////////// check error frontend ///////////////////
   const handleInputUsername = e => {
     setUserInput(cur => ({ ...cur, username: e.target.value }));
