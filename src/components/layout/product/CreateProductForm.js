@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import MenuItem from "@mui/material/MenuItem";
 import { Box } from "@mui/system";
 import { Button, Input, TextField } from "@mui/material";
 import validator from "validator";
@@ -14,10 +14,7 @@ function CreateProductForm() {
   const textFieldStyle = { width: { xs: "80%", sm: "70%" }, mb: "25px" };
 
   const [coverPic, setCoverPic] = useState(null);
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [collection, setCollection] = useState([]);
 
   const [isFocus, setIsFocus] = useState({
     productName: false,
@@ -30,8 +27,9 @@ function CreateProductForm() {
 
   ///////////// PUT Profile ///////////////////
   const handleSubmitCreactProduct = async (e) => {
+    console.log("ccccc");
     e.preventDefault();
-    console.dir(userInput.PicProduct);
+    console.dir(userInput.coverPic);
 
     let isError = false;
     try {
@@ -39,8 +37,8 @@ function CreateProductForm() {
         setError((cur) => ({ ...cur, name: "name is required" }));
         isError = true;
       }
-      if (!userInput.collection) {
-        setError((cur) => ({ ...cur, collection: "collection is required" }));
+      if (!userInput.category) {
+        setError((cur) => ({ ...cur, category: "category is required" }));
         isError = true;
       }
       if (!userInput.price) {
@@ -48,7 +46,7 @@ function CreateProductForm() {
         isError = true;
       }
 
-      if (error.name || error.collection || error.price) {
+      if (error.name || error.category || error.price) {
         isError = true;
       }
 
@@ -57,19 +55,23 @@ function CreateProductForm() {
 
         formData.append("name", userInput.name);
         formData.append("description", userInput.description);
-        formData.append("collection", userInput.collection);
+        formData.append("categoryId", userInput.category);
         formData.append("price", userInput.price);
         formData.append("coverPic", userInput.coverPic);
+        formData.append("externalLink", "link to product");
+        formData.append("hashtag", "link to product");
 
         // console.dir(formData);
-        await axios.put(`/product/${param.id}`, formData);
+        await axios.post(`/product`, formData);
 
-        // history.push({
-        //   pathname: '/product',
-        //   state: { message: 'Your creactproduct success' }
-        // });
+        history.push({
+          pathname: "/product/1",
+          state: { message: "Your creactproduct success" },
+        });
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //check err
@@ -90,14 +92,15 @@ function CreateProductForm() {
     } else setError((cur) => ({ ...cur, name: "" }));
   };
 
-  const handleInputCollection = (e) => {
-    setUserInput((cur) => ({ ...cur, collection: e.target.value }));
+  const handleInputCategory = (e) => {
+    setUserInput((cur) => ({ ...cur, category: e.target.value }));
     if (e.target.value === "") {
-      setError((cur) => ({ ...cur, collection: "Please select a collection" }));
-    } else setError((cur) => ({ ...cur, collection: "" }));
+      setError((cur) => ({ ...cur, category: "Please select a category" }));
+    } else setError((cur) => ({ ...cur, category: "" }));
   };
 
   const handleInputPrice = (e) => {
+    setUserInput((cur) => ({ ...cur, price: e.target.value }));
     if (e.target.value === "") {
       setError((cur) => ({ ...cur, price: "Please select a price" }));
     } else setError((cur) => ({ ...cur, price: "" }));
@@ -108,6 +111,24 @@ function CreateProductForm() {
     setUserInput((cur) => ({ ...cur, coverPic: e.target.files[0] }));
     setCoverPic(URL.createObjectURL(e.target.files[0]));
   };
+
+  //call backend category
+  const [optionCategory, setOptionCategory] = useState([]);
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const res = await axios.get("/category");
+        const fetChcategorys = res.data.categorys;
+        setOptionCategory(fetChcategorys);
+        console.log(fetChcategorys);
+      } catch (err) {
+        console.dir(err);
+      }
+    };
+    fetchCategory();
+  }, []);
+
+  console.log(optionCategory);
 
   return (
     <Box
@@ -139,11 +160,7 @@ function CreateProductForm() {
       >
         Creact new Item
       </Box>
-      <Box
-        sx={{ paddingTop: "30px" }}
-        component="form"
-        onSubmit={handleSubmitCreactProduct}
-      >
+      <Box sx={{ paddingTop: "30px" }}>
         <div>
           <img
             src={
@@ -185,6 +202,8 @@ function CreateProductForm() {
           padding: "80px 0px",
           mb: "80px",
         }}
+        component="form"
+        onSubmit={handleSubmitCreactProduct}
       >
         <TextField
           id="outlined-productName-input"
@@ -214,13 +233,19 @@ function CreateProductForm() {
         <TextField
           id="outlined-select-currency"
           select
-          label="Select collection"
+          label="Select category"
           sx={textFieldStyle}
-          error={error.collection !== "" ? true : false}
-          helperText={error.collection}
-          value={userInput.collection}
-          onChange={handleInputCollection}
-        />
+          error={error.category !== "" ? true : false}
+          helperText={error.category}
+          value={userInput.category}
+          onChange={handleInputCategory}
+        >
+          {optionCategory.map((item) => (
+            <MenuItem key={item.id} value={item.id}>
+              {item.name}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           label={isFocus.price ? "Price" : ""}
           placeholder={!userInput.price && "Price"}
@@ -228,8 +253,8 @@ function CreateProductForm() {
           onBlur={() => setIsFocus((curr) => ({ ...curr, price: false }))}
           sx={textFieldStyle}
           value={userInput.price}
-          error={error.price !== "" ? true : false}
-          helperText={error.price}
+          // error={error.price !== "" ? true : false}
+          // helperText={error.price}
           onChange={handleInputPrice}
         />
 
