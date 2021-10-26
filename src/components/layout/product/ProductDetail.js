@@ -1,5 +1,6 @@
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
+import Script from 'react-load-script';
 import { Avatar, Button } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -13,6 +14,44 @@ function ProductDetail() {
   const [isSubscribe, setIsSubscribe] = useState(false);
   const tags = [{ name: 'aaa' }, { name: 'bbb' }, { name: 'ccc' }];
 
+  /////////////////Omise///////////////////////
+
+  let OmiseCard = window.OmiseCard;
+  // let button = document.querySelector('#checkoutButton');
+  // let form = document.querySelector('#checkoutForm');
+
+  const creditCardConfigure = e => {
+    OmiseCard.configure({
+      publicKey: 'pkey_test_5pm0cflftkpw5lysclq'
+    });
+
+    OmiseCard.configureButton('#credit-card', {
+      amount: 3000,
+      currency: 'USD'
+      // buttonLabel: 'Pay 30 USD'
+    });
+    OmiseCard.attach();
+  };
+
+  const handleOpenOmise = e => {
+    OmiseCard.open({
+      amount: 10000,
+      // submitFormTarget: '#checkout-form',
+      onCreateTokenSuccess: token => {
+        console.log(token);
+      },
+      onFormClosed: () => {}
+    });
+  };
+
+  const handleClickPurchase = e => {
+    e.preventDefault();
+    // setPurchasing(curr => !curr);
+    creditCardConfigure();
+    handleOpenOmise();
+  };
+
+  ///////////////////////////////////////////
   return (
     <Box
       sx={{
@@ -182,10 +221,45 @@ function ProductDetail() {
             <p>1234 x900px 10MB</p>
           </Box>
         </Box>
-        <Button onClick={() => setPurchasing(curr => !curr)} variant="gradient" sx={{ p: '5px 15px', mt: '20px' }}>
+
+        {/* ////////////////Omise/////////////////// */}
+
+        <form id="checkoutForm" method="POST" action="/charge">
+          <script
+            type="text/javascript"
+            src="https://cdn.omise.co/omise.js"
+            data-key="OMISE_PUBLIC_KEY"
+            data-amount="12345"
+            data-currency="THB"
+            data-default-payment-method="credit_card"
+          ></script>
+        </form>
+
+        {/* <form id="checkoutForm" method="POST" action="/charge">
+          <input type="hidden" name="omiseToken" />
+          <input type="hidden" name="omiseSource" />
+          <button type="submit" id="checkoutButton">
+            Checkout
+          </button>
+        </form> */}
+
+        {/* <script type="text/javascript" src="https://cdn.omise.co/omise.js"></script> */}
+
+        {/* <Script url="https://cdn.omise.co/omise.js" onLoad={handleloadScript} /> */}
+
+        <form>
+          <Button id="credit-card" onClick={handleClickPurchase} variant="gradient" sx={{ p: '5px 15px', mt: '20px' }}>
+            {purchasing ? <FileDownloadIcon /> : <ShoppingCartIcon />}
+            {purchasing ? 'Dowload' : 'Buy now'}
+          </Button>
+        </form>
+
+        {/* /////////////////////////////////// */}
+
+        {/* <Button onClick={() => setPurchasing(curr => !curr)} variant="gradient" sx={{ p: '5px 15px', mt: '20px' }}>
           {purchasing ? <FileDownloadIcon /> : <ShoppingCartIcon />}
           {purchasing ? 'Dowload' : 'Buy now'}
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );

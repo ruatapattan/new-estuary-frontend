@@ -6,31 +6,30 @@ import ProfileEditForm from "../profile/ProfileEditForm";
 import CreactProductContainer from "../product/CreactProductContainer";
 import Banner from "../profile/Banner";
 import { SidebarContext } from "../../../contexts/SidebarContext";
-import EditProductForm from "../product/EditProductForm";
+import WalletForm from "./WalletForm";
 
 function ProfileContainer() {
-  const { chooseNavProfile } = useContext(SidebarContext);
+	const { chooseNavProfile } = useContext(SidebarContext);
 
-  return (
-    <Box
-      flexWrap="wrap"
-      sx={{
-        width: "100%",
-        display: "flex",
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        backgroundColor: "#EFF1F3",
-      }}
-    >
-      <Banner />
-      <SideBarProfileL />
-      {/* <EditProductForm /> */}
-      {chooseNavProfile === "Create" && <CreactProductContainer />}
-      {chooseNavProfile === "Editprofile" && <ProfileEditForm />}
-      {/* {chooseNavProfile==='Wallet' && < />} */}
-      {chooseNavProfile === "" && <ProfileForm />}
-    </Box>
-  );
+	return (
+		<Box
+			flexWrap="wrap"
+			sx={{
+				width: "100%",
+				display: "flex",
+				// justifyContent: 'center',
+				// alignItems: 'center',
+				backgroundColor: "#EFF1F3",
+			}}
+		>
+			<Banner />
+			<SideBarProfileL />
+			{chooseNavProfile === "Create" && <CreactProductContainer />}
+			{chooseNavProfile === "Editprofile" && <ProfileEditForm />}
+			{chooseNavProfile === "Wallet" && <WalletForm />}
+			{chooseNavProfile === "Profile" && <ProfileForm />}
+		</Box>
+	);
 }
 
 export default ProfileContainer;

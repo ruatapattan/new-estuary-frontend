@@ -26,6 +26,22 @@ import ProductShow from './ProductShow';
 //   }
 // ];
 
+// const Comment = [
+//   {
+//     id: '1',
+//     content: 'aaaaa',
+//     createAt: '20-11-2021',
+//     pic: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80',
+//     User: {
+//       profilePic:
+//         'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
+//     }
+//   },
+//   {
+//     id: '2'
+//   }
+// ];
+
 function ProductContainer() {
   return (
     <Box
