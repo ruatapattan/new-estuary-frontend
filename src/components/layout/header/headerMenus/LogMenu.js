@@ -20,8 +20,6 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 		setChatRoomId(id);
 	};
 
-	console.log(anchorLogEl);
-
 	return (
 		<Menu
 			anchorEl={anchorLogEl}

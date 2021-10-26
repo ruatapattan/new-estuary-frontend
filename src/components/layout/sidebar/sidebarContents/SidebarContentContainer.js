@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import { useParams } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -27,12 +28,17 @@ import StarsIcon from "@mui/icons-material/Stars";
 import PersonIcon from "@mui/icons-material/Person";
 import SidebarFilter from "./sidebarContentItems/SidebarFilter";
 import { SidebarContext } from "../../../../contexts/SidebarContext";
+import { UserContext } from "../../../../contexts/UserContext";
+import { AuthContext } from "../../../../contexts/AuthContext";
 
 // const navArr = ["Home", "Marketplace", "Ranking", "Community"];
 
 function SidebarContentContainer({ type }) {
+	const params = useParams();
+	// console.log(`params`, params);
 	const { chooseNavProfile, setChooseNavProfile } = useContext(SidebarContext);
-
+	const { isShowing, setIsShowing } = useContext(UserContext);
+	const { user } = useContext(AuthContext);
 	const menu = [
 		// { text: "Favorite", icon: FavoriteIcon },
 		{
@@ -49,7 +55,6 @@ function SidebarContentContainer({ type }) {
 		},
 	];
 
-	const [isShowing, setIsShowing] = useState("Navigation");
 	const location = useLocation();
 	const path = location.pathname;
 
@@ -67,7 +72,7 @@ function SidebarContentContainer({ type }) {
 		<>
 			<Toolbar />
 			<Box sx={{ overflow: "overlay" }}>
-				{type === "profile" && (
+				{type === "profile" && +params.id === user.id && (
 					<>
 						<List>
 							<ListItem>
@@ -92,7 +97,7 @@ function SidebarContentContainer({ type }) {
 													? "Editprofile"
 													: item.text === "Wallet"
 													? "Wallet"
-													: ""
+													: "Profile"
 											)
 										}
 										variant="gradient2"

@@ -40,11 +40,11 @@ function SignupInputForm() {
 				console.log("no error");
 				const result = await axios.post("/signup", { ...userInput });
 				console.log(result.data.message);
-				// history.push({
-				// 	pathname: "/login",
-				// 	state: { successMessage: "Account Created" },
-				// 	form: "register page",
-				// });
+				history.push({
+					pathname: "/login",
+					state: { successMessage: "Account Created" },
+					form: "register page",
+				});
 			}
 		} catch (err) {
 			console.log("err response below:");

@@ -11,11 +11,28 @@ import {
 	Typography,
 	Badge,
 } from "@mui/material";
+import { API_URL } from "../../config/env";
+import * as io from "socket.io-client";
 import { Box, styled, typography } from "@mui/system";
-import { useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import Send from "@mui/icons-material/Send";
-function ChatContainer({ chatRoomId, setChatRoomId }) {
+import { ChatContext } from "../../contexts/ChatContext";
+import { AuthContext } from "../../contexts/AuthContext";
+function ChatContainer() {
+	const { chatRoomId, setChatRoomId, isGroupChat } = useContext(ChatContext);
+	const { user } = useContext(AuthContext);
+	const socketRef = useRef();
+
+	useEffect(() => {
+		// console.log(isGroupChat);
+		// console.log(chatRoomId);
+		socketRef.current = io.connect(API_URL);
+		socketRef.current.emit("join room", user.id, chatRoomId, isGroupChat);
+	}, [chatRoomId]);
+
+	console.log("ref", socketRef);
+
 	const ChatBlob = styled(Box)(({ theme, who }) => ({
 		minWidth: "25%",
 		borderRadius: 8,
@@ -23,6 +40,8 @@ function ChatContainer({ chatRoomId, setChatRoomId }) {
 		backgroundColor: who === "me" ? theme.palette.primary.main : theme.palette.secondary.main,
 		color: who === "me" ? "white" : theme.palette.text.secondary,
 	}));
+
+	console.log(chatRoomId);
 
 	const [yourId, setYourId] = useState("1");
 
