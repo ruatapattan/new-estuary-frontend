@@ -27,12 +27,13 @@ import StarsIcon from "@mui/icons-material/Stars";
 import PersonIcon from "@mui/icons-material/Person";
 import SidebarFilter from "./sidebarContentItems/SidebarFilter";
 import { SidebarContext } from "../../../../contexts/SidebarContext";
+import { UserContext } from "../../../../contexts/UserContext";
 
 // const navArr = ["Home", "Marketplace", "Ranking", "Community"];
 
 function SidebarContentContainer({ type }) {
 	const { chooseNavProfile, setChooseNavProfile } = useContext(SidebarContext);
-
+	const { isShowing, setIsShowing } = useContext(UserContext);
 	const menu = [
 		// { text: "Favorite", icon: FavoriteIcon },
 		{
@@ -49,7 +50,6 @@ function SidebarContentContainer({ type }) {
 		},
 	];
 
-	const [isShowing, setIsShowing] = useState("Navigation");
 	const location = useLocation();
 	const path = location.pathname;
 

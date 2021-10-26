@@ -259,7 +259,7 @@ export default function Header() {
 				type="notification"
 				log={MOCK_NOTIFIACTION}
 			/>
-			{chatRoomId !== "" && <ChatContainer chatRoomId={chatRoomId} setChatRoomId={setChatRoomId} />}
+			{chatRoomId !== "" && <ChatContainer />}
 			<CreateCommunityBackdrop openBackdrop={openBackdrop} handleCloseBackdrop={handleCloseBackdrop} />
 		</>
 		// </Box>

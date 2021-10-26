@@ -19,6 +19,7 @@ import { useContext, useState } from "react";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import SidebarPeopleItem from "./sidebarPeopleItem/SidebarPeopleItem";
+import { UserContext } from "../../../../../contexts/UserContext";
 
 const pplArr = [
 	{
@@ -66,6 +67,8 @@ const pplArr = [
 ];
 
 function SidebarPeople() {
+	const { sidebarSocialList } = useContext(UserContext);
+
 	const PeopleItem = styled(ListItem)(({ theme }) => ({
 		// backgroundColor: alpha(theme.palette.common.white, 0.15),
 		width: "100%",
@@ -75,7 +78,7 @@ function SidebarPeople() {
 	return (
 		<>
 			<List>
-				{pplArr.map((item, index) => (
+				{sidebarSocialList.map((item, index) => (
 					<SidebarPeopleItem type="people" item={item} />
 				))}
 			</List>

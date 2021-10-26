@@ -25,7 +25,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { ChatContext } from "../../../../../../contexts/ChatContext";
 
 function SidebarPeopleItem({ item, type }) {
-	const { setChatRoomId } = useContext(ChatContext);
+	const { setChatRoomId, setIsGroupChat } = useContext(ChatContext);
 	const [open, setOpen] = useState(false);
 	const handleClickOpenSidebarItem = () => {
 		setOpen(!open);
@@ -38,8 +38,11 @@ function SidebarPeopleItem({ item, type }) {
 
 	const handleClickChat = () => {
 		handleClickOpenSidebarItem();
+		console.log(item.id);
+		setIsGroupChat(type === "people" ? false : type === "community" ? true : "");
 		setChatRoomId(item.id);
 	};
+
 	return (
 		<>
 			<PeopleItem button key={item.id} onClick={handleClickOpenSidebarItem}>
@@ -52,12 +55,6 @@ function SidebarPeopleItem({ item, type }) {
 
 			<Collapse in={open} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
-					{/* {options.map((item, idx) => {
-						return ( */}
-					{/* const options = [
-						{ name: "Visit", icon: AccountCircle },
-						{ name: "Chat", icon: TextsmsIcon },
-					]; */}
 					<Box width="100%" display="flex" justifyContent="center">
 						<Link
 							sx={{ textDecoration: "none", display: "flex", justifyContent: "center", width: "90%" }}
@@ -77,7 +74,7 @@ function SidebarPeopleItem({ item, type }) {
 					<Box width="100%" display="flex" justifyContent="center">
 						<Button
 							variant="gradient"
-							key={item}
+							key={item.id}
 							sx={{ marginY: 1, display: "flex", justifyContent: "center", width: "90%" }}
 							onClick={handleClickChat}
 						>
