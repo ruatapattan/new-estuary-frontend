@@ -5,7 +5,7 @@ import WavesIcon from "@mui/icons-material/Waves";
 function GuestNav() {
 	return (
 		<>
-			<Box sx={{ display: { xs: "none", md: "flex" } }}>
+			<Box sx={{ display: { xs: "flex", md: "flex" } }}>
 				<Link href="/login" underline="none" display="flex" color="white" alignItems="center">
 					<IconButton
 						size="large"

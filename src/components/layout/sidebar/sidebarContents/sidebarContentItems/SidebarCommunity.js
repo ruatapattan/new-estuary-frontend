@@ -7,6 +7,7 @@ import GroupIcon from "@mui/icons-material/Group";
 import { styled } from "@mui/system";
 import { useContext } from "react";
 import SidebarPeopleItem from "./sidebarPeopleItem/SidebarPeopleItem";
+import { UserContext } from "../../../../../contexts/UserContext";
 
 const communityArr = [
 	{
@@ -30,6 +31,8 @@ const communityArr = [
 ];
 
 function SidebarCommunity() {
+	const { sidebarSocialList } = useContext(UserContext);
+
 	const PeopleItem = styled(ListItem)(({ theme }) => ({
 		// backgroundColor: alpha(theme.palette.common.white, 0.15),
 		width: "100%",
@@ -39,8 +42,8 @@ function SidebarCommunity() {
 	return (
 		<>
 			<List>
-				{communityArr.map((item, index) => (
-					<SidebarPeopleItem item={item} />
+				{sidebarSocialList.map((item, index) => (
+					<SidebarPeopleItem type="community" item={item} />
 				))}
 			</List>
 		</>

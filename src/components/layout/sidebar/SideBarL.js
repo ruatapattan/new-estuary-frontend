@@ -11,17 +11,6 @@ const drawerWidth = "240px";
 
 export default function SideBar({ type }) {
 	const { handleDrawerToggle, mobileOpen } = useContext(SidebarContext);
-	// const [anchorEl, setAnchorEl] = useState(null);
-
-	// const handleProfileMenuOpen = (event) => {
-	// 	setAnchorEl(event.currentTarget);
-	// };
-
-	// const handleMenuClose = () => {
-	// 	setAnchorEl(null);
-	// };
-
-	// console.log(handleProfileMenuOpen);
 
 	return (
 		// <Box sx={{ zIndex: "1", marginRight: "500px" }} className="BoxBarrrrrr">
