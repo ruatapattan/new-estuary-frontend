@@ -7,6 +7,7 @@ import validator from 'validator';
 import userValidate from '../../../services/userValidate';
 import passwordValidate from '../../../services/passwordValidate';
 import phoneValidate from '../../../services/phoneValidate';
+import Swal from 'sweetalert2';
 
 function ProfileEditFrom() {
   const param = useParams();
@@ -97,6 +98,12 @@ function ProfileEditFrom() {
         //   pathname: '/profile',
         //   state: { message: 'Your account has been updated' }
         // });
+        await Swal.fire({
+          icon: 'success',
+          title: 'Edit profile successful',
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } catch (err) {
       // //username errors

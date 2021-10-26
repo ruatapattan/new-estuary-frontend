@@ -235,7 +235,7 @@ function WalletForm() {
                   setAmount('');
                 }}
               >
-                Cancle
+                Cancel
               </Button>
               <form>
                 <Button id="credit-card" onClick={handleClickPurchase} variant="gradient">
