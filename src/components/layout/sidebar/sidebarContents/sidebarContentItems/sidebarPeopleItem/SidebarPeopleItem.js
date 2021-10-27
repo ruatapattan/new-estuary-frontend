@@ -23,9 +23,11 @@ import TextsmsIcon from "@mui/icons-material/Textsms";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { ChatContext } from "../../../../../../contexts/ChatContext";
+import { SidebarContext } from "../../../../../../contexts/SidebarContext";
 
 function SidebarPeopleItem({ item, type }) {
-	const { setChatRoomId, setIsGroupChat } = useContext(ChatContext);
+	const { setChatRoomInfo, setIsGroupChat } = useContext(ChatContext);
+	const { handleDrawerToggle } = useContext(SidebarContext);
 	const [open, setOpen] = useState(false);
 	const handleClickOpenSidebarItem = () => {
 		setOpen(!open);
@@ -38,10 +40,14 @@ function SidebarPeopleItem({ item, type }) {
 
 	const handleClickChat = () => {
 		handleClickOpenSidebarItem();
+		handleDrawerToggle();
 		console.log(item.id);
+		console.log("type", type);
 		setIsGroupChat(type === "people" ? false : type === "community" ? true : "");
-		setChatRoomId(item.id);
+		setChatRoomInfo({ id: type === "people" ? item.id + "p" : item.id + "c", name: item.name });
 	};
+
+	// console.log("open", open);
 
 	return (
 		<>

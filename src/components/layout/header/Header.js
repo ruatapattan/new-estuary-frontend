@@ -121,7 +121,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-	const { chatRoomId, setChatRoomId } = useContext(ChatContext);
+	const { chatRoomInfo, setChatRoomInfo } = useContext(ChatContext);
 	const { handleDrawerToggle } = useContext(SidebarContext);
 	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -135,7 +135,7 @@ export default function Header() {
 	const location = useLocation();
 	const path = location.pathname;
 
-	// console.log(chatRoomId);
+	// console.log(chatRoomInfo);
 
 	const handleProfileMenuOpen = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -187,6 +187,7 @@ export default function Header() {
 		history.push("/marketplace");
 		window.location.reload();
 	};
+	console.log(chatRoomInfo);
 
 	return (
 		// <Box sx={{ flexGrow: 1, zIndex: 1500 }}>
@@ -247,7 +248,6 @@ export default function Header() {
 			<LogMenu
 				anchorLogEl={anchorChatLogEl}
 				handleLogMenuClose={handleChatLogMenuClose}
-				setChatRoomId={setChatRoomId}
 				type="chat"
 				log={MOCK_CHAT}
 			/>
@@ -259,7 +259,7 @@ export default function Header() {
 				type="notification"
 				log={MOCK_NOTIFIACTION}
 			/>
-			{chatRoomId !== "" && <ChatContainer />}
+			{Object.keys(chatRoomInfo).length !== 0 && <ChatContainer />}
 			<CreateCommunityBackdrop openBackdrop={openBackdrop} handleCloseBackdrop={handleCloseBackdrop} />
 		</>
 		// </Box>

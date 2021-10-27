@@ -3,11 +3,11 @@ import { createContext, useState } from "react";
 const ChatContext = createContext();
 
 function ChatContextProvider(props) {
-	const [chatRoomId, setChatRoomId] = useState("");
+	const [chatRoomInfo, setChatRoomInfo] = useState({});
 	const [isGroupChat, setIsGroupChat] = useState("");
 
 	return (
-		<ChatContext.Provider value={{ chatRoomId, setChatRoomId, isGroupChat, setIsGroupChat }}>
+		<ChatContext.Provider value={{ chatRoomInfo, setChatRoomInfo, isGroupChat, setIsGroupChat }}>
 			{props.children}
 		</ChatContext.Provider>
 	);
