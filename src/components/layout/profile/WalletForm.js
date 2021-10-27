@@ -4,7 +4,6 @@ import { Button, TextField } from '@mui/material';
 import { Avatar, Link } from '@mui/material';
 import axios from '../../../config/axios';
 import { useParams, useHistory } from 'react-router-dom';
-import amountCreditCardValidate from '../../../services/amountCreditCardValidate';
 import Swal from 'sweetalert2';
 
 function WalletForm() {
@@ -20,8 +19,10 @@ function WalletForm() {
 
     if (e.target.value == '') {
       setError(cur => ({ ...cur, amount: 'Amount is required' }));
-    } else if (!amountCreditCardValidate.validateCharacter(e.target.value)) {
-      setError(cur => ({ ...cur, amount: 'Amount must contain number' }));
+    } else if (e.target.value < 100) {
+      setError(cur => ({ ...cur, amount: 'Limit: More than or equal to 100' }));
+    } else if (e.target.value > 10000) {
+      setError(cur => ({ ...cur, amount: 'Limit: Less than or equal to 10,000' }));
     } else {
       setError(cur => ({ ...cur, amount: '' }));
     }
@@ -220,6 +221,7 @@ function WalletForm() {
                 multilineColor: { color: 'white' }
               }}
               // label="Amount"
+              type="number"
               defaultValue=""
               error={error.amount !== '' ? true : false}
               helperText={error.amount}

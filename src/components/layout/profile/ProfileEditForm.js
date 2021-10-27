@@ -13,7 +13,7 @@ function ProfileEditFrom() {
   const param = useParams();
   const history = useHistory();
   const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
-  const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217695/headshot_default_utpjzp.gif';
+  const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
   const defaulfBanner = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
 
   const [isFocus, setIsFocus] = useState({
@@ -173,12 +173,13 @@ function ProfileEditFrom() {
   const handleInputPhone = e => {
     setUserInput(cur => ({ ...cur, phone: e.target.value }));
     if (!e.target.value == '') {
-      if (!phoneValidate.validateCharacter(e.target.value)) {
-        setError(cur => ({
-          ...cur,
-          phone: 'phone number must contain number'
-        }));
-      } else if (!phoneValidate.validateLength(e.target.value)) {
+      // if (!phoneValidate.validateCharacter(e.target.value)) {
+      //   setError(cur => ({
+      //     ...cur,
+      //     phone: 'phone number must contain number'
+      //   }));
+      // }
+      if (!phoneValidate.validateLength(e.target.value)) {
         setError(cur => ({ ...cur, phone: 'phone must be 10 characters long' }));
       } else {
         setError(cur => ({ ...cur, phone: '' }));
@@ -334,6 +335,7 @@ function ProfileEditFrom() {
 
           <TextField
             id="outlined-phone-input"
+            type="number"
             label={isFocus.phone ? 'Phone Number' : ''}
             sx={textFieldStyle}
             placeholder={!userInput.phone && 'Phone Number'}

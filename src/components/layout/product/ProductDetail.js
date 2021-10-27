@@ -1,60 +1,64 @@
 import { Box } from '@mui/system';
+import { saveAs } from 'file-saver';
 import React, { useContext, useEffect, useState } from 'react';
 import axios from '../../../config/axios';
 import { AuthContext } from '../../../contexts/AuthContext';
 import Script from 'react-load-script';
-import { Avatar, Button } from '@mui/material';
+import { Avatar, Button, Link } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Swal from 'sweetalert2';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-function ProductDetail({ product }) {
+function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle }) {
   const { user } = useContext(AuthContext);
   const history = useHistory();
+  const param = useParams();
+
+  const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
 
   const iconHeartStyle = { color: '#e91e63', ml: '10px' };
-  const [like, setLike] = useState(false);
-  const [purchasing, setPurchasing] = useState(false);
-  const [isSubscribe, setIsSubscribe] = useState(false);
-  // const tags = [{ name: 'aaa' }, { name: 'bbb' }, { name: 'ccc' }];
 
-  const [userDetail, setUserDetail] = useState({});
-  const [purchasedLists, setPurchasedLists] = useState({});
+  ///////////////set show button buy now////////////////////////
+  let ispurchased = false;
 
-  useEffect(() => {
-    const callUserDetail = async () => {
-      await axios
-        .get(`/profile/${user.id}`)
-        .then(res => {
-          setUserDetail({ ...res.data.user });
-        })
-        .catch(err => {
-          console.dir(err);
-        });
-    };
+  purchasedLists.map(item => {
+    if (+item.productId === +param.id && +item.userId === +user.id) {
+      ispurchased = true;
+    }
+  });
 
-    const callPurchased = async () => {
-      await axios
-        .get(`/purchased`)
-        .then(res => {
-          setPurchasedLists({ ...res.data.purchased });
-        })
-        .catch(err => {
-          console.dir(err);
-        });
-    };
+  if (+product.userId === +user.id) {
+    ispurchased = true;
+  }
 
-    callUserDetail();
-    callPurchased();
-  }, []);
-  console.dir(userDetail);
+  ///////////////set show button Subscribe////////////////////////
+  let isSubscribed = false;
+
+  followingLists.map(item => {
+    if (+item.followedId === +product.userId && +item.followerId === +user.id && item.status === true) {
+      isSubscribed = true;
+    }
+  });
+
+  ///////////////set show button Like////////////////////////
+  let isLiked = false;
+
+  likeLists.map(item => {
+    if (+item.productId === +product.userId && +item.userId === +user.id && item.status === true) {
+      isLiked = true;
+    }
+  });
+
+  const countLike = likeLists.filter(item => item.status === true);
+
+  ///////////////////////////////////////////////////////////
 
   const handleClickPurchase = async () => {
     await Swal.fire({
-      title: 'Purchase?',
+      title: 'Buy now?',
       text: 'Are you sure you want to purchase this item?',
       icon: 'warning',
       showCancelButton: true,
@@ -63,7 +67,7 @@ function ProductDetail({ product }) {
       confirmButtonText: 'Yes!'
     }).then(result => {
       if (result.isConfirmed) {
-        if (userDetail.wallet >= product.price) {
+        if (+userDetail.wallet >= +product.price) {
           const createPurchased = async () => {
             await axios
               .post(`/purchased`, {
@@ -73,8 +77,14 @@ function ProductDetail({ product }) {
                 wallet: userDetail.wallet
               })
               .then(res => {
-                Swal.fire('Complete!', 'Your order has been success', 'success');
-                setPurchasing(curr => !curr);
+                const alertComplete = async () => {
+                  await Swal.fire('Complete!', 'Your order has been success', 'success');
+                };
+
+                alertComplete();
+              })
+              .then(res => {
+                window.location.reload();
               });
           };
           createPurchased();
@@ -102,7 +112,74 @@ function ProductDetail({ product }) {
   };
 
   const handleClickDownload = async () => {
-    setPurchasing(curr => !curr);
+    saveAs(product.externalLink ? product.externalLink : product.coverPic);
+  };
+
+  const handleClickSubscribe = async () => {
+    if (followingLists.length === 0) {
+      axios.post('/following', { followedId: product.userId }).then(res => {
+        setToggle(curr => !curr);
+      });
+    } else {
+      followingLists.map(item => {
+        if (+item.followedId === +product.userId && +item.followerId === +user.id) {
+          axios.put(`/following/${item.id}`, { isSubscribed: !isSubscribed }).then(res => {
+            setToggle(curr => !curr);
+          });
+        } else {
+          axios.post('/following', { followedId: product.userId }).then(res => {
+            setToggle(curr => !curr);
+          });
+        }
+      });
+    }
+  };
+
+  const handleClickUnSubscribe = async () => {
+    followingLists.map(item => {
+      if (+item.followedId === +product.userId && +item.followerId === +user.id) {
+        axios.put(`/following/${item.id}`, { isSubscribed: !isSubscribed }).then(res => {
+          setToggle(curr => !curr);
+        });
+        // axios.delete(`/following/${item.id}`).then(res => {
+        //   window.location.reload();
+        // });
+      }
+    });
+  };
+
+  console.log(isLiked);
+  const handleClickLike = async () => {
+    if (likeLists.length === 0) {
+      axios.post('/like', { productId: product.id }).then(res => {
+        setToggle(curr => !curr);
+      });
+    } else {
+      likeLists.map(item => {
+        if (+item.productId === +product.userId && +item.userId === +user.id) {
+          axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
+            setToggle(curr => !curr);
+          });
+        } else {
+          axios.post('/like', { productId: product.id }).then(res => {
+            setToggle(curr => !curr);
+          });
+        }
+      });
+    }
+  };
+
+  const handleClickUnLike = async () => {
+    likeLists.map(item => {
+      if (+item.productId === +product.userId && +item.userId === +user.id) {
+        axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
+          setToggle(curr => !curr);
+        });
+        // axios.delete(`/following/${item.id}`).then(res => {
+        //   window.location.reload();
+        // });
+      }
+    });
   };
 
   return (
@@ -121,9 +198,17 @@ function ProductDetail({ product }) {
           textAlign: 'end'
         }}
       >
-        <Button sx={{ p: '0', m: '0' }} onClick={() => setLike(curr => !curr)}>
-          {like ? <FavoriteIcon sx={iconHeartStyle} /> : <FavoriteBorderIcon sx={iconHeartStyle} />}
-        </Button>
+        {isLiked && (
+          <Button onClick={handleClickUnLike} sx={{ p: '0', m: '0' }}>
+            <FavoriteIcon sx={iconHeartStyle} />
+          </Button>
+        )}
+
+        {!isLiked && (
+          <Button onClick={handleClickLike} sx={{ p: '0', m: '0' }}>
+            <FavoriteBorderIcon sx={iconHeartStyle} />
+          </Button>
+        )}
       </Box>
 
       {/* /////////Creater Detail///////////////  */}
@@ -152,7 +237,7 @@ function ProductDetail({ product }) {
         >
           <Avatar
             aria-label="recipe"
-            src={product.User.profilePic}
+            src={product?.User?.profilePic ? product?.User?.profilePic : defaulfProfile}
             sx={{
               width: '50px',
               height: '50px',
@@ -160,20 +245,41 @@ function ProductDetail({ product }) {
             }}
           ></Avatar>
           <Box>
-            <h4>{product.name}</h4>
+            <h4>{product?.name}</h4>
             <Box
               sx={{
                 display: 'flex'
               }}
             >
-              <p>by {product.User.username}</p>
-              <Button variant="gradient" sx={{ fontSize: '10px', p: '0px 10px', lineHeight: '0px', ml: '10px' }}>
-                subscribe
-              </Button>
+              <p>by {product?.User?.username}</p>
+
+              {!(+user.id === +product.userId) && (
+                <>
+                  {isSubscribed && (
+                    <Button
+                      onClick={handleClickUnSubscribe}
+                      variant="gradient3"
+                      sx={{ fontSize: '10px', p: '0px 10px', lineHeight: '0px', ml: '10px' }}
+                    >
+                      unsubscribe
+                    </Button>
+                  )}
+
+                  {!isSubscribed && (
+                    <Button
+                      onClick={handleClickSubscribe}
+                      variant="gradient"
+                      sx={{ fontSize: '10px', p: '0px 10px', lineHeight: '0px', ml: '10px' }}
+                    >
+                      subscribe
+                    </Button>
+                  )}
+                </>
+              )}
             </Box>
           </Box>
         </Box>
-        <p>Date: {product.createAt}</p>
+        <p>Date: {product?.createdAt}</p>
       </Box>
 
       {/* /////////Favourites Detail///////////////  */}
@@ -189,9 +295,9 @@ function ProductDetail({ product }) {
           }
         }}
       >
-        <p>10k favourites</p>
+        <p>{countLike.length} favourites</p>
         <p>1k comments</p>
-        <p>1M views</p>
+        <p>{purchasedLists?.length} downloads</p>
       </Box>
 
       {/* /////////Tag///////////////  */}
@@ -209,7 +315,7 @@ function ProductDetail({ product }) {
           </Button>
         ))} */}
         <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          {product.ProductCategory.name}
+          {product?.ProductCategory?.name}
         </Button>
       </Box>
 
@@ -223,7 +329,7 @@ function ProductDetail({ product }) {
           }
         }}
       >
-        description: {product.description}
+        description: {!product?.description === undefined ? product?.description : '-'}
       </Box>
 
       {/* /////////Purchasing Detail///////////////  */}
@@ -260,7 +366,7 @@ function ProductDetail({ product }) {
             }}
           >
             <p>Price:</p>
-            <p>{product.price} Bath</p>
+            <p>{product?.price} Bath</p>
           </Box>
           {/* <Box
             sx={{
@@ -277,17 +383,20 @@ function ProductDetail({ product }) {
           </Box> */}
         </Box>
 
-        {purchasing && (
+        {ispurchased && (
           <Button
             onClick={handleClickDownload}
             variant="gradient"
             sx={{ p: '5px 15px', mt: { lg: '0px', xs: '20px' } }}
           >
+            {/* <a href={product?.coverPic} download="thumbnail"> */}
             <FileDownloadIcon />
             Dowload
+            {/* </a> */}
           </Button>
         )}
-        {!purchasing && (
+
+        {!ispurchased && (
           <Button
             onClick={handleClickPurchase}
             variant="gradient"

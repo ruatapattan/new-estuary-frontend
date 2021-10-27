@@ -9,7 +9,7 @@ function ProductShow({ product }) {
         sx={{ objectFit: 'contain' }}
         component="img"
         height="100%"
-        image={product.coverPic}
+        image={product?.coverPic}
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
