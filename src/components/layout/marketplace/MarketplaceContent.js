@@ -56,22 +56,6 @@ function MarketplaceContent({ title }) {
 								md={4}
 								sx={{ display: "flex", justifyContent: "center" }}
 							>
-								{/* <Link to="#" key={idx} style={{ textDecoration: "none" }}>
-									<Card sx={{ maxWidth: 345 }}>
-										<CardActionArea>
-											<CardMedia component="img" image={item} alt="green iguana" />
-											<CardContent>
-												<Typography gutterBottom variant="h5" component="div">
-													Lizard
-												</Typography>
-												<Typography variant="body2" color="text.secondary">
-													Lizards are a widespread group of squamate reptiles, with over 6,000
-													species, ranging across all continents except Antarctica
-												</Typography>
-											</CardContent>
-										</CardActionArea>
-									</Card>
-								</Link> */}
 								<Link to="#" className="expSlider" key={idx} style={{ textDecoration: "none" }}>
 									<Card sx={{ maxWidth: 345 }}>
 										<CardActionArea>

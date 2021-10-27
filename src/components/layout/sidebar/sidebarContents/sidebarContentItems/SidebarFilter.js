@@ -5,7 +5,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, styled } from "@mui/system";
 import { useState } from "react";
 
-const options = [{ name: "All Tags" }, { name: "Art" }, { name: "Music" }, { name: "Other" }];
+const options = [{ name: "All Categories" }, { name: "Art" }, { name: "Music" }, { name: "Other" }];
 const priceRange = ["0", "50", "100", "300", "500", "1000", ">1000"];
 
 function SidebarFilter() {
@@ -48,7 +48,7 @@ function SidebarFilter() {
 	return (
 		<>
 			<ListItem>
-				<ListItemText sx={{ textAlign: "center", color: "text.secondary" }} primary="Filter by Tag" />
+				<ListItemText sx={{ textAlign: "center", color: "text.secondary" }} primary="Filter by Category" />
 			</ListItem>
 			<ListItem sx={{ display: "flex", justifyContent: "center" }} onClick={handleClickOpenSidebarHeader}>
 				<NavButton variant="text">

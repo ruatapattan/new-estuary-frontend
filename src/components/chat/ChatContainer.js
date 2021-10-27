@@ -20,19 +20,6 @@ import Send from "@mui/icons-material/Send";
 import { ChatContext } from "../../contexts/ChatContext";
 import { AuthContext } from "../../contexts/AuthContext";
 function ChatContainer() {
-	const { chatRoomId, setChatRoomId, isGroupChat } = useContext(ChatContext);
-	const { user } = useContext(AuthContext);
-	const socketRef = useRef();
-
-	useEffect(() => {
-		// console.log(isGroupChat);
-		// console.log(chatRoomId);
-		socketRef.current = io.connect(API_URL);
-		socketRef.current.emit("join room", user.id, chatRoomId, isGroupChat);
-	}, [chatRoomId]);
-
-	console.log("ref", socketRef);
-
 	const ChatBlob = styled(Box)(({ theme, who }) => ({
 		minWidth: "25%",
 		borderRadius: 8,
@@ -41,99 +28,83 @@ function ChatContainer() {
 		color: who === "me" ? "white" : theme.palette.text.secondary,
 	}));
 
-	console.log(chatRoomId);
+	const { chatRoomInfo, setChatRoomInfo, isGroupChat } = useContext(ChatContext);
+	console.log("chatroomInfo", chatRoomInfo);
 
-	const [yourId, setYourId] = useState("1");
-
-	//will get these from axios where chatroomId
-	const [membersInfo, setMembersInfo] = useState([
-		{
-			id: "1",
-			name: "jondoe",
-		},
-		{
-			id: "2",
-			name: "jane",
-		},
-	]);
-	const [messages, setMessages] = useState({
-		// chatRoomId: 1,
-		// participants: [
-		// 	{
-		// 		participantId: 2,
-		// 		name: "Jane",
-		// 	},
-		// 	{
-		// 		participantId: 1,
-		// 		name: "jondoe",
-		// 	},
-		// ],
-		chatRoomName: "jane",
-		chatLog: [
-			{
-				id: "1",
-				body: "hi",
-			},
-			{
-				id: "2",
-				body: "hi",
-			},
-			{
-				id: "2",
-				body: "how are you?",
-			},
-			{
-				id: "1",
-				body: "p gud u?",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "2",
-				body: "I'm alright",
-			},
-			{
-				id: "1",
-				body: "ok I get it",
-			},
-		],
-	});
+	const { user } = useContext(AuthContext);
+	// const socketRef = useRef();
+	const socketRef = useRef(io.connect(API_URL));
+	const [chatLog, setChatLog] = useState([]);
+	const [sent, setSent] = useState(false);
+	const [membersInfo, setMembersInfo] = useState([]);
 	const [message, setMessage] = useState("");
-	console.log(messages);
+
+	console.log(chatRoomInfo);
+	useEffect(() => {
+		// console.log(isGroupChat);
+		socketRef.current = io.connect(API_URL);
+		// if (user.id ===  )
+		socketRef.current.emit("join room", user.id, chatRoomInfo.id, isGroupChat);
+
+		socketRef.current.on("fetched log", (chatLog, chatMembers) => {
+			// alert("hi");
+			// console.log("fetched members", chatMembers);
+			setMembersInfo(chatMembers);
+			setChatLog(chatLog);
+		});
+
+		socketRef.current.on("n", (newMessage) => {
+			// alert("in event");
+			console.log(newMessage);
+			// const clone = [...chatLog];
+			// clone.push(newMessage);
+			console.log(`chatLog after`, chatLog);
+			// setChatLog(clone);
+			setChatLog((cur) => [...cur, newMessage]);
+		});
+		// }, [socketRef]);
+	}, [chatRoomInfo]);
+
+	// useEffect(() => {
+	// 	// console.log("useeffect");
+	// 	socketRef.current.on("n", (newMessage) => {
+	// 		// alert("in event");
+	// 		console.log(newMessage);
+	// 		// const clone = [...chatLog];
+	// 		// clone.push(newMessage);
+	// 		// setChatLog(newMessage);
+	// 		console.log(`chatLog`, chatLog);
+	// 	});
+	// }, [sent]);
+
+	console.log(`oldChatLog`, chatLog);
+	// console.log("chatlog", chatLog);
+
+	// console.log("chatroominfo", chatRoomInfo);
+	// console.log("chatmemberstate", membersInfo);
 
 	function sendMessage(e) {
 		e.preventDefault();
-		const messageObj = {
-			body: message,
-			id: yourId,
-		};
-		setMessage("");
-		// socketRef.current.emit("send message", messageObj);
+		if (message !== "") {
+			const messageObj = {
+				content: message,
+				senderId: user.id,
+				roomId: chatRoomInfo.id,
+				isGroupChat,
+			};
+			// console.log(messageObj);
+			socketRef.current.emit("send message", messageObj);
+			setSent((cur) => !cur);
+			// id: recordedChat.id,
+			// createdAt: recordedChat.createdAt,
+			// senderId: recordedChat.senderId,
+			// content: recordedChat.content,
+			setChatLog((cur) => [...cur, { senderId: user.id, content: message }]);
+			setMessage("");
+		}
 	}
 
-	function handleChange(e) {
+	function handleChangeInputMessage(e) {
 		setMessage(e.target.value);
 	}
 
@@ -141,6 +112,11 @@ function ChatContainer() {
 
 	const handleClickToggleChatBox = () => {
 		setOpen(!open);
+	};
+
+	const handleLeaveChat = () => {
+		setChatRoomInfo({});
+		socketRef.current.emit("leave-room");
 	};
 
 	return (
@@ -155,9 +131,6 @@ function ChatContainer() {
 						md: "25vw",
 					},
 					height: open ? "70vh" : "5vh",
-					// marginLeft: { sm: 0, md: "240px" },
-					// border: "3px solid black",
-					// position: "sticky",
 					position: "fixed",
 					bottom: "0",
 					right: "0",
@@ -176,10 +149,10 @@ function ChatContainer() {
 					onClick={handleClickToggleChatBox}
 					color="primary"
 				>
-					{messages.chatRoomName}
-					<Button sx={{ position: "absolute", right: 0 }} onClick={() => setChatRoomId("")}>
-						<Typography color="error">X</Typography>
-					</Button>
+					{chatRoomInfo.name}
+				</Button>
+				<Button sx={{ position: "absolute", right: 0 }} onClick={() => handleLeaveChat()}>
+					<Typography color="error">X</Typography>
 				</Button>
 				{/* </Badge> */}
 				<Collapse
@@ -212,10 +185,10 @@ function ChatContainer() {
 							overflow: "scroll",
 						}}
 					>
-						{messages.chatLog.map((item, idx) => {
+						{chatLog.map((item, idx) => {
 							//render my side of message if id matches
-							console.log("ad");
-							if (item.id === yourId) {
+							// console.log("ad");
+							if (item.senderId === user.id) {
 								return (
 									<>
 										<ListItem sx={{ display: "flex", justifyContent: "right" }}>
@@ -232,7 +205,7 @@ function ChatContainer() {
 												}}
 											>
 												<ChatBlob who="me" display="flex" flexDirection="column">
-													<Typography sx={{ textAlign: "right" }}>{item.body}</Typography>
+													<Typography sx={{ textAlign: "right" }}>{item.content}</Typography>
 												</ChatBlob>
 												<Typography color="text.primary" sx={{ textAlign: "right" }}>
 													me
@@ -244,18 +217,20 @@ function ChatContainer() {
 							}
 							//if not mine, render the other side's message
 							let chatterName;
+							let pfp;
 							membersInfo.forEach((elem) => {
-								console.log();
-								if (elem.id === item.id) {
-									chatterName = elem.name;
+								// console.log();
+								if (elem.id === item.senderId) {
+									chatterName = elem.username;
+									pfp = elem.profilePic;
 								}
 							});
-							console.log(chatterName);
+							// console.log(chatterName);
 							return (
 								<>
 									<ListItem alignItems="flex-start">
 										<ListItemAvatar>
-											<Avatar src="/static/images/avatar/1.jpg" />
+											<Avatar src={pfp} />
 										</ListItemAvatar>
 										{/* <Box display="flex" flexDirection="column">
 											<Typography color="text.secondary">{item.body}</Typography>
@@ -270,7 +245,7 @@ function ChatContainer() {
 											}}
 										>
 											<ChatBlob display="flex" flexDirection="column">
-												<Typography sx={{ textAlign: "right" }}>{item.body}</Typography>
+												<Typography sx={{ textAlign: "right" }}>{item.content}</Typography>
 											</ChatBlob>
 											<Typography color="text.primary">{chatterName}</Typography>
 										</Box>
@@ -280,13 +255,13 @@ function ChatContainer() {
 						})}
 					</Box>
 					<Box
-						component="form"
-						onSubmit={sendMessage}
+						// component="form"
+						// onSubmit={sendMessage}
 						style={{ width: "100%", boxSizing: "border-box", display: "flex" }}
 					>
 						<input
 							value={message}
-							onChange={handleChange}
+							onChange={handleChangeInputMessage}
 							placeholder="say something..."
 							style={{
 								paddingLeft: "1rem",
@@ -297,7 +272,12 @@ function ChatContainer() {
 								borderTop: "1px solid black",
 							}}
 						/>
-						<Button variant="gradient" sx={{ height: "2rem", width: "20%", borderRadius: "0" }}>
+						<Button
+							onClick={sendMessage}
+							type="button"
+							variant="gradient"
+							sx={{ height: "2rem", width: "20%", borderRadius: "0" }}
+						>
 							<SendIcon />
 						</Button>
 					</Box>
