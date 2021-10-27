@@ -11,6 +11,8 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Swal from 'sweetalert2';
 import { useHistory, useParams } from 'react-router-dom';
+import dateValidate from '../../../services/dateValidate';
+import HistoryIcon from '@mui/icons-material/History';
 
 function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle }) {
   const { user } = useContext(AuthContext);
@@ -18,7 +20,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
   const param = useParams();
 
   const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
-
+  const dateNow = dateValidate.formatShortMonthShortYear(Date.now());
   const iconHeartStyle = { color: '#e91e63', ml: '10px' };
 
   ///////////////set show button buy now////////////////////////
@@ -47,7 +49,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
   let isLiked = false;
 
   likeLists.map(item => {
-    if (+item.productId === +product.userId && +item.userId === +user.id && item.status === true) {
+    if (+item.productId === +product.id && +item.userId === +user.id && item.status === true) {
       isLiked = true;
     }
   });
@@ -156,7 +158,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
       });
     } else {
       likeLists.map(item => {
-        if (+item.productId === +product.userId && +item.userId === +user.id) {
+        if (+item.productId === +product.id && +item.userId === +user.id) {
           axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
             setToggle(curr => !curr);
           });
@@ -171,7 +173,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
 
   const handleClickUnLike = async () => {
     likeLists.map(item => {
-      if (+item.productId === +product.userId && +item.userId === +user.id) {
+      if (+item.productId === +product.id && +item.userId === +user.id) {
         axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
           setToggle(curr => !curr);
         });
@@ -279,7 +281,14 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
             </Box>
           </Box>
         </Box>
-        <p>Date: {product?.createdAt}</p>
+        <Box sx={{ display: 'flex' }}>
+          <p>
+            Since:{' '}
+            {dateValidate.getNumberOfDays(dateValidate.formatShortMonthShortYear(new Date(product.createdAt)), dateNow)}
+            day
+          </p>
+          <HistoryIcon sx={{ ml: '5px', color: 'white' }} />
+        </Box>
       </Box>
 
       {/* /////////Favourites Detail///////////////  */}

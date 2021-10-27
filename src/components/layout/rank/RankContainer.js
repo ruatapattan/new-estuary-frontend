@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import axios from '../../../config/axios';
 import { Box } from '@mui/system';
 import { Button } from '@mui/material';
 import RankList from './RankList';
@@ -17,7 +18,13 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-///////////////Search////////////////////////
+const buttonStyle = {
+  color: 'white',
+  width: '25%',
+  p: { md: '15px', sm: '15px 10px', xs: '15px 10px' },
+  fontSize: { md: 'default', xs: '10px' }
+};
+
 const Search = styled('div')(({ theme }) => ({
   border: '1px solid gray',
   position: 'relative',
@@ -73,35 +80,76 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function RankContainer() {
-  // const User = [
-  //   {
-  //     id: '1',
-  //     userName: 'aaaaaa',
-  //     profilePic:
-  //       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
-  //   }
-  // ];
+  // const [rankListsByLike, setRankListsByLike] = useState([]);
+  const [rankListsByCategory, setRankListsByCategory] = useState([]);
+  const [rankListsByCategoryPastWeek, setRankListsByCategoryPastWeek] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
+  const [isFilterByPastWeek, setIsFilterByPastWeek] = useState(false);
 
-  // const Product = [
-  //   {
-  //     id: '5'
-  //   }
-  // ];
-
-  // const Like = [
-  //   {
-  //     sumLike: '50000'
-  //   }
-  // ];
-
-  ///////////////Category////////////////////////
-  const options = ['CATEGORY', 'ART', 'MUSIC', 'OTHER'];
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
+
+  useEffect(() => {
+    // const callRankbyLike = async () => {
+    //   await axios
+    //     .get(`/rank/like`)
+    //     .then(res => {
+    //       setRankListsByLike([...res.data.result]);
+    //     })
+    //     .catch(err => {
+    //       console.dir(err);
+    //     });
+    // };
+
+    const callRankbyCategoryPassWeek = async () => {
+      await axios
+        .get(`/rank/like/pastweek/category/${selectedIndex}`)
+        .then(res => {
+          setRankListsByCategoryPastWeek([...res.data.result]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callRankbyCategory = async () => {
+      await axios
+        .get(`/rank/like/category/${selectedIndex}`)
+        .then(res => {
+          setRankListsByCategory([...res.data.result]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callCategory = async () => {
+      await axios
+        .get('/category')
+        .then(res => {
+          setCategory([...res.data.categorys]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    // callRankbyLike();
+    callRankbyCategoryPassWeek();
+    callRankbyCategory();
+    callCategory();
+  }, [searchText, selectedIndex, isFilterByPastWeek]);
+
+  console.dir(isFilterByPastWeek);
+
+  ///////////////Category////////////////////////
+  // const options = ['CATEGORY', 'ART', 'MUSIC', 'OTHER'];
 
   const handleClick = () => {
-    console.info(`You clicked ${options[selectedIndex]}`);
+    console.info(`You clicked ${category[selectedIndex - 1]?.name}`);
   };
 
   const handleMenuItemClick = (event, index) => {
@@ -120,22 +168,19 @@ function RankContainer() {
 
     setOpen(false);
   };
-  ////////////////////////////////////
 
-  const buttonStyle = {
-    color: 'white',
-    width: '25%',
-    p: { md: '15px', sm: '15px 10px', xs: '15px 10px' },
-    fontSize: { md: 'default', xs: '10px' }
-  };
+  ///////////////Search////////////////////////
 
-  const [isSearch, setIsSearch] = useState(false);
+  const arr = isFilterByPastWeek ? rankListsByCategoryPastWeek : rankListsByCategory;
+
+  const filterBySearch = arr.filter(item => item?.username?.toLowerCase().includes(searchText.toLowerCase()));
+  console.dir(filterBySearch);
 
   return (
     <Box
       sx={{
         width: '100%',
-        // height: '100vh',
+        height: '100vh',
         display: 'flex',
         backgroundColor: '#EFF1F3'
       }}
@@ -168,9 +213,17 @@ function RankContainer() {
             justifyContent: 'space-between'
           }}
         >
-          <Button variant="gradient" sx={buttonStyle}>
-            past week
-          </Button>
+          {!isFilterByPastWeek && (
+            <Button onClick={() => setIsFilterByPastWeek(curr => !curr)} variant="gradient" sx={buttonStyle}>
+              past week
+            </Button>
+          )}
+
+          {isFilterByPastWeek && (
+            <Button onClick={() => setIsFilterByPastWeek(curr => !curr)} variant="gradient" sx={buttonStyle}>
+              all time
+            </Button>
+          )}
 
           <React.Fragment>
             <ButtonGroup
@@ -196,7 +249,7 @@ function RankContainer() {
                   aria-haspopup="menu"
                   onClick={handleToggle}
                 >
-                  {options[selectedIndex]}
+                  {category[selectedIndex - 1]?.name}
                   <ArrowDropDownIcon />
                 </Button>
               </Button>
@@ -212,15 +265,17 @@ function RankContainer() {
                   <Paper>
                     <ClickAwayListener onClickAway={handleClose}>
                       <MenuList id="split-button-menu" sx={{ width: { md: '12vw', xs: '22vw' } }}>
-                        {options.map((option, index) => (
+                        <MenuItem>CATEGORY</MenuItem>
+
+                        {category.map(item => (
                           <MenuItem
-                            key={option}
+                            key={item.name}
                             sx={{ fontSize: { md: 'default', xs: '10px' } }}
                             // disabled={index === 0}
-                            selected={index === selectedIndex}
-                            onClick={event => handleMenuItemClick(event, index)}
+                            selected={item.id}
+                            onClick={event => handleMenuItemClick(event, item.id)}
                           >
-                            {option}
+                            {item.name}
                           </MenuItem>
                         ))}
                       </MenuList>
@@ -243,6 +298,7 @@ function RankContainer() {
                 <SearchIcon sx={{ fontSize: { lg: '20px', md: '20px', xs: '10px' } }} />
               </SearchIconWrapper>
               <StyledInputBase
+                onChange={e => setSearchText(e.target.value)}
                 sx={{ spacing: { md: (2, 1, 2, 5), xs: (2, 1, 2, 4) }, fontSize: { md: 'default', xs: '10px' } }}
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
@@ -257,8 +313,10 @@ function RankContainer() {
             boxShadow: 2
           }}
         >
-          {[1, 2, 3, 4, 5].map((text, index) => (
-            <>{index % 2 === 0 ? <RankList color={'white'} /> : <RankList color={'#EFF1F3'} />}</>
+          {filterBySearch.map((item, index) => (
+            <>
+              {index % 2 === 0 ? <RankList color={'white'} item={item} /> : <RankList color={'#EFF1F3'} item={item} />}
+            </>
           ))}
         </Box>
       </Box>
