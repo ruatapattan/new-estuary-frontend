@@ -15,6 +15,7 @@ function CreateProductForm() {
 
 	const [coverPic, setCoverPic] = useState(null);
 	const [description, setDescription] = useState("");
+	const [externalLink, setExternalLink] = useState("");
 
 	const [isFocus, setIsFocus] = useState({
 		productName: false,
@@ -58,7 +59,7 @@ function CreateProductForm() {
 				formData.append("categoryId", userInput.category);
 				formData.append("price", userInput.price);
 				formData.append("coverPic", userInput.coverPic);
-				formData.append("externalLink", "link to product");
+				formData.append("externalLink", userInput.externalLink);
 				formData.append("hashtag", "link to product");
 
 				// console.dir(formData);
@@ -77,16 +78,6 @@ function CreateProductForm() {
 		setUserInput((cur) => ({ ...cur, name: e.target.value }));
 		if (e.target.value === "") {
 			setError((cur) => ({ ...cur, name: "name is required" }));
-		} else if (!userValidate.validateLength(e.target.value)) {
-			setError((cur) => ({
-				...cur,
-				name: "name must be 6-12 characters long",
-			}));
-		} else if (!validator.isAlphanumeric(e.target.value)) {
-			setError((cur) => ({
-				...cur,
-				name: "name must consists of alphabets and numbers only",
-			}));
 		} else setError((cur) => ({ ...cur, name: "" }));
 	};
 
@@ -100,7 +91,7 @@ function CreateProductForm() {
 	const handleInputPrice = (e) => {
 		setUserInput((cur) => ({ ...cur, price: e.target.value }));
 		if (e.target.value === "") {
-			setError((cur) => ({ ...cur, price: "Please select a price" }));
+			setError((cur) => ({ ...cur, price: "price is required" }));
 		} else setError((cur) => ({ ...cur, price: "" }));
 	};
 
@@ -147,20 +138,30 @@ function CreateProductForm() {
 					// height: '6%',
 					// width: '70%',
 					width: { xs: "100%", sm: "100%", md: "100%" },
+
 					backgroundColor: "#232836",
 					color: "white",
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
 					padding: "20px 50px",
-					mt: "58px",
+					mt: "65px",
 				}}
 			>
 				Creact new Item
 			</Box>
 			<Box sx={{ paddingTop: "30px" }}>
-				<div>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
 					<img
+						style={{
+							width: "80%",
+						}}
 						src={
 							coverPic
 								? coverPic
@@ -229,7 +230,7 @@ function CreateProductForm() {
 					select
 					label="Select category"
 					sx={textFieldStyle}
-					error={error.category !== "" ? true : false}
+					error={error.category && error.category !== "" ? true : false}
 					helperText={error.category}
 					value={userInput.category}
 					onChange={handleInputCategory}
@@ -247,9 +248,20 @@ function CreateProductForm() {
 					onBlur={() => setIsFocus((curr) => ({ ...curr, price: false }))}
 					sx={textFieldStyle}
 					value={userInput.price}
-					// error={error.price !== "" ? true : false}
-					// helperText={error.price}
+					error={error.price && error.price !== "" ? true : false}
+					helperText={error.price}
 					onChange={handleInputPrice}
+				/>
+				<TextField
+					id="standard-multiline-static"
+					label={isFocus.description ? "External Link" : ""}
+					placeholder={!userInput.description && "External Link"}
+					onFocus={() => setIsFocus((curr) => ({ ...curr, externalLink: true }))}
+					onBlur={() => setIsFocus((curr) => ({ ...curr, externalLink: false }))}
+					multiline
+					sx={textFieldStyle}
+					value={externalLink}
+					onChange={(e) => setExternalLink(e.target.value)}
 				/>
 
 				<Button
