@@ -82,6 +82,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function RankContainer() {
   const [rankListsByLike, setRankListsByLike] = useState([]);
   const [rankListsByCategory, setRankListsByCategory] = useState([]);
+  const [rankListsByPastWeek, setRankListsByPastWeek] = useState([]);
   const [rankListsByCategoryPastWeek, setRankListsByCategoryPastWeek] = useState([]);
   const [category, setCategory] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -100,6 +101,17 @@ function RankContainer() {
         .then(res => {
           setRankListsByLike([...res.data.result]);
           console.dir(res.data.result);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callRankbyPassWeek = async () => {
+      await axios
+        .get(`/rank/like/pastweek`)
+        .then(res => {
+          setRankListsByPastWeek([...res.data.result]);
         })
         .catch(err => {
           console.dir(err);
@@ -140,13 +152,14 @@ function RankContainer() {
     };
 
     callRankbyLike();
+    callRankbyPassWeek();
     callRankbyCategoryPassWeek();
     callRankbyCategory();
     callCategory();
   }, [searchText, selectedIndex, isFilterByPastWeek]);
 
   // console.dir(category);
-  console.dir(rankListsByLike);
+  console.dir(selectedIndex);
 
   ///////////////Category////////////////////////
   // const options = ['CATEGORY', 'ART', 'MUSIC', 'OTHER'];
@@ -177,7 +190,9 @@ function RankContainer() {
   ///////////////Search////////////////////////
   console.log(selectedName);
   const arr = isFilterByPastWeek
-    ? rankListsByCategoryPastWeek
+    ? selectedName === 'all'
+      ? rankListsByPastWeek
+      : rankListsByCategoryPastWeek
     : selectedName === 'all'
     ? rankListsByLike
     : rankListsByCategory;
