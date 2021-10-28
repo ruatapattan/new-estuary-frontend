@@ -20,7 +20,10 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
   const param = useParams();
 
   const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
-  const dateNow = dateValidate.formatShortMonthShortYear(Date.now());
+  // const dateSince = dateValidate.getNumberOfDays(
+  //   dateValidate.formatShortMonthShortYear(new Date(product.createdAt)),
+  //   dateNow
+  // );
   const iconHeartStyle = { color: '#e91e63', ml: '10px' };
 
   ///////////////set show button buy now////////////////////////
@@ -283,8 +286,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
         </Box>
         <Box sx={{ display: 'flex' }}>
           <p>
-            Since:{' '}
-            {dateValidate.getNumberOfDays(dateValidate.formatShortMonthShortYear(new Date(product.createdAt)), dateNow)}
+            Since: {product?.createdAt}
             day
           </p>
           <HistoryIcon sx={{ ml: '5px', color: 'white' }} />

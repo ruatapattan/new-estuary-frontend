@@ -80,7 +80,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function RankContainer() {
-  // const [rankListsByLike, setRankListsByLike] = useState([]);
+  const [rankListsByLike, setRankListsByLike] = useState([]);
   const [rankListsByCategory, setRankListsByCategory] = useState([]);
   const [rankListsByCategoryPastWeek, setRankListsByCategoryPastWeek] = useState([]);
   const [category, setCategory] = useState([]);
@@ -90,19 +90,21 @@ function RankContainer() {
 
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState();
+  const [selectedName, setSelectedName] = useState('all');
 
   useEffect(() => {
-    // const callRankbyLike = async () => {
-    //   await axios
-    //     .get(`/rank/like`)
-    //     .then(res => {
-    //       setRankListsByLike([...res.data.result]);
-    //     })
-    //     .catch(err => {
-    //       console.dir(err);
-    //     });
-    // };
+    const callRankbyLike = async () => {
+      await axios
+        .get(`/rank/like`)
+        .then(res => {
+          setRankListsByLike([...res.data.result]);
+          console.dir(res.data.result);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
     const callRankbyCategoryPassWeek = async () => {
       await axios
@@ -137,25 +139,28 @@ function RankContainer() {
         });
     };
 
-    // callRankbyLike();
+    callRankbyLike();
     callRankbyCategoryPassWeek();
     callRankbyCategory();
     callCategory();
   }, [searchText, selectedIndex, isFilterByPastWeek]);
 
-  console.dir(isFilterByPastWeek);
+  // console.dir(category);
+  console.dir(rankListsByLike);
 
   ///////////////Category////////////////////////
   // const options = ['CATEGORY', 'ART', 'MUSIC', 'OTHER'];
 
   const handleClick = () => {
-    console.info(`You clicked ${category[selectedIndex - 1]?.name}`);
+    console.info(`You clicked ${category[selectedIndex]?.name}`);
   };
 
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
+  const handleMenuItemClick = (id, name) => {
+    setSelectedIndex(id);
+    setSelectedName(name);
     setOpen(false);
   };
+  // console.log('id', selectedIndex);
 
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen);
@@ -170,8 +175,12 @@ function RankContainer() {
   };
 
   ///////////////Search////////////////////////
-
-  const arr = isFilterByPastWeek ? rankListsByCategoryPastWeek : rankListsByCategory;
+  console.log(selectedName);
+  const arr = isFilterByPastWeek
+    ? rankListsByCategoryPastWeek
+    : selectedName === 'all'
+    ? rankListsByLike
+    : rankListsByCategory;
 
   const filterBySearch = arr.filter(item => item?.username?.toLowerCase().includes(searchText.toLowerCase()));
   console.dir(filterBySearch);
@@ -249,7 +258,8 @@ function RankContainer() {
                   aria-haspopup="menu"
                   onClick={handleToggle}
                 >
-                  {category[selectedIndex - 1]?.name}
+                  {selectedName}
+                  {/* {category[selectedIndex]?.name ? category[selectedIndex]?.name : 'ssss'} */}
                   <ArrowDropDownIcon />
                 </Button>
               </Button>
@@ -271,9 +281,8 @@ function RankContainer() {
                           <MenuItem
                             key={item.name}
                             sx={{ fontSize: { md: 'default', xs: '10px' } }}
-                            // disabled={index === 0}
                             selected={item.id}
-                            onClick={event => handleMenuItemClick(event, item.id)}
+                            onClick={() => handleMenuItemClick(item.id, item.name)}
                           >
                             {item.name}
                           </MenuItem>
