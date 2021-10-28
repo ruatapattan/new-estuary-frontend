@@ -234,7 +234,7 @@ function CreateProductForm() {
           select
           label="Select category"
           sx={textFieldStyle}
-          error={error.category !== "" ? true : false}
+          error={error.category && error.category !== "" ? true : false}
           helperText={error.category}
           value={userInput.category}
           onChange={handleInputCategory}
@@ -252,7 +252,7 @@ function CreateProductForm() {
           onBlur={() => setIsFocus((curr) => ({ ...curr, price: false }))}
           sx={textFieldStyle}
           value={userInput.price}
-          error={error.price !== "" ? true : false}
+          error={error.price && error.price !== "" ? true : false}
           helperText={error.price}
           onChange={handleInputPrice}
         />

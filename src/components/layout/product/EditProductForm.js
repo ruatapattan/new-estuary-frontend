@@ -115,13 +115,13 @@ function EditProductForm() {
           sx={{
             // height: '6%',
             // width: '70%',
-            width: { xs: "90%", sm: "90%", md: "70%" },
+            width: { xs: "100%", sm: "100%", md: "100%" },
             backgroundColor: "#232836",
             color: "white",
             display: "flex",
             alignItems: "center",
             padding: "20px 50px",
-            mt: "50px",
+            // mt: "50px",
           }}
         >
           Edit Item
@@ -141,7 +141,7 @@ function EditProductForm() {
                   : "https://res.cloudinary.com/duca0jbyn/image/upload/v1635160655/1478594_uop0jq.png"
               }
               style={{
-                width: "30%",
+                width: "50%",
               }}
               alt=""
             />

@@ -52,6 +52,7 @@ function ProfileForm() {
   //call product
   const [products, setProducts] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const handleClickDelete = async (id) => {
     try {
@@ -103,24 +104,38 @@ function ProfileForm() {
     }
   };
 
+  //search text
+  console.log(products);
+
+  const handleChangeSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filterProduct =
+    searchText === ""
+      ? products
+      : products.filter((item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+
   return (
     <Box
       className="BOXXXXXXXXX"
       display="flex"
       flexWrap="wrap"
       flexDirection="column"
-      justifyContent="center"
+      justifyContent="flex-start"
       alignItems="center"
-      sx={{ width: { xs: "100%", sm: "100%", md: "72%" } }}
-      // border="5px solid pink"
+      sx={{ width: { xs: "90%", sm: "90%", md: "72%" } }}
+      border="5px solid pink"
       backgroundColor="#EFF1F3"
     >
       <Box
         display="flex"
-        justifyContent="space-between"
+        justifyContent="center"
         alignItems="center"
         sx={{ width: { xs: "90%", sm: "90%", md: "90%" }, mt: "15px" }}
-        // border="5px solid blue"
+        border="5px solid blue"
         flexWrap="wrap"
 
         // height="5vh"
@@ -140,37 +155,29 @@ function ProfileForm() {
           </SearchIconWrapper>
 
           <StyledInputBase
+            autoFocus
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
             sx={{
-              width: { md: "250px", xs: "100%" },
+              width: { md: "500px", xs: "100%" },
               height: "50px",
               border: "1px groove",
             }}
+            value={searchText}
+            onChange={handleChangeSearch}
           />
         </Search>
-
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Single items"
-          sx={{ mb: "10px", width: { md: "250px", xs: "100%" } }}
-        />
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Recently Received"
-          sx={{ mb: "10px", width: { md: "250px", xs: "100%" } }}
-        />
       </Box>
 
       <Box
-        display="flex"
-        flexWrap="wrap"
-        justifyContent="flex-start"
-        sx={{ width: { xs: "90%", sm: "90%", md: "90%" } }}
+        sx={{
+          width: { xs: "90%", sm: "90%", md: "90%" },
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
       >
-        {products.map((item) => (
+        {filterProduct.map((item) => (
           <CardProfile
             key={item.id}
             id={item.id}
@@ -182,6 +189,7 @@ function ProfileForm() {
             handleEditProduct={handleEditProduct}
             externalLink={item.externalLink}
             category={item.ProductCategory}
+            createdAt={item.createdAt}
           />
         ))}
       </Box>

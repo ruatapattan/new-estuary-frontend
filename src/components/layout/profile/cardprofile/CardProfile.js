@@ -14,7 +14,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
+import { createdAgo } from "../../../../services/getTimeService";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { Link } from "react-router-dom";
@@ -34,6 +34,7 @@ function CardProfile({
   handleClickDelete,
   handleEditProduct,
   category,
+  createdAt,
 }) {
   const product = {
     id,
@@ -167,7 +168,10 @@ function CardProfile({
             <ShareIcon sx={{ fontSize: "1.5rem" }} />
           </IconButton>
         </Box>
-        <Box>3 Days Ago</Box>
+        <Box>
+          {Math.round(createdAgo(createdAt).time)} {createdAgo(createdAt).unit}
+          Ago
+        </Box>
       </CardActions>
       <Typography
         variant="body2"
@@ -176,6 +180,7 @@ function CardProfile({
           overflow: "hidden",
           textOverflow: "ellipsis",
           paddingBottom: "0.5rem",
+          margin: "1rem",
         }}
       >
         {description === "undefined" ? "No description " : description}
