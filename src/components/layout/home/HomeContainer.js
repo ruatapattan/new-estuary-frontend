@@ -4,6 +4,13 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CreatePost from '../../card/CreatePost';
 import Post from '../../card/Post';
+import { useState, useEffect } from 'react';
+import axios from '../../../config/axios';
+import Grid from '@mui/material/Grid';
+import PostCard from '../../card/PostCard';
+//=====================================================
+
+//====================================================
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -17,7 +24,26 @@ const ExpandMore = styled((props) => {
 }));
 
 function HomeContainer() {
+  //=========================================================== set Grid responsive
   const hide = { display: { xs: 'none', md: 'flex' } };
+
+  //=========================================================== set State
+  const [post, setPost] = useState([]);
+  // const [toggle, setToggle] = useState(false);
+
+  //=========================================================== fetch post data
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const res = await axios.get('/post');
+        setPost(res.data.post);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchPost();
+  }, []);
+  //=========================================================
 
   return (
     <>
@@ -30,19 +56,10 @@ function HomeContainer() {
           width: { xs: '100%', md: '60%' },
           mt: '20px',
         }}>
-        {/* <Box mb='20px' width='100%'>
-              <Paper variant='outlined' sx={{ bgcolor: 'primary' }} color='success'>
-                <Typography variant='h3' component='h3' mb='20px'>
-                  Home
-                </Typography>
-              </Paper>
-            </Box> */}
         <CreatePost />
-        <Post />
-        {/* <Post
-          type='img'
-          link='https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80'
-        /> */}
+        {post.map((postItem) => (
+          <PostCard key={postItem.id} postItem={postItem} />
+        ))}
       </Box>
     </>
   );
