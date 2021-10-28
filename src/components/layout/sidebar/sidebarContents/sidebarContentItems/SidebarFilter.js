@@ -3,25 +3,37 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Button, Collapse, Divider, List, ListItem, ListItemText, MenuItem, TextField } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, styled } from "@mui/system";
-import { useState } from "react";
-
-const options = [{ name: "All Categories" }, { name: "Art" }, { name: "Music" }, { name: "Other" }];
-const priceRange = ["0", "50", "100", "300", "500", "1000", ">1000"];
+import { useContext, useEffect, useState } from "react";
+import { ProductFilterContext } from "../../../../../contexts/ProductFilterContext";
+import axios from "../../../../../config/axios";
+// const options = [{ name: "All Categories" }, { name: "Art" }, { name: "Music" }, { name: "Other" }];
+const priceFrom = ["0", "50", "100", "300", "500", "1000"];
+const priceTo = ["50", "100", "300", "500", "1000", ">1000"];
 
 function SidebarFilter() {
+	const { currentPrice, setCurrentPrice, currentCategory, setCurrentCategory } = useContext(ProductFilterContext);
 	const [open, setOpen] = useState(false);
-	const [openPrice, setOpenPrice] = useState(false);
-	const [currentTag, setCurrentTag] = useState(options[0].name);
-	const [currentPrice, setCurrentPrice] = useState({
-		from: 0,
-		to: ">1000",
-	});
+	// const [openPrice, setOpenPrice] = useState(false);
+	const [options, setOptions] = useState([]);
+
+	console.log(currentCategory);
+	console.log("options", options);
+
+	useEffect(() => {
+		const fetch = async () => {
+			const fetchedCategories = await axios.get("/sidebar/categories");
+			console.log("cat", fetchedCategories);
+			setOptions(fetchedCategories.data);
+		};
+		fetch();
+	}, []);
+
 	const handleClickOpenSidebarHeader = () => {
 		setOpen(!open);
 	};
-	const handleClickOpenSidebarPrice = () => {
-		setOpenPrice(!openPrice);
-	};
+	// const handleClickOpenSidebarPrice = () => {
+	// 	setOpenPrice(!openPrice);
+	// };
 
 	const NavButton = styled(Button)(({ theme }) => ({
 		// backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -33,8 +45,8 @@ function SidebarFilter() {
 		},
 	}));
 
-	const handleClickNavType = (tag) => {
-		setCurrentTag(tag);
+	const handleClickNavType = (category, id) => {
+		setCurrentCategory({ id, name: category });
 		setOpen(!open);
 	};
 
@@ -53,21 +65,21 @@ function SidebarFilter() {
 			<ListItem sx={{ display: "flex", justifyContent: "center" }} onClick={handleClickOpenSidebarHeader}>
 				<NavButton variant="text">
 					{open ? <ExpandMore /> : <ArrowForwardIosIcon />}
-					<ListItemText primary={currentTag} />
+					<ListItemText primary={currentCategory.name} />
 				</NavButton>
 			</ListItem>
 			<Collapse in={open} timeout="auto" unmountOnExit>
 				<List component="div" disablePadding>
 					{options.map((item) => {
-						if (item.name !== currentTag) {
+						if (item.name !== currentCategory.name) {
 							return (
 								<ListItem
 									key={item}
 									sx={{ display: "flex", justifyContent: "center" }}
-									onClick={() => handleClickNavType(item.name)}
+									onClick={() => handleClickNavType(item.name, item.id)}
 								>
 									<NavButton variant="text">
-										<ListItemText sx={{ textTransform: "none" }} primary={item.name} />
+										<ListItemText sx={{ textTransform: "capitalize" }} primary={item.name} />
 									</NavButton>
 								</ListItem>
 							);
@@ -90,7 +102,7 @@ function SidebarFilter() {
 						variant="standard"
 						sx={{ minWidth: "10ch" }}
 					>
-						{priceRange.map((item) => (
+						{priceFrom.map((item) => (
 							<MenuItem key={item} value={item}>
 								{item}
 							</MenuItem>
@@ -107,7 +119,7 @@ function SidebarFilter() {
 						variant="standard"
 						sx={{ minWidth: "10ch" }}
 					>
-						{priceRange.map((item) => (
+						{priceTo.map((item) => (
 							<MenuItem key={item} value={item}>
 								{item}
 							</MenuItem>

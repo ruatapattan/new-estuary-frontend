@@ -257,7 +257,12 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
                     <Button
                       onClick={handleClickUnSubscribe}
                       variant="gradient3"
-                      sx={{ fontSize: '10px', p: '0px 10px', lineHeight: '0px', ml: '10px' }}
+                      sx={{
+                        fontSize: '10px',
+                        p: '0px 10px',
+                        lineHeight: '0px',
+                        ml: '10px'
+                      }}
                     >
                       unsubscribe
                     </Button>
@@ -267,7 +272,12 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
                     <Button
                       onClick={handleClickSubscribe}
                       variant="gradient"
-                      sx={{ fontSize: '10px', p: '0px 10px', lineHeight: '0px', ml: '10px' }}
+                      sx={{
+                        fontSize: '10px',
+                        p: '0px 10px',
+                        lineHeight: '0px',
+                        ml: '10px'
+                      }}
                     >
                       subscribe
                     </Button>
