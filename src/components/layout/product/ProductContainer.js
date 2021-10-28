@@ -1,6 +1,9 @@
 import { CardMedia, Grid, Typography } from '@mui/material';
 import { Box, flexbox } from '@mui/system';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from '../../../config/axios';
+import { AuthContext } from '../../../contexts/AuthContext';
 import CreateComment from '../../card/CreateComment';
 import MainComment from '../../card/MainComment';
 import SubComment from '../../card/SubComment';
@@ -8,23 +11,25 @@ import SideBarL from '../sidebar/SideBarL';
 import ProductDetail from './ProductDetail';
 import ProductShow from './ProductShow';
 
-// const Product = [
-//   {
-//     coverPic:
-//       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80',
-//     name: 'Product 1',
-//     externalLink: '',
-//     description: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-//     price: '100.00',
-//     hashtag: ['aaa1', 'aaa2', 'aaa3'],
-//     createAt: '20-11-2021',
-//     User: {
-//       userName: 'Anna',
-//       profilePic:
-//         'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
-//     }
+// const product = {
+//   id: 1,
+//   coverPic:
+//     'https://images.unsplash.com/photo-1547891654-e66ed7ebb968?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80',
+//   name: 'Product 1',
+//   externalLink: '',
+//   description: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+//   price: '100.00',
+//   hashtag: ['aaa1', 'aaa2', 'aaa3'],
+//   createAt: '20-11-2021',
+//   User: {
+//     username: 'Anna',
+//     profilePic:
+//       'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
+//   },
+//   ProductCategory: {
+//     name: 'Art'
 //   }
-// ];
+// };
 
 // const Comment = [
 //   {
@@ -43,6 +48,84 @@ import ProductShow from './ProductShow';
 // ];
 
 function ProductContainer() {
+  const [product, setProduct] = useState({});
+  const [userDetail, setUserDetail] = useState({});
+  const [purchasedLists, setPurchasedLists] = useState([]);
+  const [followingLists, setFollowingLists] = useState([]);
+  const [likeLists, setLikeLists] = useState([]);
+
+  const { user } = useContext(AuthContext);
+  const param = useParams();
+
+  const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    const callProduct = async () => {
+      await axios
+        .get(`/product/${param.id}`)
+        .then(res => {
+          setProduct({ ...res.data.product });
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callUserDetail = async () => {
+      await axios
+        .get(`/profile/${user.id}`)
+        .then(res => {
+          setUserDetail({ ...res.data.user });
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callPurchased = async () => {
+      await axios
+        .get(`/purchased/${param.id}`)
+        .then(res => {
+          setPurchasedLists([...res.data.purchased]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callSubscribed = async () => {
+      await axios
+        .get(`/following/follower/${user.id}`)
+        .then(res => {
+          setFollowingLists([...res.data.following]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    const callLike = async () => {
+      await axios
+        .get(`/like/product/${param.id}`)
+        .then(res => {
+          setLikeLists([...res.data.like]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
+
+    callProduct();
+    callUserDetail();
+    callPurchased();
+    callSubscribed();
+    callLike();
+  }, [toggle]);
+
+  // console.dir(product);
+  // console.dir(followingLists);
+  console.dir(likeLists);
+
   return (
     <Box
       sx={{
@@ -74,9 +157,16 @@ function ProductContainer() {
             p: { md: '50px', xs: '50px 0px' }
           }}
         >
-          <ProductShow />
+          <ProductShow product={product} />
 
-          <ProductDetail />
+          <ProductDetail
+            product={product}
+            userDetail={userDetail}
+            purchasedLists={purchasedLists}
+            followingLists={followingLists}
+            likeLists={likeLists}
+            setToggle={setToggle}
+          />
 
           <Box
             sx={{
