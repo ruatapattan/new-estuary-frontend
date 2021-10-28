@@ -1,46 +1,13 @@
-import React,{useState,useEffect} from "react";
-import { Box, minWidth } from "@mui/system";
+import React, { useState, useEffect } from "react";
+import { Box } from "@mui/system";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import axios from "../../../config/axios";
 import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import CardProfile from "./cardprofile/CardProfile";
-
-const mook = [
-  {
-    productName: "product1",
-    picProduct: "https://picsum.photos/id/20/200/300",
-    price: 100,
-    description:
-      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-  },
-  {
-    productName: "product2",
-    picProduct: "https://picsum.photos/id/49/200/300",
-    price: 200,
-    description:
-      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-  },
-  {
-    productName: "product3",
-    picProduct: "https://picsum.photos/id/145/200/300",
-    price: 30000,
-    description:
-      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-  },
-  {
-    productName: "product4",
-    picProduct: "https://picsum.photos/id/145/200/300",
-    price: 30000000,
-    description:
-      "testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-  },
-];
-
 function ProfileForm() {
   // seach
-
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -82,20 +49,74 @@ function ProfileForm() {
     },
   }));
 
-  const [product, setProduct] = useState([]);
+  //call product
+  const [products, setProducts] = useState([]);
+  const [toggle, setToggle] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const handleClickDelete = async (id) => {
+    try {
+      console.log(id);
+      await axios.delete(`/product/${id}`);
+      setToggle((c) => !c);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategory = async () => {
+    const fetchProduct = async () => {
       try {
-        const res = await axios.get("/category");
-        const fetChcategorys = res.data.categorys;
-        setProduct(fetChcategorys);
-        console.log(fetChcategorys);
+        const res = await axios.get("/product");
+        const resProducts = res.data.products;
+        console.log(resProducts);
+        setProducts(resProducts);
       } catch (err) {
-        console.dir(err);
+        console.log(err);
       }
     };
-    fetchCategory();
-  }, []);
+    fetchProduct();
+  }, [toggle]);
+
+  const handleEditProduct = async (products) => {
+    const {
+      coverPic,
+      name,
+      externalLink,
+      description,
+      price,
+      hashtag,
+      categoryId,
+    } = products;
+    try {
+      await axios.put(`/product/${products.id}`, {
+        coverPic,
+        name,
+        externalLink,
+        description,
+        price,
+        hashtag,
+        categoryId,
+      });
+      setToggle((c) => !c);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //search text
+  console.log(products);
+
+  const handleChangeSearch = (e) => {
+    setSearchText(e.target.value);
+  };
+
+  const filterProduct =
+    searchText === ""
+      ? products
+      : products.filter((item) =>
+          item.name.toLowerCase().includes(searchText.toLowerCase())
+        );
 
   return (
     <Box
@@ -103,18 +124,18 @@ function ProfileForm() {
       display="flex"
       flexWrap="wrap"
       flexDirection="column"
-      justifyContent="center"
+      justifyContent="flex-start"
       alignItems="center"
-      sx={{ width: { xs: "100%", sm: "100%", md: "72%" } }}
-      // border="5px solid pink"
+      sx={{ width: { xs: "90%", sm: "90%", md: "72%" } }}
+      border="5px solid pink"
       backgroundColor="#EFF1F3"
     >
       <Box
         display="flex"
-        justifyContent="space-between"
+        justifyContent="center"
         alignItems="center"
         sx={{ width: { xs: "90%", sm: "90%", md: "90%" }, mt: "15px" }}
-        // border="5px solid blue"
+        border="5px solid blue"
         flexWrap="wrap"
 
         // height="5vh"
@@ -134,43 +155,41 @@ function ProfileForm() {
           </SearchIconWrapper>
 
           <StyledInputBase
+            autoFocus
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
             sx={{
-              width: { md: "250px", xs: "100%" },
+              width: { md: "500px", xs: "100%" },
               height: "50px",
               border: "1px groove",
             }}
+            value={searchText}
+            onChange={handleChangeSearch}
           />
         </Search>
-
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Single items"
-          sx={{ mb: "10px", width: { md: "250px", xs: "100%" } }}
-        />
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Recently Received"
-          sx={{ mb: "10px", width: { md: "250px", xs: "100%" } }}
-        />
       </Box>
 
       <Box
-        display="flex"
-        flexWrap="wrap"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ width: { xs: "90%", sm: "90%", md: "90%" } }}
+        sx={{
+          width: { xs: "90%", sm: "90%", md: "90%" },
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
       >
-        {mook.map((item) => (
+        {filterProduct.map((item) => (
           <CardProfile
-            productName={item.productName}
-            picProduct={item.picProduct}
-            // price={item.price}
+            key={item.id}
+            id={item.id}
+            productName={item.name}
+            picProduct={item.coverPic}
+            price={item.price}
             description={item.description}
+            handleClickDelete={handleClickDelete}
+            handleEditProduct={handleEditProduct}
+            externalLink={item.externalLink}
+            category={item.ProductCategory}
+            createdAt={item.createdAt}
           />
         ))}
       </Box>

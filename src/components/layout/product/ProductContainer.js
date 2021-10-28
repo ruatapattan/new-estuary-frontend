@@ -1,15 +1,15 @@
-import { CardMedia, Grid, Typography } from '@mui/material';
-import { Box, flexbox } from '@mui/system';
-import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../../../config/axios';
-import { AuthContext } from '../../../contexts/AuthContext';
-import CreateComment from '../../card/CreateComment';
-import MainComment from '../../card/MainComment';
-import SubComment from '../../card/SubComment';
-import SideBarL from '../sidebar/SideBarL';
-import ProductDetail from './ProductDetail';
-import ProductShow from './ProductShow';
+import { CardMedia, Grid, Typography } from "@mui/material";
+import { Box, flexbox } from "@mui/system";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "../../../config/axios";
+import { AuthContext } from "../../../contexts/AuthContext";
+import CreateComment from "../../card/CreateComment";
+import MainComment from "../../card/MainComment";
+import SubComment from "../../card/SubComment";
+import SideBarL from "../sidebar/SideBarL";
+import ProductDetail from "./ProductDetail";
+import ProductShow from "./ProductShow";
 
 // const product = {
 //   id: 1,
@@ -63,10 +63,10 @@ function ProductContainer() {
     const callProduct = async () => {
       await axios
         .get(`/product/${param.id}`)
-        .then(res => {
+        .then((res) => {
           setProduct({ ...res.data.product });
         })
-        .catch(err => {
+        .catch((err) => {
           console.dir(err);
         });
     };
@@ -74,10 +74,10 @@ function ProductContainer() {
     const callUserDetail = async () => {
       await axios
         .get(`/profile/${user.id}`)
-        .then(res => {
+        .then((res) => {
           setUserDetail({ ...res.data.user });
         })
-        .catch(err => {
+        .catch((err) => {
           console.dir(err);
         });
     };
@@ -85,10 +85,10 @@ function ProductContainer() {
     const callPurchased = async () => {
       await axios
         .get(`/purchased/${param.id}`)
-        .then(res => {
+        .then((res) => {
           setPurchasedLists([...res.data.purchased]);
         })
-        .catch(err => {
+        .catch((err) => {
           console.dir(err);
         });
     };
@@ -96,10 +96,10 @@ function ProductContainer() {
     const callSubscribed = async () => {
       await axios
         .get(`/following/follower/${user.id}`)
-        .then(res => {
+        .then((res) => {
           setFollowingLists([...res.data.following]);
         })
-        .catch(err => {
+        .catch((err) => {
           console.dir(err);
         });
     };
@@ -107,10 +107,10 @@ function ProductContainer() {
     const callLike = async () => {
       await axios
         .get(`/like/product/${param.id}`)
-        .then(res => {
+        .then((res) => {
           setLikeLists([...res.data.like]);
         })
-        .catch(err => {
+        .catch((err) => {
           console.dir(err);
         });
     };
@@ -129,32 +129,38 @@ function ProductContainer() {
   return (
     <Box
       sx={{
-        width: '100%',
+        width: "100%",
         // height: '100vh',
-        display: 'flex',
-        backgroundColor: '#EFF1F3'
+        display: "flex",
+        backgroundColor: "#EFF1F3",
       }}
     >
-      <Grid item sx={{ width: { md: '25%', lg: '18%' }, display: { md: 'flex', xs: 'none' } }}>
+      <Grid
+        item
+        sx={{
+          width: { md: "25%", lg: "18%" },
+          display: { md: "flex", xs: "none" },
+        }}
+      >
         <SideBarL />
       </Grid>
 
       <Box
         sx={{
-          width: '100%',
-          backgroundColor: '#EFF1F3',
-          display: 'flex',
-          justifyContent: 'center',
-          border: '1px solid red'
+          width: "100%",
+          backgroundColor: "#EFF1F3",
+          display: "flex",
+          justifyContent: "center",
+          border: "1px solid red",
           // p: '80px 0px'
         }}
       >
         <Box
           sx={{
-            width: { md: '80%', xs: '100%' },
-            backgroundColor: 'white',
+            width: { md: "80%", xs: "100%" },
+            backgroundColor: "white",
             boxShadow: 2,
-            p: { md: '50px', xs: '50px 0px' }
+            p: { md: "50px", xs: "50px 0px" },
           }}
         >
           <ProductShow product={product} />
@@ -170,15 +176,15 @@ function ProductContainer() {
 
           <Box
             sx={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
               // border: '1px solid red',
-              p: { md: '0px', xs: '20px' },
-              justifyContent: 'flex-start',
-              '& p': {
-                m: '20px 50px'
-              }
+              p: { md: "0px", xs: "20px" },
+              justifyContent: "flex-start",
+              "& p": {
+                m: "20px 50px",
+              },
             }}
           >
             <p>comment</p>
