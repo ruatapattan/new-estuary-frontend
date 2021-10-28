@@ -12,10 +12,11 @@ import Link from "@mui/material/Link";
 import { removeToken } from "../../../services/localStorage";
 import { useHistory } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useLocation } from "react-router-dom";
 import { SidebarContext } from "../../../contexts/SidebarContext";
+import axios from "../../../config/axios";
 import DesktopMenu from "./headerMenus/DesktopMenu";
 import GuestNav from "./headerDesktopNavs/GuestNav";
 import UserNav from "./headerDesktopNavs/UserNav";
@@ -23,8 +24,9 @@ import LogMenu from "./headerMenus/LogMenu";
 import ChatContainer from "../../chat/ChatContainer";
 
 import CreateCommunityBackdrop from "./createCommunity/CreateCommunityBackdrop";
-import { Button } from "@mui/material";
+import { Avatar, Button, Divider, List, ListItem, ListItemAvatar, ListItemText, MenuItem } from "@mui/material";
 import { ChatContext } from "../../../contexts/ChatContext";
+import SearchResultContainer from "./headerMenus/search/SearchResultContainer";
 
 const MOCK_CHAT = [
 	{
@@ -121,7 +123,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-	const { chatRoomInfo, setChatRoomInfo } = useContext(ChatContext);
+	const { chatRoomInfo } = useContext(ChatContext);
 	const { handleDrawerToggle } = useContext(SidebarContext);
 	const { userRole, user, setUserRole, setUser } = useContext(AuthContext);
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -130,8 +132,10 @@ export default function Header() {
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const [openBackdrop, setOpenBackdrop] = useState(false);
 	const history = useHistory();
+	const [searchKeyword, setSearchKeyword] = useState("");
+	const [searchResult, setSearchResult] = useState([]);
 	// const isMenuOpen = Boolean(anchorEl);
-	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+	// const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 	const location = useLocation();
 	const path = location.pathname;
 
@@ -149,9 +153,9 @@ export default function Header() {
 		setMobileMoreAnchorEl(null);
 	};
 
-	const handleMobileMenuOpen = (event) => {
-		setMobileMoreAnchorEl(event.currentTarget);
-	};
+	// const handleMobileMenuOpen = (event) => {
+	// 	setMobileMoreAnchorEl(event.currentTarget);
+	// };
 
 	//chat toggle
 	const handleChatLogMenuOpen = (event) => {
@@ -187,7 +191,22 @@ export default function Header() {
 		history.push("/marketplace");
 		window.location.reload();
 	};
-	console.log(chatRoomInfo);
+
+	// search handling
+	useEffect(() => {
+		if (searchKeyword !== "") {
+			const search = async () => {
+				const searched = await axios.get(`/header/search/product/${searchKeyword}`);
+				setSearchResult(searched.data.searchResult);
+			};
+			search();
+		}
+	}, [searchKeyword]);
+
+	const handleInputSearch = (e) => {
+		setSearchKeyword(e.target.value);
+	};
+	console.log(`result`, searchResult);
 
 	return (
 		// <Box sx={{ flexGrow: 1, zIndex: 1500 }}>
@@ -213,7 +232,13 @@ export default function Header() {
 						<SearchIconWrapper>
 							<SearchIcon />
 						</SearchIconWrapper>
-						<StyledInputBase placeholder="Search…" inputProps={{ "aria-label": "search" }} />
+						<StyledInputBase
+							placeholder="Search…"
+							inputProps={{ "aria-label": "search" }}
+							value={searchKeyword}
+							onChange={handleInputSearch}
+						/>
+						{searchKeyword !== "" && <SearchResultContainer searchResult={searchResult} />}
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					{userRole === "guest" ? (

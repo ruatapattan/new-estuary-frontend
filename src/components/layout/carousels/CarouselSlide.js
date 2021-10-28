@@ -14,7 +14,6 @@ import CarouselSlideButtons from "./CarouselSlideButtons";
 
 function CarouselSlide({ title, products }) {
 	const slides = products.length > 2 ? 3 : products.length > 1 ? 2 : 1;
-
 	const settings = {
 		nextArrow: <SampleNextArrow />,
 		prevArrow: <SamplePrevArrow />,

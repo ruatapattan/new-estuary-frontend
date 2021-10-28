@@ -1,11 +1,13 @@
-import { Avatar, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Avatar, Card, CardActionArea, CardContent, CardMedia, Link, Typography } from "@mui/material";
+import { Box, display } from "@mui/system";
 import { useState } from "react";
+import { useHistory } from "react-router";
 import Slider from "react-slick";
 import SampleNextArrow from "./arrows/SampleNextArrow";
 import SamplePrevArrow from "./arrows/SamplePrevArrow";
 
 function Carousel3D({ trendingCreators }) {
+	const history = useHistory();
 	const [imgIdx, setImgIdx] = useState(0);
 	const settingsOverlap = {
 		className: "center",
@@ -19,6 +21,7 @@ function Carousel3D({ trendingCreators }) {
 		prevArrow: <SamplePrevArrow />,
 		beforeChange: (cur, next) => setImgIdx(next),
 	};
+	console.log(trendingCreators);
 
 	return (
 		<Box
@@ -41,13 +44,42 @@ function Carousel3D({ trendingCreators }) {
 							sx={{ width: "500px", height: "50vh" }}
 						>
 							<CardActionArea sx={{ width: "500px", height: "50vh", display: "flex" }}>
-								<CardMedia
-									component="img"
-									image={item.Products.coverPic}
-									alt="green iguana"
-									sx={{ width: "50%", height: "100%" }}
-								/>
+								<Box
+									sx={{
+										width: "50%",
+										height: "100%",
+										"&:hover *": { bgcolor: "rgba(255, 255, 255, 0.7)", visibility: "visible" },
+									}}
+								>
+									<Link
+										href={`/product/${item.Products.id}`}
+										sx={{
+											width: "50%",
+											height: "100%",
+											display: "flex",
+											visibility: "hidden",
+											justifyContent: "center",
+											alignItems: "center",
+											textDecoration: "none",
+											color: "#242A38",
+											fontWeight: "bold",
+											fontSize: "1.5rem",
+											padding: "1rem",
+										}}
+										position="absolute"
+									>
+										Check out this product!
+									</Link>
+									<CardMedia
+										// onClick={() => history.push(`/product/${item.Products.id}`)}
+										component="img"
+										image={item.Products.coverPic}
+										alt="green iguana"
+										sx={{ width: "100%", height: "100%" }}
+									/>
+								</Box>
 								<CardContent
+									// onClick={() => history.push(`/profile/${item.id}`)}
 									sx={{
 										width: "50%",
 										height: "100%",
@@ -55,8 +87,29 @@ function Carousel3D({ trendingCreators }) {
 										flexDirection: "column",
 										justifyContent: "center",
 										alignItems: "center",
+										"&:hover *": { bgcolor: "rgba(255, 255, 255, 0.9)", visibility: "visible" },
 									}}
 								>
+									<Link
+										href={`/product/${item.Products.id}`}
+										sx={{
+											width: "50%",
+											height: "100%",
+											display: "flex",
+											visibility: "hidden",
+											justifyContent: "center",
+											alignItems: "center",
+											textDecoration: "none",
+											color: "#242A38",
+											fontWeight: "bold",
+											fontSize: "1.5rem",
+											padding: "1rem",
+											textAlign: "right",
+										}}
+										position="absolute"
+									>
+										Check out this creator!
+									</Link>
 									<Avatar
 										sx={{ mb: 1, width: 100, height: 100 }}
 										alt="Remy Sharp"

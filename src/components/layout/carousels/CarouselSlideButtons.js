@@ -17,30 +17,54 @@ function CarouselSlideButtons({ item }) {
 	const { user } = useContext(AuthContext);
 	const [isLiked, setIsLiked] = useState(false);
 	const [currentLikeCount, setCurrentLikeCount] = useState(0);
+	const [usersLiked, setUsersLiked] = useState([]);
+	const [firstLike, setFirstLike] = useState(false);
+
+	console.log(item.name, item.id, item);
+	// console.log(item.name, item.id, item);
+	// console.log(usersLiked);
+
+	// console.log("likecount", currentLikeCount);
 
 	// too many rerender here
 	useEffect(() => {
-		item.usersLiked.map((elem) => {
-			if (+elem.userId === +user.id && elem.status === true) {
+		setUsersLiked(usersLiked);
+		usersLiked.map((elem) => {
+			if (+elem.userId === +user?.id && elem.status === true) {
 				setIsLiked(true);
 			}
 		});
 		setCurrentLikeCount(item.Likes);
 	}, []);
 
+	useEffect(() => {
+		if (firstLike) {
+			// alert("first like effect");
+			const fetch = async () => {
+				const newLikeList = await axios.get(`/marketplace/likesbyproduct/${item.id}`);
+				console.log(newLikeList.data);
+				setUsersLiked(newLikeList.data.usersLiked);
+			};
+			fetch();
+		}
+	}, [firstLike]);
+	console.log(`effect ${item.name}`, usersLiked);
+
 	const handleClickLike = async () => {
-		if (item.usersLiked.length === 0) {
+		if (usersLiked.length === 0) {
 			alert("first like");
 			axios.post("/like", { productId: item.id }).then((res) => {
 				setIsLiked((cur) => !cur);
 				setCurrentLikeCount((cur) => cur + 1);
+				setFirstLike((cur) => !cur);
 			});
 		} else {
-			item.usersLiked.map((elem) => {
+			usersLiked.map((elem) => {
 				if (+elem.userId === +user.id) {
 					axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then((res) => {
+						const currentType = isLiked;
 						setIsLiked((cur) => !cur);
-						setCurrentLikeCount((cur) => (elem.status === true ? cur - 1 : cur + 1));
+						setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
 					});
 				} else {
 					axios.post("/like", { productId: item.id }).then((res) => {
@@ -52,33 +76,16 @@ function CarouselSlideButtons({ item }) {
 		}
 	};
 
-	const handleClickUnLike = async () => {
-		item.usersLiked.map((elem) => {
-			if (+elem.userId === +user.id) {
-				axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then((res) => {
-					setIsLiked((curr) => !curr);
-					setCurrentLikeCount((cur) => (elem.status === true ? cur - 1 : cur + 1));
-				});
-				// axios.delete(`/following/${item.id}`).then(res => {
-				//   window.location.reload();
-				// });
-			}
-		});
-	};
-
 	return (
 		<Box>
-			{isLiked ? (
-				<IconButton aria-label="add to favorites" onClick={handleClickUnLike}>
+			<IconButton aria-label="add to favorites" onClick={handleClickLike}>
+				{isLiked ? (
 					<FavoriteIcon sx={{ fontSize: "1.5rem", color: "red" }} />
-					<Typography>{currentLikeCount}</Typography>
-				</IconButton>
-			) : (
-				<IconButton aria-label="add to favorites" onClick={handleClickLike}>
+				) : (
 					<FavoriteBorderIcon sx={{ fontSize: "1.5rem" }} />
-					<Typography>{currentLikeCount}</Typography>
-				</IconButton>
-			)}
+				)}
+				<Typography>{currentLikeCount}</Typography>
+			</IconButton>
 			<IconButton aria-label="share">
 				<ShareIcon sx={{ fontSize: "1.5rem" }} />
 				{/* <Typography>{item.Shares}</Typography> */}

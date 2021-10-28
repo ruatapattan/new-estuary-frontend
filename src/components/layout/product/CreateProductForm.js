@@ -117,7 +117,7 @@ function CreateProductForm() {
 			try {
 				const res = await axios.get("/category");
 				const fetChcategorys = res.data.categorys;
-				setOptionCategory(fetChcategorys);
+				setOptionCategory(fetChcategorys.filter((item) => item.name !== "all"));
 				console.log(fetChcategorys);
 			} catch (err) {
 				console.dir(err);

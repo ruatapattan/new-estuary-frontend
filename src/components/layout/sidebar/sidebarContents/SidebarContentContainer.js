@@ -72,7 +72,7 @@ function SidebarContentContainer({ type }) {
 		<>
 			<Toolbar />
 			<Box sx={{ overflow: "overlay" }}>
-				{type === "profile" && +params.id === user.id && (
+				{type === "profile" && +params.id === user?.id && (
 					<>
 						<List>
 							<ListItem>
