@@ -13,28 +13,94 @@ import {
 } from "@mui/material";
 import { Box, typography } from "@mui/system";
 import Slider from "react-slick";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CarouselWrapper } from "react-pretty-carousel";
 import { CenterTypography } from "../../../style";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import Carousel3D from "../carousels/Carousel3D";
 import CarouselSlide from "../carousels/CarouselSlide";
-const imgArr = [
-	"https://picsum.photos/id/1/400/300",
-	"https://picsum.photos/id/222/400/300",
-	"https://picsum.photos/id/22/400/300",
-	"https://picsum.photos/id/39/400/300",
-	"https://picsum.photos/id/142/400/300",
-	"https://picsum.photos/id/34/400/300",
-];
+
+import axios from "../../../config/axios";
+import { createdAgo } from "../../../services/getTimeService";
+import { ProductFilterContext } from "../../../contexts/ProductFilterContext";
+import MarketplaceProductItem from "./MarketplaceProductItem";
 
 function MarketplaceContent({ title }) {
+	const [allProducts, setAllProducts] = useState([]);
+	// const [filteredProducts, setFilteredProducts] = useState([]);
+	const [trendingCreators, setTrendingCreators] = useState([]);
+	const { currentPrice, currentCategory } = useContext(ProductFilterContext);
+
+	// console.log(currentPrice, currentCategory);
+
+	useEffect(() => {
+		try {
+			const fetch = async () => {
+				const allFetched = await axios.get("/marketplace/all");
+				// console.log(allFetched.data.allProducts);
+				setAllProducts(allFetched.data.allProducts);
+				// setFilteredProducts(allFetched.data.allProducts.filter(
+
+				// ));
+				const trendingFetched = await axios.get("marketplace/trending");
+				setTrendingCreators(trendingFetched.data.trendingCreators);
+			};
+			fetch();
+		} catch (err) {
+			console.log(err);
+		}
+	}, []);
+
+	function sortByPrice(a, b) {
+		if (+a.price > +b.price) {
+			return 1;
+		}
+		if (+a.price < +b.price) {
+			return -1;
+		}
+		return 0;
+	}
+
+	const filteredProducts = allProducts
+		.filter(
+			(item) =>
+				(item.categoryId === currentCategory.id || currentCategory.id === 4) &&
+				(+item.price <= +currentPrice.to || currentPrice.to === ">1000") &&
+				+item.price >= +currentPrice.from
+		)
+		.sort(sortByPrice);
+
+	// console.log(currentPrice.from);
+
+	// console.log("all", allProducts);
+	// console.log("trend", trendingCreators);
+
+	function sortByLikeCount(a, b) {
+		if (a.Likes < b.Likes) {
+			return 1;
+		}
+		if (a.Likes > b.Likes) {
+			return -1;
+		}
+		return 0;
+	}
+
 	return (
 		<>
-			<Carousel3D />
-			<CarouselSlide />
-			<CarouselSlide />
+			<Carousel3D trendingCreators={trendingCreators} />
+			<CarouselSlide
+				title="Art"
+				products={allProducts.filter((item) => item.categoryId === 1).sort(sortByLikeCount)}
+			/>
+			<CarouselSlide
+				title="Music"
+				products={allProducts.filter((item) => item.categoryId === 2).sort(sortByLikeCount)}
+			/>
+			<CarouselSlide
+				title="Other"
+				products={allProducts.filter((item) => item.categoryId === 3).sort(sortByLikeCount)}
+			/>
 			<br />
 			<Box
 				sx={{
@@ -47,71 +113,8 @@ function MarketplaceContent({ title }) {
 				</Typography>
 				<Box display="flex" justifyContent="center">
 					<Grid container spacing={6} sx={{ width: "100%", p: "1rem" }}>
-						{imgArr.map((item, idx) => (
-							<Grid
-								key={item}
-								item
-								xs={12}
-								sm={6}
-								md={4}
-								sx={{ display: "flex", justifyContent: "center" }}
-							>
-								<Link to="#" className="expSlider" key={idx} style={{ textDecoration: "none" }}>
-									<Card sx={{ maxWidth: 345 }}>
-										<CardActionArea>
-											<CardMedia component="img" image={item} alt="green iguana" />
-											<CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
-												<Box>
-													<Typography
-														color="text.primary"
-														gutterBottom
-														variant="h5"
-														component="div"
-													>
-														Art Name
-													</Typography>
-													<Typography variant="body2" color="text.secondary">
-														By: THEVinci
-													</Typography>
-												</Box>
-												<Box>
-													<Typography
-														color="text.secondary"
-														gutterBottom
-														variant="body1"
-														component="div"
-													>
-														Price
-													</Typography>
-													<Typography variant="body2" color="text.secondary">
-														{"500"}$
-													</Typography>
-												</Box>
-											</CardContent>
-										</CardActionArea>
-										<CardActions
-											disableSpacing
-											sx={{
-												padding: 0,
-												display: "flex",
-												justifyContent: "space-between",
-												paddingX: "0.5rem",
-											}}
-										>
-											<Box>
-												<IconButton aria-label="add to favorites">
-													<FavoriteIcon sx={{ fontSize: "1.5rem" }} />
-													<Typography>1.1M</Typography>
-												</IconButton>
-												<IconButton aria-label="share">
-													<ShareIcon sx={{ fontSize: "1.5rem" }} />
-												</IconButton>
-											</Box>
-											<Box>3 Days Ago</Box>
-										</CardActions>
-									</Card>
-								</Link>
-							</Grid>
+						{filteredProducts.map((item, idx) => (
+							<MarketplaceProductItem item={item} />
 						))}
 					</Grid>
 				</Box>

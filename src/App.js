@@ -5,14 +5,17 @@ import { UserContextProvider } from "./contexts/UserContext";
 
 import "./App.css";
 import { theme } from "./style";
+import { ProductFilterContextProvider } from "./contexts/ProductFilterContext";
 
 function App() {
 	return (
 		<UserContextProvider>
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<RouteContainer />
-			</ThemeProvider>
+			<ProductFilterContextProvider>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<RouteContainer />
+				</ThemeProvider>
+			</ProductFilterContextProvider>
 		</UserContextProvider>
 	);
 }
