@@ -11,7 +11,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Swal from 'sweetalert2';
 import { useHistory, useParams } from 'react-router-dom';
-import dateValidate from '../../../services/dateValidate';
+import { createdAgo } from '../../../services/getTimeService';
 import HistoryIcon from '@mui/icons-material/History';
 
 function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle }) {
@@ -20,7 +20,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
   const param = useParams();
 
   const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
-  // const dateNow = dateValidate.formatShortMonthShortYear(Date.now());
+
   const iconHeartStyle = { color: '#e91e63', ml: '10px' };
 
   ///////////////set show button buy now////////////////////////
@@ -128,11 +128,12 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           axios.put(`/following/${item.id}`, { isSubscribed: !isSubscribed }).then(res => {
             setToggle(curr => !curr);
           });
-        } else {
-          axios.post('/following', { followedId: product.userId }).then(res => {
-            setToggle(curr => !curr);
-          });
         }
+        // else {
+        //   axios.post('/following', { followedId: product.userId }).then(res => {
+        //     setToggle(curr => !curr);
+        //   });
+        // }
       });
     }
   };
@@ -289,9 +290,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
         </Box>
         <Box sx={{ display: 'flex' }}>
           <p>
-            Since:{' '}
-            {/* {dateValidate.getNumberOfDays(dateValidate.formatShortMonthShortYear(new Date(product.createdAt)), dateNow)} */}
-            day
+            {Math.round(createdAgo(product.createdAt).time)} {createdAgo(product.createdAt).unit} Ago
           </p>
           <HistoryIcon sx={{ ml: '5px', color: 'white' }} />
         </Box>
@@ -330,7 +329,19 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           </Button>
         ))} */}
         <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-          {product?.ProductCategory?.name}
+          <Link
+            sx={{ textDecoration: 'none' }}
+            onClick={() => {
+              product?.ProductCategory?.name === 'Art'
+                ? history.push({ pathname: '/marketplace', state: 'Art' })
+                : product?.ProductCategory?.name === 'Music'
+                ? history.push({ pathname: '/marketplace', state: 'Music' })
+                : history.push({ pathname: '/marketplace', state: 'Other' });
+            }}
+          >
+            {console.log(product?.ProductCategory?.name)}
+            {product?.ProductCategory?.name}
+          </Link>
         </Button>
       </Box>
 
