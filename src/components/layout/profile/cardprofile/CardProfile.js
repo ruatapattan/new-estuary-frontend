@@ -17,7 +17,36 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-function CardProfile({ productName, picProduct, price, description }) {
+import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "../../../../config/axios";
+
+import { AuthContext } from "../../../../contexts/AuthContext";
+
+function CardProfile({
+  id,
+  productName,
+  picProduct,
+  price,
+  externalLink,
+  description,
+  handleClickDelete,
+  handleEditProduct,
+  category,
+}) {
+  const product = {
+    id,
+    productName,
+    picProduct,
+    price,
+    externalLink,
+    description,
+    category,
+  };
+
+  let { user } = useContext(AuthContext);
+  // console.log(id);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -26,6 +55,7 @@ function CardProfile({ productName, picProduct, price, description }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Card
       sx={{
@@ -65,8 +95,17 @@ function CardProfile({ productName, picProduct, price, description }) {
                   horizontal: "left",
                 }}
               >
-                <MenuItem onClick={handleClose}>Edit</MenuItem>
-                <MenuItem onClick={handleClose}>Delete</MenuItem>
+                <Link
+                  to={{
+                    pathname: `/editproduct/${id}`,
+                    state: { product },
+                  }}
+                >
+                  <MenuItem onClick={handleClose}>Edit</MenuItem>
+                </Link>
+                <MenuItem onClick={() => handleClickDelete(id)}>
+                  Delete
+                </MenuItem>
               </Menu>
             </div>
           }
@@ -90,7 +129,7 @@ function CardProfile({ productName, picProduct, price, description }) {
               {productName}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              By: THEVinci
+              By: {user.username}
             </Typography>
           </Box>
           <Box>
@@ -100,10 +139,10 @@ function CardProfile({ productName, picProduct, price, description }) {
               variant="body1"
               component="div"
             >
-              {price}
+              Price
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {"500"}$
+              {price}$
             </Typography>
           </Box>
         </CardContent>
@@ -139,12 +178,10 @@ function CardProfile({ productName, picProduct, price, description }) {
           paddingBottom: "0.5rem",
         }}
       >
-        {description}
+        {description === "undefined" ? "No description " : description}
       </Typography>
     </Card>
   );
-}
-{
 }
 
 export default CardProfile;
