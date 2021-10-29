@@ -7,7 +7,7 @@ function CreactProductContainer() {
     <Box
       flexWrap="wrap"
       sx={{
-        width: "80%",
+        width: "73%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

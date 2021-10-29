@@ -121,7 +121,6 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 							<TextField
 								size="small"
 								label="Community Name"
-								defaultValue=""
 								error={error.name !== "" ? true : false}
 								helperText={error.name}
 								value={communityInput.name}

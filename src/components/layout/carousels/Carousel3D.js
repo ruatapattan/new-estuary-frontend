@@ -1,25 +1,19 @@
-import { Avatar, Card, CardActionArea, CardContent, CardMedia, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Avatar, Card, CardActionArea, CardContent, CardMedia, Link, Typography } from "@mui/material";
+import { Box, display } from "@mui/system";
 import { useState } from "react";
+import { useHistory } from "react-router";
 import Slider from "react-slick";
 import SampleNextArrow from "./arrows/SampleNextArrow";
 import SamplePrevArrow from "./arrows/SamplePrevArrow";
 
-const imgArr = [
-	"https://picsum.photos/id/1/400/300",
-	"https://picsum.photos/id/222/400/300",
-	"https://picsum.photos/id/22/400/300",
-	"https://picsum.photos/id/39/400/300",
-	"https://picsum.photos/id/142/400/300",
-	"https://picsum.photos/id/34/400/300",
-];
-
-function Carousel3D() {
+function Carousel3D({ trendingCreators }) {
+	const history = useHistory();
 	const [imgIdx, setImgIdx] = useState(0);
 	const settingsOverlap = {
 		className: "center",
 		centerMode: true,
 		infinite: true,
+		lazyLoad: false,
 		slidesToShow: 3,
 		speed: 500,
 		variableWidth: true,
@@ -27,6 +21,7 @@ function Carousel3D() {
 		prevArrow: <SamplePrevArrow />,
 		beforeChange: (cur, next) => setImgIdx(next),
 	};
+	console.log(trendingCreators);
 
 	return (
 		<Box
@@ -42,20 +37,49 @@ function Carousel3D() {
 			<Typography variant="h4">Trending Creators</Typography>
 			<Box width="90%" display="block" justifyContent="center">
 				<Slider {...settingsOverlap} className="carouselBox" style={{ cursor: "pointer" }}>
-					{imgArr.map((item, idx) => (
+					{trendingCreators?.map((item, idx) => (
 						<Card
-							key={idx}
+							key={item.id}
 							className={idx === imgIdx ? "slide activeSlide" : "slide"}
 							sx={{ width: "500px", height: "50vh" }}
 						>
 							<CardActionArea sx={{ width: "500px", height: "50vh", display: "flex" }}>
-								<CardMedia
-									component="img"
-									image={item}
-									alt="green iguana"
-									sx={{ width: "50%", height: "100%" }}
-								/>
+								<Box
+									sx={{
+										width: "50%",
+										height: "100%",
+										"&:hover *": { bgcolor: "rgba(255, 255, 255, 0.7)", visibility: "visible" },
+									}}
+								>
+									<Link
+										href={`/product/${item.Products.id}`}
+										sx={{
+											width: "50%",
+											height: "100%",
+											display: "flex",
+											visibility: "hidden",
+											justifyContent: "center",
+											alignItems: "center",
+											textDecoration: "none",
+											color: "#242A38",
+											fontWeight: "bold",
+											fontSize: "1.5rem",
+											padding: "1rem",
+										}}
+										position="absolute"
+									>
+										Check out this product!
+									</Link>
+									<CardMedia
+										// onClick={() => history.push(`/product/${item.Products.id}`)}
+										component="img"
+										image={item.Products.coverPic}
+										alt="green iguana"
+										sx={{ width: "100%", height: "100%" }}
+									/>
+								</Box>
 								<CardContent
+									// onClick={() => history.push(`/profile/${item.id}`)}
 									sx={{
 										width: "50%",
 										height: "100%",
@@ -63,20 +87,81 @@ function Carousel3D() {
 										flexDirection: "column",
 										justifyContent: "center",
 										alignItems: "center",
+										"&:hover *": { bgcolor: "rgba(255, 255, 255, 0.9)", visibility: "visible" },
 									}}
 								>
+									<Link
+										href={`/product/${item.Products.id}`}
+										sx={{
+											width: "50%",
+											height: "100%",
+											display: "flex",
+											visibility: "hidden",
+											justifyContent: "center",
+											alignItems: "center",
+											textDecoration: "none",
+											color: "#242A38",
+											fontWeight: "bold",
+											fontSize: "1.5rem",
+											padding: "1rem",
+											textAlign: "right",
+										}}
+										position="absolute"
+									>
+										Check out this creator!
+									</Link>
 									<Avatar
-										sx={{ mb: 5, width: 100, height: 100 }}
+										sx={{ mb: 1, width: 100, height: 100 }}
 										alt="Remy Sharp"
-										src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634099288/nps3akzuq75qpmgvddk3.png"
+										src={item.profilePic}
 									/>
 									<Typography gutterBottom variant="h5" component="div">
-										Lizard
+										{item.username}
 									</Typography>
-									<Typography variant="body2" color="text.secondary">
-										Lizards are a widespread group of squamate reptiles, with over 6,000 species,
-										ranging across all continents except Antarctica
-									</Typography>
+									<hr width="100%" color="slateblue" />
+									<Box
+										display="flex"
+										flexDirection="column"
+										alignItems="flex-start"
+										justifyContent="space-evenly"
+										width="100%"
+										height="100%"
+									>
+										<Box
+											display="flex"
+											alignItems="center"
+											justifyContent="flex-start"
+											width="100%"
+										>
+											<Typography variant="body2" color="text.secondary">
+												Latest Product:
+											</Typography>
+											<Typography
+												variant="body1"
+												sx={{ marginLeft: "0.5rem" }}
+												color="text.primary"
+											>
+												{item.Products.name}
+											</Typography>
+										</Box>
+										<Box
+											display="flex"
+											alignItems="center"
+											justifyContent="flex-start"
+											width="100%"
+										>
+											<Typography variant="body2" color="text.secondary">
+												Followers:
+											</Typography>
+											<Typography
+												variant="body1"
+												sx={{ marginLeft: "0.5rem" }}
+												color="text.primary"
+											>
+												{item.followerCount}
+											</Typography>
+										</Box>
+									</Box>
 								</CardContent>
 							</CardActionArea>
 						</Card>

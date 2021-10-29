@@ -6,7 +6,7 @@ import ProfileEditForm from "../profile/ProfileEditForm";
 import CreactProductContainer from "../product/CreactProductContainer";
 import Banner from "../profile/Banner";
 import { SidebarContext } from "../../../contexts/SidebarContext";
-import EditProductForm from "../product/EditProductForm";
+import WalletForm from "./WalletForm";
 
 function ProfileContainer() {
   const { chooseNavProfile } = useContext(SidebarContext);
@@ -24,11 +24,10 @@ function ProfileContainer() {
     >
       <Banner />
       <SideBarProfileL />
-      {/* <EditProductForm /> */}
       {chooseNavProfile === "Create" && <CreactProductContainer />}
       {chooseNavProfile === "Editprofile" && <ProfileEditForm />}
-      {/* {chooseNavProfile==='Wallet' && < />} */}
-      {chooseNavProfile === "" && <ProfileForm />}
+      {chooseNavProfile === "Wallet" && <WalletForm />}
+      {chooseNavProfile === "Profile" && <ProfileForm />}
     </Box>
   );
 }

@@ -7,17 +7,20 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import limitStringLength from "../../../../services/limitStringLength";
+import { useContext } from "react";
+import { ChatContext } from "../../../../contexts/ChatContext";
 
-function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) {
+function LogMenu({ anchorLogEl, handleLogMenuClose, type, log }) {
+	const { setChatRoomInfo } = useContext(ChatContext);
 	const menuId = "primary-chatLog-menu";
 
 	const isChatLogMenuOpen = Boolean(anchorLogEl);
 
 	// console.log(log);
 
-	const handleClickStartChat = (id) => {
+	const handleClickStartChat = (id, name) => {
 		handleLogMenuClose();
-		setChatRoomId(id);
+		setChatRoomInfo({ id, name });
 	};
 
 	return (
@@ -29,12 +32,10 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 			}}
 			id={menuId}
 			keepMounted
-			transformOrigin={
-				{
-					// vertical: "top",
-					// horizontal: "right",
-				}
-			}
+			transformOrigin={{
+				vertical: "top",
+				horizontal: "right",
+			}}
 			open={isChatLogMenuOpen}
 			onClose={handleLogMenuClose}
 		>
@@ -46,9 +47,12 @@ function LogMenu({ anchorLogEl, handleLogMenuClose, type, log, setChatRoomId }) 
 			<List
 				sx={{ width: { xs: "100vw", sm: "50vw", md: "25vw", maxHeight: "50vh" }, bgcolor: "background.paper" }}
 			>
-				{log.map((item) => (
+				{log.map((item, index) => (
 					<ListItem
-						{...(type === "chat" && { onClick: () => handleClickStartChat(item.chatRoomId) })}
+						key={index}
+						{...(type === "chat" && {
+							onClick: () => handleClickStartChat(item.chatRoomInfo.id, item.chatRoomInfo.name),
+						})}
 						alignItems="flex-start"
 						width="100%"
 						sx={{

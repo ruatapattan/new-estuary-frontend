@@ -7,11 +7,14 @@ import validator from 'validator';
 import userValidate from '../../../services/userValidate';
 import passwordValidate from '../../../services/passwordValidate';
 import phoneValidate from '../../../services/phoneValidate';
+import Swal from 'sweetalert2';
 
 function ProfileEditFrom() {
   const param = useParams();
   const history = useHistory();
   const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
+  const defaulfProfile = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
+  const defaulfBanner = 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg';
 
   const [isFocus, setIsFocus] = useState({
     firstName: false,
@@ -95,6 +98,12 @@ function ProfileEditFrom() {
         //   pathname: '/profile',
         //   state: { message: 'Your account has been updated' }
         // });
+        await Swal.fire({
+          icon: 'success',
+          title: 'Edit profile successful',
+          showConfirmButton: false,
+          timer: 1500
+        });
       }
     } catch (err) {
       // //username errors
@@ -107,6 +116,8 @@ function ProfileEditFrom() {
       }
     }
   };
+
+  console.log(userInput.birthDate);
 
   //////////// check error frontend ///////////////////
   const handleInputUsername = e => {
@@ -162,12 +173,13 @@ function ProfileEditFrom() {
   const handleInputPhone = e => {
     setUserInput(cur => ({ ...cur, phone: e.target.value }));
     if (!e.target.value == '') {
-      if (!phoneValidate.validateCharacter(e.target.value)) {
-        setError(cur => ({
-          ...cur,
-          phone: 'phone number must contain number'
-        }));
-      } else if (!phoneValidate.validateLength(e.target.value)) {
+      // if (!phoneValidate.validateCharacter(e.target.value)) {
+      //   setError(cur => ({
+      //     ...cur,
+      //     phone: 'phone number must contain number'
+      //   }));
+      // }
+      if (!phoneValidate.validateLength(e.target.value)) {
         setError(cur => ({ ...cur, phone: 'phone must be 10 characters long' }));
       } else {
         setError(cur => ({ ...cur, phone: '' }));
@@ -220,8 +232,8 @@ function ProfileEditFrom() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          border: '1px solid red'
+          justifyContent: 'center'
+          // border: '1px solid red'
 
           // backgroundColor: '#EFF1F3'
         }}
@@ -323,6 +335,7 @@ function ProfileEditFrom() {
 
           <TextField
             id="outlined-phone-input"
+            type="number"
             label={isFocus.phone ? 'Phone Number' : ''}
             sx={textFieldStyle}
             placeholder={!userInput.phone && 'Phone Number'}
@@ -368,13 +381,7 @@ function ProfileEditFrom() {
             }}
           >
             <img
-              src={
-                previewProfile
-                  ? previewProfile
-                  : userInput.profilePic
-                  ? userInput.profilePic
-                  : 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1633073970/l6y8yhzctblrttmt2xpp.png'
-              }
+              src={previewProfile ? previewProfile : userInput.profilePic ? userInput.profilePic : defaulfProfile}
               alt=""
               sx={{ mb: '25px' }}
             />
@@ -399,13 +406,7 @@ function ProfileEditFrom() {
             </label>
 
             <img
-              src={
-                previewBanner
-                  ? previewBanner
-                  : userInput.bannerPic
-                  ? userInput.bannerPic
-                  : 'https://res.cloudinary.com/dl7u9oybl/image/upload/v1633073970/l6y8yhzctblrttmt2xpp.png'
-              }
+              src={previewBanner ? previewBanner : userInput.bannerPic ? userInput.bannerPic : defaulfBanner}
               alt=""
               sx={{ mb: '25px' }}
             />

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -41,7 +41,11 @@ export default function SideBar({ type }) {
 				}}
 				// anchor="left"
 			>
-				<SidebarContentContainer type={type} />
+				<SidebarContentContainer
+					type={type}
+					// anchorEl={anchorEl}
+					// handleProfileMenuOpen={handleProfileMenuOpen}
+				/>
 			</GradientDrawer>
 			<GradientDrawer
 				className="drawerDiv"

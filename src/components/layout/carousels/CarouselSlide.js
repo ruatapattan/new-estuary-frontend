@@ -7,23 +7,21 @@ import SamplePrevArrow from "./arrows/SamplePrevArrow";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import { Box } from "@mui/system";
+import { createdAgo } from "../../../services/getTimeService";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { useContext, useState } from "react";
+import CarouselSlideButtons from "./CarouselSlideButtons";
 
-const imgArr = [
-	"https://picsum.photos/id/1/400/300",
-	"https://picsum.photos/id/222/400/300",
-	"https://picsum.photos/id/22/400/300",
-	"https://picsum.photos/id/39/400/300",
-	"https://picsum.photos/id/142/400/300",
-	"https://picsum.photos/id/34/400/300",
-];
-function CarouselSlide({ title }) {
+function CarouselSlide({ title, products }) {
+	const slides = products.length > 2 ? 3 : products.length > 1 ? 2 : 1;
 	const settings = {
 		nextArrow: <SampleNextArrow />,
 		prevArrow: <SamplePrevArrow />,
 		infinite: true,
+		lazyLoad: false,
 		speed: 300,
-		slidesToShow: 3,
-		slidesToScroll: 3,
+		slidesToShow: slides,
+		slidesToScroll: slides,
 		responsive: [
 			// {
 			//   breakpoint: 1024,
@@ -35,18 +33,18 @@ function CarouselSlide({ title }) {
 			//   }
 			// },
 			{
-				breakpoint: 600,
+				breakpoint: 900,
 				settings: {
-					slidesToShow: 2,
-					slidesToScroll: 2,
+					slidesToShow: slides > 1 ? slides - 1 : 1,
+					slidesToScroll: slides > 1 ? slides - 1 : 1,
 					// initialSlide: 2,
 				},
 			},
 			{
 				breakpoint: 480,
 				settings: {
-					slidesToShow: 1,
-					slidesToScroll: 1,
+					slidesToShow: slides > 1 ? slides - 2 : 1,
+					slidesToScroll: slides > 1 ? slides - 2 : 1,
 				},
 			},
 		],
@@ -56,27 +54,35 @@ function CarouselSlide({ title }) {
 			<Typography variant="h5" ml="5%">
 				{title ?? "All Products"}
 			</Typography>
-			<Slider {...settings} className="expSlideBox">
-				{imgArr.map((item, idx) => (
+			<Slider {...settings} className="expSlideBox" sx={{ padding: 0 }}>
+				{products.map((item, idx) => (
+					// <CarouselSlideItem item={item} />
+
 					<Link to="#" className="expSlider" key={idx}>
-						<Card sx={{ maxWidth: 345 }}>
+						<Card sx={{ maxWidth: 345, height: "350px" }}>
 							<CardActionArea>
-								<CardMedia component="img" image={item} alt="green iguana" />
+								<CardMedia
+									sx={{ width: 245, height: 197.75 }}
+									classname="sliderImage"
+									component="img"
+									image={item.coverPic}
+									alt="green iguana"
+								/>
 								<CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
 									<Box>
 										<Typography color="text.primary" gutterBottom variant="h5" component="div">
-											Art Name
+											{item.name}
 										</Typography>
 										<Typography variant="body2" color="text.secondary">
-											By: THEVinci
+											By: {item.User.username}
 										</Typography>
 									</Box>
 									<Box>
 										<Typography color="text.secondary" gutterBottom variant="body1" component="div">
-											Price
+											Price:
 										</Typography>
 										<Typography variant="body2" color="text.secondary">
-											{"500"}$
+											{(+item?.price)?.toFixed(0)} {`\u0E3F`}
 										</Typography>
 									</Box>
 								</CardContent>
@@ -90,19 +96,24 @@ function CarouselSlide({ title }) {
 									paddingX: "0.5rem",
 								}}
 							>
-								<Box>
+								{/* <Box>
 									<IconButton aria-label="add to favorites">
 										<FavoriteIcon sx={{ fontSize: "1.5rem" }} />
-										<Typography>1.1M</Typography>
+										<Typography>{item.Likes}</Typography>
 									</IconButton>
 									<IconButton aria-label="share">
 										<ShareIcon sx={{ fontSize: "1.5rem" }} />
+										<Typography>{item.Shares}</Typography>
 									</IconButton>
+								</Box> */}
+								<CarouselSlideButtons item={item} />
+								<Box>
+									{Math.round(createdAgo(item.createdAt).time)} {createdAgo(item.createdAt).unit} Ago
 								</Box>
-								<Box>3 Days Ago</Box>
 							</CardActions>
 						</Card>
 					</Link>
+
 					// <MarketProductCard item={item} />
 				))}
 			</Slider>
