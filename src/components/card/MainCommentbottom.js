@@ -11,9 +11,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
+import axios from '../../config/axios';
 
 function MainCommentbottom({ commentItem, postItem }) {
-  // console.log(postItem);
+  // console.log(commentItem);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [openDialog, setOpenDialog] = React.useState(false);
@@ -26,6 +28,15 @@ function MainCommentbottom({ commentItem, postItem }) {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickDelete = async () => {
+    console.log(commentItem?.id);
+    try {
+      await axios.delete(`/${commentItem.id}`);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -68,7 +79,7 @@ function MainCommentbottom({ commentItem, postItem }) {
             Edit
           </MenuItem>
           <EditDialogComment open={openDialog} setOpen={setOpenDialog} postItem={postItem} commentItem={commentItem} />
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleClickDelete}>
             <ListItemIcon>
               <DeleteIcon fontSize='small' />
             </ListItemIcon>
