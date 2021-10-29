@@ -28,7 +28,7 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>
-        <Link href={`/profile${user?.id}`} color="text.primary" underline="none" display="flex" alignItems="center">
+        <Link href={`/profile/${user?.id}`} color="text.primary" underline="none" display="flex" alignItems="center">
           <IconButton
             size="large"
             aria-label="account of current user"
