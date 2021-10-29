@@ -36,21 +36,27 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
     ispurchased = true;
   }
 
-  ///////////////set show button Subscribe////////////////////////
+  ///////////////set is  show button Subscribe and following array////////////////////////
   let isSubscribed = false;
-
-  followingLists.map(item => {
-    if (+item.followedId === +product.userId && +item.followerId === +user.id && item.status === true) {
-      isSubscribed = true;
+  let filteredfollowingList = [];
+  followingLists.forEach(item => {
+    if (+item.followedId === +product.userId && +item.followerId === +user.id) {
+      if (item.status) {
+        isSubscribed = true;
+      }
+      filteredfollowingList.push(item);
     }
   });
 
-  ///////////////set show button Like////////////////////////
+  ///////////////set is  show button Like and likeLists array////////////////////////
   let isLiked = false;
-
-  likeLists.map(item => {
-    if (+item.productId === +product.id && +item.userId === +user.id && item.status === true) {
-      isLiked = true;
+  let filteredLikeList = [];
+  likeLists.forEach(item => {
+    if (+item.productId === +product.id && +item.userId === +user.id) {
+      if (item.status) {
+        isLiked = true;
+      }
+      filteredLikeList.push(item);
     }
   });
 
@@ -118,67 +124,29 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
   };
 
   const handleClickSubscribe = async () => {
-    if (followingLists.length === 0) {
+    if (filteredfollowingList.length === 0) {
       axios.post('/following', { followedId: product.userId }).then(res => {
         setToggle(curr => !curr);
       });
     } else {
-      followingLists.map(item => {
-        if (+item.followedId === +product.userId && +item.followerId === +user.id) {
-          axios.put(`/following/${item.id}`, { isSubscribed: !isSubscribed }).then(res => {
-            setToggle(curr => !curr);
-          });
-        }
-        // else {
-        //   axios.post('/following', { followedId: product.userId }).then(res => {
-        //     setToggle(curr => !curr);
-        //   });
-        // }
-      });
+      axios
+        .put(`/following/${filteredfollowingList[0].id}`, { isSubscribed: !filteredfollowingList[0].status })
+        .then(res => {
+          setToggle(curr => !curr);
+        });
     }
   };
 
-  const handleClickUnSubscribe = async () => {
-    followingLists.map(item => {
-      if (+item.followedId === +product.userId && +item.followerId === +user.id) {
-        axios.put(`/following/${item.id}`, { isSubscribed: !isSubscribed }).then(res => {
-          setToggle(curr => !curr);
-        });
-        // axios.delete(`/following/${item.id}`).then(res => {
-        //   window.location.reload();
-        // });
-      }
-    });
-  };
-
-  console.log(isLiked);
   const handleClickLike = async () => {
-    if (likeLists.length === 0) {
+    if (filteredLikeList.length === 0) {
       axios.post('/like', { productId: product.id }).then(res => {
         setToggle(curr => !curr);
       });
     } else {
-      likeLists.map(item => {
-        if (+item.productId === +product.id && +item.userId === +user.id) {
-          axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
-            setToggle(curr => !curr);
-          });
-        }
+      axios.put(`/like/${filteredLikeList[0].id}`, { isLiked: !filteredLikeList[0].status }).then(res => {
+        setToggle(curr => !curr);
       });
     }
-  };
-
-  const handleClickUnLike = async () => {
-    likeLists.map(item => {
-      if (+item.productId === +product.id && +item.userId === +user.id) {
-        axios.put(`/like/${item.id}`, { isLiked: !isLiked }).then(res => {
-          setToggle(curr => !curr);
-        });
-        // axios.delete(`/following/${item.id}`).then(res => {
-        //   window.location.reload();
-        // });
-      }
-    });
   };
 
   return (
@@ -198,7 +166,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
         }}
       >
         {isLiked && (
-          <Button onClick={handleClickUnLike} sx={{ p: '0', m: '0' }}>
+          <Button onClick={handleClickLike} sx={{ p: '0', m: '0' }}>
             <FavoriteIcon sx={iconHeartStyle} />
           </Button>
         )}
@@ -256,7 +224,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
                 <>
                   {isSubscribed && (
                     <Button
-                      onClick={handleClickUnSubscribe}
+                      onClick={handleClickSubscribe}
                       variant="gradient3"
                       sx={{
                         fontSize: '10px',
@@ -323,11 +291,6 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           // border: '1px solid blue',
         }}
       >
-        {/* {tags.map(item => (
-          <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
-            {item.name}
-          </Button>
-        ))} */}
         <Button variant="gradient" sx={{ borderRadius: '8px', p: '0px', mr: '10px', mb: '10px' }}>
           <Link
             sx={{ textDecoration: 'none' }}
@@ -394,19 +357,6 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
             <p>Price:</p>
             <p>{product?.price} Bath</p>
           </Box>
-          {/* <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: { lg: 'space-between', xs: 'flex-start' },
-              '& p': {
-                mr: '10px'
-              }
-            }}
-          >
-            <p>Size:</p>
-            <p>1234 x900px 10MB</p>
-          </Box> */}
         </Box>
 
         {ispurchased && (

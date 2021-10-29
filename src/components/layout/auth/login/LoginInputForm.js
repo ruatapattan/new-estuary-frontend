@@ -43,12 +43,13 @@ function LoginInputForm() {
       setToken(result.data.token);
       setUser(jwtDecode(result.data.token)); //obj from authcontroller
       const decoded = jwtDecode(result.data.token);
-      // console.log(decoded);
-      setUserRole(decoded);
-      console.log(result.data.token);
+      console.log(decoded);
+      setUserRole(decoded.role);
+      // console.log(result.data.token);
       setInProgress(false);
+      // setUserRole('');
       history.push('/');
-      window.location.reload();
+      // window.location.reload();
     } catch (err) {
       setInProgress(false);
       console.dir(err);
@@ -126,7 +127,7 @@ function LoginInputForm() {
           <Button type="submit" variant="gradient">
             Log In
           </Button>
-          <Button variant="gradient" sx={{ mt: '.8rem' }}>
+          <Button variant="gradient3" sx={{ mt: '.8rem' }}>
             <Link sx={{ textDecoration: 'none' }} href="/signup">
               Sign Up
             </Link>

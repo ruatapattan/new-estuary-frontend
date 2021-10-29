@@ -29,7 +29,7 @@ const routes = {
       { path: '/login', component: Login },
       { path: '/signup', component: Signup }
     ],
-    redirect: '/login'
+    redirect: '/'
   },
   CLIENT: {
     route: [

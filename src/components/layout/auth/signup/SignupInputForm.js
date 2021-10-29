@@ -198,7 +198,7 @@ function SignupInputForm() {
           <Button type="submit" variant="gradient" sx={{ mt: 2 }}>
             Submit
           </Button>
-          <Button variant="gradient" sx={{ mt: '.8rem' }}>
+          <Button variant="gradient3" sx={{ mt: '.8rem' }}>
             <Link sx={{ textDecoration: 'none' }} href="/login">
               Log In
             </Link>
