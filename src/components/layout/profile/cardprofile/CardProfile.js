@@ -214,8 +214,7 @@ function CardProfile({
 					</IconButton>
 				</Box>
 				<Box>
-					{Math.round(createdAgo(createdAt).time)} {createdAgo(createdAt).unit}
-					Ago
+					{Math.round(createdAgo(createdAt).time)} {createdAgo(createdAt).unit} Ago
 				</Box>
 			</CardActions>
 			<Typography

@@ -120,7 +120,8 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
 	};
 
 	const handleClickDownload = async () => {
-		saveAs(product.externalLink ? product.externalLink : product.coverPic);
+		// console.log(product.externalLink);
+		!product.externalLink === undefined ? saveAs(product.externalLink) : saveAs(product.coverPic);
 	};
 
 	const handleClickSubscribe = async () => {

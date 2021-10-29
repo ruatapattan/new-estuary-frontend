@@ -81,7 +81,8 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 				const result = await axios.post("/community/create", formData);
 				// console.log(result.data.message);
 				history.push({
-					pathname: `/community/${result.data.createdCommunityId}`,
+					pathname: `/community`,
+					// pathname: `/community/${result.data.createdCommunityId}`,
 					state: { successMessage: "Account Created" },
 					form: "register page",
 				});

@@ -55,20 +55,23 @@ function CreateProductForm() {
 				const formData = new FormData();
 
 				formData.append("name", userInput.name);
-				formData.append("description", userInput.description);
+				// formData.append("description", userInput.description);
+				formData.append("description", description);
 				formData.append("categoryId", userInput.category);
 				formData.append("price", userInput.price);
 				formData.append("coverPic", userInput.coverPic);
-				formData.append("externalLink", userInput.externalLink);
+				// formData.append("externalLink", userInput.externalLink);
+				formData.append("externalLink", externalLink);
 				formData.append("hashtag", "link to product");
 
 				// console.dir(formData);
-				await axios.post(`/product`, formData);
+				const createdId = await axios.post(`/product`, formData);
 
-				history.push({
-					pathname: "/product/1",
-					state: { message: "Your creactproduct success" },
-				});
+				// history.push({
+				// 	pathname: `/product/${createdId.data.product.id}`,
+				// 	state: { message: "Your creactproduct success" },
+				// });
+				window.location.reload();
 			}
 		} catch (err) {}
 	};
