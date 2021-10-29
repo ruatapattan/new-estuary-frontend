@@ -19,29 +19,41 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { createdAgo } from "../../../services/getTimeService";
 import { useContext, useEffect, useState } from "react";
 import axios from "../../../config/axios";
+import { useHistory } from "react-router-dom";
 
 function MarketplaceProductItem({ item }) {
+	const history = useHistory();
+
 	const { user } = useContext(AuthContext);
 	const [isLiked, setIsLiked] = useState(false);
 	const [currentLikeCount, setCurrentLikeCount] = useState(0);
 	const [usersLiked, setUsersLiked] = useState([]);
 	const [firstLike, setFirstLike] = useState(false);
-
+	const [filteredUsersLiked, setFilteredUsersLiked] = useState([]);
 	// console.log(item.name, item.id, item);
 	// console.log(usersLiked);
 
 	// console.log("likecount", currentLikeCount);
 
 	// too many rerender here
+
 	useEffect(() => {
-		setUsersLiked(usersLiked);
-		usersLiked.map((elem) => {
-			if (+elem.userId === +user?.id && elem.status === true) {
-				setIsLiked(true);
-			}
-		});
+		setUsersLiked(item.usersLiked);
 		setCurrentLikeCount(item.Likes);
 	}, []);
+
+	useEffect(() => {
+		const filtered = [];
+		usersLiked.forEach((elem) => {
+			if (+elem.userId === +user.id) {
+				if (elem.status === true) {
+					setIsLiked(true);
+				}
+				filtered.push(elem);
+			}
+		});
+		setFilteredUsersLiked(filtered);
+	}, [usersLiked]);
 
 	useEffect(() => {
 		if (firstLike) {
@@ -56,8 +68,11 @@ function MarketplaceProductItem({ item }) {
 	}, [firstLike]);
 	// console.log(`effect ${item.name}`, usersLiked);
 
+	console.log("filteredLikes", item.name, filteredUsersLiked);
+	console.log("current user", user.username, "id", user.id);
+
 	const handleClickLike = async () => {
-		if (usersLiked.length === 0) {
+		if (filteredUsersLiked.length === 0) {
 			alert("first like");
 			axios.post("/like", { productId: item.id }).then((res) => {
 				setIsLiked((cur) => !cur);
@@ -65,33 +80,25 @@ function MarketplaceProductItem({ item }) {
 				setFirstLike((cur) => !cur);
 			});
 		} else {
-			usersLiked.map((elem) => {
-				if (+elem.userId === +user.id) {
-					axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then((res) => {
-						const currentType = isLiked;
-						setIsLiked((cur) => !cur);
-						setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
-					});
-				} else {
-					axios.post("/like", { productId: item.id }).then((res) => {
-						setIsLiked((cur) => !cur);
-						setCurrentLikeCount((cur) => cur + 1);
-					});
-				}
+			alert("not first");
+			axios.put(`/like/${filteredUsersLiked[0].id}`, { isLiked: !isLiked }).then((res) => {
+				const currentType = isLiked;
+				setIsLiked((cur) => !cur);
+				setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
 			});
 		}
 	};
 
 	return (
 		<Grid key={item} item xs={12} sm={6} md={4} sx={{ display: "flex", justifyContent: "center" }}>
-			<Link
+			<Box
 				// href={`/product/${item.id}`}
 				className="expSlider"
 				key={item.id}
 				style={{ textDecoration: "none", height: "400px" }}
 			>
 				<Card sx={{ maxWidth: 345, height: "400px" }}>
-					<CardActionArea>
+					<CardActionArea onClick={() => history.push(`/product/${item.id}`)}>
 						<CardMedia
 							component="img"
 							sx={{ width: 280, height: 258 }}
@@ -145,7 +152,7 @@ function MarketplaceProductItem({ item }) {
 						</Box>
 					</CardActions>
 				</Card>
-			</Link>
+			</Box>
 		</Grid>
 	);
 }

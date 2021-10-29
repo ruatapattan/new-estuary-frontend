@@ -11,10 +11,16 @@ import {
 	Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { GradientBox } from "../../../../style";
+import axios from "../../../../config/axios";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
+	const history = useHistory();
+	const [inProgress, setInProgress] = useState(false);
+	const { user } = useContext(AuthContext);
 	const [error, setError] = useState({
 		name: "",
 		description: "",
@@ -23,7 +29,7 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 	const [communityInput, setCommunityInput] = useState({
 		name: "",
 		description: "",
-		image: "",
+		image: null,
 	});
 
 	const handleChooseImage = (e) => {
@@ -48,6 +54,43 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 			setError((cur) => ({ ...cur, description: "" }));
 		}
 		setCommunityInput((cur) => ({ ...cur, description: e.target.value }));
+	};
+
+	const handleSubmitCreate = async (e) => {
+		try {
+			e.preventDefault();
+			// console.log("here");
+			// console.log(Object.values(error));
+			if (communityInput.name === "") {
+				setError((cur) => ({ ...cur, name: "Community name is required" }));
+			}
+			if (communityInput.description === "") {
+				setError((cur) => ({ ...cur, description: "description is required" }));
+			}
+			if (communityInput.image === null) {
+				setError((cur) => ({ ...cur, image: "image is required" }));
+			} else if (Object.values(error).every((item) => item === "")) {
+				console.log("no error");
+				setInProgress(true);
+				const formData = new FormData();
+				formData.append("name", communityInput.name);
+				formData.append("userId", user.id);
+				formData.append("description", communityInput.description);
+				formData.append("cloudinput", communityInput.image);
+
+				const result = await axios.post("/community/create", formData);
+				// console.log(result.data.message);
+				history.push({
+					pathname: `/community/${result.data.createdCommunityId}`,
+					state: { successMessage: "Account Created" },
+					form: "register page",
+				});
+			}
+		} catch (err) {
+			setInProgress(false);
+			console.log("err response below:");
+			console.dir(err.response.data);
+		}
 	};
 
 	return (
@@ -88,7 +131,7 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 						{communityInput.image !== "" && (
 							<Box>
 								<Avatar
-									src={communityInput.image !== "" ? URL.createObjectURL(communityInput.image) : ""}
+									src={communityInput.image !== null ? URL.createObjectURL(communityInput.image) : ""}
 									sx={{ width: 150, height: 150 }}
 								/>
 							</Box>
@@ -108,7 +151,7 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 							"& .MuiTextField-root, & input, & textarea": { m: 1, width: "80%" },
 						}}
 						component="form"
-						// onSubmit={handleSubmitSignup}
+						onSubmit={handleSubmitCreate}
 						noValidate
 						autoComplete="off"
 					>
@@ -155,9 +198,13 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 								</Button>
 							</label>
 							{error.image !== "" && <p style={{ color: "red" }}>{error.image}</p>}
-							<Button type="submit" variant="gradient" sx={{ m: 2 }}>
-								Submit
-							</Button>
+							{inProgress ? (
+								<CircularProgress />
+							) : (
+								<Button type="submit" variant="gradient" sx={{ m: 2 }}>
+									Submit
+								</Button>
+							)}
 						</Box>
 					</Box>
 				</Box>

@@ -29,7 +29,7 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
 		>
 			<MenuItem onClick={handleMenuClose}>
 				<Link
-					href={`/profile${user.id}`}
+					href={`/profile/${user?.id}`}
 					color="text.primary"
 					underline="none"
 					display="flex"
