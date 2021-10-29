@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CreatePost from '../../card/CreatePost';
-import Post from '../../card/Post';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -35,7 +34,6 @@ function CommunityContent() {
           </Typography>
         </Box>
         <CreatePost />
-        <Post />
       </Box>
     </>
   );
