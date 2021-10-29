@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import CustomizedDialogs from './dialog';
 import EditDialogPost from './EditDialogPost';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';

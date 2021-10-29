@@ -8,7 +8,7 @@ import MarketPlace from '../pages/MarketPlace';
 import TestPhoto from '../pages/TestPhoto';
 import Product from '../pages/Product';
 import EditProductForm from '../components/layout/product/EditProductForm';
-import Community from '../pages/Comunity';
+import Community from '../pages/Community';
 
 const allPages = [
   { path: '/product/:id', component: Product },

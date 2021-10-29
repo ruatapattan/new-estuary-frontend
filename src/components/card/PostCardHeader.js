@@ -53,10 +53,9 @@ function PostCardHeader({ postItem }) {
         }
         // title='Sarah'
         title={User.firstName}
-        subheader='September 14, 2016'
+        // subheader='September 14, 2016'
         subheader={
           <Typography color='text.disabled' variant='body2'>
-            {/* September 14, 2016 */}
             {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(createdAt))}
           </Typography>
         }
@@ -91,7 +90,8 @@ function PostCardHeader({ postItem }) {
                 </ListItemIcon>
                 Edit
               </MenuItem>
-              {/* <MenuItem> */}
+              <EditDialogPost open={openDialog} setOpen={setOpenDialog} postItem={postItem} />
+
               <MenuItem onClick={handleClickDelete}>
                 <ListItemIcon>
                   <DeleteIcon fontSize='small' />
@@ -99,7 +99,6 @@ function PostCardHeader({ postItem }) {
                 Delete
               </MenuItem>
             </Menu>
-            <EditDialogPost open={openDialog} setOpen={setOpenDialog} postItem={postItem} />
           </div>
         }
       />

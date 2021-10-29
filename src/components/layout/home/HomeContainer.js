@@ -3,10 +3,9 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CreatePost from '../../card/CreatePost';
-import Post from '../../card/Post';
 import { useState, useEffect } from 'react';
 import axios from '../../../config/axios';
-import Grid from '@mui/material/Grid';
+
 import PostCard from '../../card/PostCard';
 //=====================================================
 

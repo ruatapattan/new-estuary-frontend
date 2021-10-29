@@ -27,11 +27,11 @@ function PostCardItem({ postItem }) {
 
         <PostCardItemMedia PostPictures={PostPictures} />
 
-        <PostCardBottom />
-
+        <PostCardBottom postItem={postItem} />
+        {/* 
         <CreatComment />
 
-        <MainComment />
+        <MainComment /> */}
       </Card>
     </>
   );

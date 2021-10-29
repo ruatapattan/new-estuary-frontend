@@ -1,35 +1,40 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import { useState } from 'react';
-function PostCardBottom() {
-  const [isShowComment, setIsShowComment] = useState(false);
 
-  const showComment = () => {
-    setIsShowComment(true);
-  };
+import { useState, useContext } from 'react';
+import CreateComment from './CreateComment';
+import MainComment from './MainComment';
+
+import { AuthContext } from '../../contexts/AuthContext';
+import Button from '@mui/material/Button';
+import PostCardBottomIconLike from './PostCardBottomIconLike';
+import PostCardBottomIconComment from './PostCardBottomIconComment';
+import PostCardBottomIconLink from './PostCardBottomIconLink';
+import LinkDialog from './LinkDialog';
+
+function PostCardBottom({ postItem }) {
+  const { user } = useContext(AuthContext);
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  // console.log(postItem);
+
+  // const [isShowComment, setIsShowComment] = useState(false);
+
   return (
-    <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
-      <Grid item>
-        <ThumbUpOutlinedIcon />
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          2
-        </Typography>
+    <>
+      <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
+        <PostCardBottomIconLike />
+        <PostCardBottomIconComment />
+        <span onClick={() => setOpenDialog(true)}>
+          <PostCardBottomIconLink />
+        </span>
+        <LinkDialog open={openDialog} setOpen={setOpenDialog} />
       </Grid>
-      <Grid item>
-        <ChatBubbleOutlineOutlinedIcon onClick={showComment} />
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          5
-        </Typography>
-      </Grid>
-      <Grid item>
-        <ShareOutlinedIcon />
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.secondary'></Typography>
-      </Grid>
-    </Grid>
+      <CreateComment user={user} postItem={postItem} />
+      {/* {openCreateComment ? <CreateComment user={user} postItem={postItem} /> : null} */}
+
+      <MainComment postItem={postItem} />
+    </>
   );
 }
 

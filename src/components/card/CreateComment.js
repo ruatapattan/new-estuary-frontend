@@ -1,16 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 import { Box } from '@mui/system';
-import CardActions from '@mui/material/CardActions';
-function CreateComment() {
+// import CardActions from '@mui/material/CardActions';
+import { Card } from '@mui/material';
+import axios from 'axios';
+
+function CreateComment(props) {
+  const { user, postItem } = props;
+
+  // console.log(props.postItem);
+
+  // console.log(user.id);
+  const [content, setContent] = useState('');
+
+  const handleSubmitCreateComment = async (e) => {
+    e.preventDefault();
+    axios
+      .post('/comment', { content, userId: user.id, PostId: props.postItem.id })
+
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Box sx={{ p: '5px 0', mb: '20px' }}>
-      <CardActions>
-        <Grid container justifyContent='space-evenly'>
+      {/* <CardActions> */}
+      <form onSubmit={handleSubmitCreateComment}>
+        <Grid container justifyContent='space-evenly' alignItems='center'>
           <Grid item>
             <Avatar
               aria-label='recipe'
@@ -18,13 +40,22 @@ function CreateComment() {
               sx={{ width: 40, height: 40 }}></Avatar>
           </Grid>
           <Grid item xs={6} md={5}>
-            <TextField id='standard-basic' label='comment' size='small' variant='filled' sx={{ width: '100%' }} />
+            <TextField
+              id='standard-basic'
+              label='comment'
+              size='small'
+              variant='filled'
+              sx={{ width: '100%' }}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
           </Grid>
           <Grid item xs={2} md={2}>
-            <Button variant='contained' endIcon={<SendIcon />} color='success' />
+            <Button type='submit' variant='contained' endIcon={<SendIcon />} color='success' />
           </Grid>
         </Grid>
-      </CardActions>
+      </form>
+      {/* </CardActions> */}
     </Box>
   );
 }
