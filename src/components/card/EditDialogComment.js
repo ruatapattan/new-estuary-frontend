@@ -71,8 +71,11 @@ function EditDialogComment({ open, setOpen, commentItem, postItem }) {
 
   const handleSubmitUpdateComment = async (e) => {
     e.preventDefault();
-
-    axios.put(`/commment/${id}`, { content });
+    try {
+      await axios.put(`/comment/${id}`, { content });
+    } catch (err) {
+      console.dir(err);
+    }
   };
 
   return (
@@ -93,7 +96,7 @@ function EditDialogComment({ open, setOpen, commentItem, postItem }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button type='submit' autoFocus onClick={handleClose} variant='contained' color='success'>
+            <Button type='submit' autoFocus variant='contained' color='success'>
               Save
             </Button>
           </DialogActions>
