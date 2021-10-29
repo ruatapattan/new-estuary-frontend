@@ -36,7 +36,7 @@ function SidebarNavHeader({ isShowing, setIsShowing }) {
 		<>
 			<ListItem sx={{ display: "flex", justifyContent: "center" }} onClick={handleClickOpenSidebarHeader}>
 				<NavButton variant="text">
-					<ListItemText primary={isShowing === "Navigation" ? isShowing : `${isShowing} (10)`} />
+					<ListItemText primary={isShowing === "Navigation" ? isShowing : `${isShowing}`} />
 					{open ? <ExpandLess /> : <ExpandMore />}
 				</NavButton>
 			</ListItem>

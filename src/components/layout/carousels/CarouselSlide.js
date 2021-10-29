@@ -1,5 +1,5 @@
 import { Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Slider from "react-slick";
 import MarketProductCard from "../marketplace/MarketProductCard";
 import SampleNextArrow from "./arrows/SampleNextArrow";
@@ -13,6 +13,7 @@ import { useContext, useState } from "react";
 import CarouselSlideButtons from "./CarouselSlideButtons";
 
 function CarouselSlide({ title, products }) {
+	const history = useHistory();
 	const slides = products.length > 2 ? 3 : products.length > 1 ? 2 : 1;
 	const settings = {
 		nextArrow: <SampleNextArrow />,
@@ -58,9 +59,9 @@ function CarouselSlide({ title, products }) {
 				{products.map((item, idx) => (
 					// <CarouselSlideItem item={item} />
 
-					<Link to="#" className="expSlider" key={idx}>
+					<Box className="expSlider" key={idx}>
 						<Card sx={{ maxWidth: 345, height: "350px" }}>
-							<CardActionArea>
+							<CardActionArea onClick={() => history.push(`/product/${item.id}`)}>
 								<CardMedia
 									sx={{ width: 245, height: 197.75 }}
 									classname="sliderImage"
@@ -112,7 +113,7 @@ function CarouselSlide({ title, products }) {
 								</Box>
 							</CardActions>
 						</Card>
-					</Link>
+					</Box>
 
 					// <MarketProductCard item={item} />
 				))}

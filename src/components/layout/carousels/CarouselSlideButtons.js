@@ -19,23 +19,31 @@ function CarouselSlideButtons({ item }) {
 	const [currentLikeCount, setCurrentLikeCount] = useState(0);
 	const [usersLiked, setUsersLiked] = useState([]);
 	const [firstLike, setFirstLike] = useState(false);
-
-	console.log(item.name, item.id, item);
+	const [filteredUsersLiked, setFilteredUsersLiked] = useState([]);
 	// console.log(item.name, item.id, item);
 	// console.log(usersLiked);
 
 	// console.log("likecount", currentLikeCount);
 
 	// too many rerender here
+
 	useEffect(() => {
-		setUsersLiked(usersLiked);
-		usersLiked.map((elem) => {
-			if (+elem.userId === +user?.id && elem.status === true) {
-				setIsLiked(true);
-			}
-		});
+		setUsersLiked(item.usersLiked);
 		setCurrentLikeCount(item.Likes);
 	}, []);
+
+	useEffect(() => {
+		const filtered = [];
+		usersLiked.forEach((elem) => {
+			if (+elem.userId === +user.id) {
+				if (elem.status === true) {
+					setIsLiked(true);
+				}
+				filtered.push(elem);
+			}
+		});
+		setFilteredUsersLiked(filtered);
+	}, [usersLiked]);
 
 	useEffect(() => {
 		if (firstLike) {
@@ -48,30 +56,25 @@ function CarouselSlideButtons({ item }) {
 			fetch();
 		}
 	}, [firstLike]);
-	console.log(`effect ${item.name}`, usersLiked);
+	// console.log(`effect ${item.name}`, usersLiked);
+
+	console.log("filteredLikes", item.name, filteredUsersLiked);
+	console.log("current user", user.username, "id", user.id);
 
 	const handleClickLike = async () => {
-		if (usersLiked.length === 0) {
-			alert("first like");
+		if (filteredUsersLiked.length === 0) {
+			// alert("first like");
 			axios.post("/like", { productId: item.id }).then((res) => {
 				setIsLiked((cur) => !cur);
 				setCurrentLikeCount((cur) => cur + 1);
 				setFirstLike((cur) => !cur);
 			});
 		} else {
-			usersLiked.map((elem) => {
-				if (+elem.userId === +user.id) {
-					axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then((res) => {
-						const currentType = isLiked;
-						setIsLiked((cur) => !cur);
-						setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
-					});
-				} else {
-					axios.post("/like", { productId: item.id }).then((res) => {
-						setIsLiked((cur) => !cur);
-						setCurrentLikeCount((cur) => cur + 1);
-					});
-				}
+			// alert("not first");
+			axios.put(`/like/${filteredUsersLiked[0].id}`, { isLiked: !isLiked }).then((res) => {
+				const currentType = isLiked;
+				setIsLiked((cur) => !cur);
+				setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
 			});
 		}
 	};

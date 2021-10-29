@@ -3,6 +3,9 @@ import { Box } from "@mui/system";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import TextsmsIcon from "@mui/icons-material/Textsms";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../../../contexts/AuthContext";
+import axios from "../../../../config/axios";
 function UserNav({
 	handleProfileMenuOpen,
 	// handleMobileMenuOpen,
@@ -10,7 +13,24 @@ function UserNav({
 	handleNotificationMenuOpen,
 }) {
 	const menuId = "primary-search-account-menu";
+	const [userInfo, setUserInfo] = useState({});
 	const mobileMenuId = "primary-search-account-menu-mobile";
+	const { user } = useContext(AuthContext);
+	console.log(user);
+
+	useEffect(() => {
+		const callProfile = async () => {
+			await axios
+				.get(`/profile/${user.id}`)
+				.then((res) => {
+					setUserInfo(res.data.user);
+				})
+				.catch((err) => {
+					console.dir(err);
+				});
+		};
+		callProfile();
+	}, []);
 
 	return (
 		<>
@@ -46,7 +66,7 @@ function UserNav({
 					color="inherit"
 				>
 					{/* <AccountCircle /> */}
-					<Avatar src="https://res.cloudinary.com/dbaavttgh/image/upload/v1634039431/euopnlkdkag488x5l8jc.png" />
+					<Avatar src={userInfo.profilePic} />
 				</IconButton>
 			</Box>
 			{/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
