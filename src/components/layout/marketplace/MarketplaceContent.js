@@ -62,11 +62,11 @@ function MarketplaceContent({ title }) {
 
   useEffect(() => {
     try {
-      if (location.state === 'Art') {
+      if (location.state === 'art') {
         navUseRefArt.current.scrollIntoView();
-      } else if (location.state === 'Music') {
+      } else if (location.state === 'music') {
         navUseRefMusic.current.scrollIntoView();
-      } else if (location.state === 'Other') {
+      } else if (location.state === 'other') {
         navUseRefOther.current.scrollIntoView();
       } else {
         navUseRefAllItem.current.scrollIntoView();
