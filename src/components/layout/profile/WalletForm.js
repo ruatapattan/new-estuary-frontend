@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, CircularProgress } from '@mui/material';
 import { Avatar, Link } from '@mui/material';
 import axios from '../../../config/axios';
 import { useParams, useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 function WalletForm() {
+  const [inProgress, setInProgress] = useState(false);
   const param = useParams();
   const [user, setUser] = useState([]);
   const [amount, setAmount] = useState();
@@ -97,10 +98,13 @@ function WalletForm() {
       if (error.amount) {
         setError(cur => ({ ...cur, amount: 'Amount is incorrect' }));
       } else {
+        setInProgress(true);
         await creditCardConfigure();
         await handleOpenOmise();
+        setInProgress(false);
       }
     } catch (err) {
+      setInProgress(false);
       console.dir(err);
     }
   };
@@ -229,22 +233,26 @@ function WalletForm() {
               onChange={handleInputAmount}
             />
 
-            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                variant="gradient3"
-                onClick={() => {
-                  setIsAddWallet(curr => !curr);
-                  setAmount('');
-                }}
-              >
-                Cancel
-              </Button>
-              <form>
-                <Button id="credit-card" onClick={handleClickPurchase} variant="gradient">
-                  Confirm
+            {inProgress ? (
+              <CircularProgress sx={{ color: 'text.primary' }} />
+            ) : (
+              <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                <Button
+                  variant="gradient3"
+                  onClick={() => {
+                    setIsAddWallet(curr => !curr);
+                    setAmount('');
+                  }}
+                >
+                  Cancel
                 </Button>
-              </form>
-            </Box>
+                <form>
+                  <Button id="credit-card" onClick={handleClickPurchase} variant="gradient">
+                    Confirm
+                  </Button>
+                </form>
+              </Box>
+            )}
           </Box>
         )}
 
