@@ -4,15 +4,18 @@ import { setToken } from '../../../../services/localStorage';
 import jwtDecode from 'jwt-decode';
 
 import { Button, CircularProgress, Link, TextField, Typography } from '@mui/material';
-import { Box, display, Grid } from '@mui/system';
+import { borderRadius, Box, display, Grid } from '@mui/system';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
+import { GoogleLogin } from 'react-google-login';
+import GoogleIcon from '@mui/icons-material/Google';
 
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { AuthContext } from '../../../../contexts/AuthContext';
 import { useHistory } from 'react-router';
+
 function LoginInputForm() {
   const history = useHistory();
   const [inProgress, setInProgress] = useState(false);
@@ -20,6 +23,14 @@ function LoginInputForm() {
     username: '',
     password: ''
   });
+
+  // const [userGoogle, setUserGoogle] = useState({
+  //   email: '',
+  //   firstName: '',
+  //   lastName: '',
+  //   profilePic: ''
+  // });
+
   const [error, setError] = useState('');
   const { setUser, setUserRole } = useContext(AuthContext);
 
@@ -59,7 +70,77 @@ function LoginInputForm() {
     }
   };
 
-  console.log(error);
+  // const handleSubmitLoginWhitGoogle = async e => {
+  //   try {
+  //     e.preventDefault();
+  //     setInProgress(true);
+  //     const result = await axios.post('/login/google', {
+  //       username: userGoogle.firstName,
+  //       email: userGoogle.email,
+  //       firstName: userGoogle.firstName,
+  //       lastName: userGoogle.lastName,
+  //       profilePic: userGoogle.profilePic
+  //     });
+  //     setToken(result.data.token);
+  //     setUser(jwtDecode(result.data.token)); //obj from authcontroller
+  //     const decoded = jwtDecode(result.data.token);
+  //     console.log(decoded);
+  //     setUserRole(decoded.role);
+  //     // console.log(result.data.token);
+  //     setInProgress(false);
+  //     // setUserRole('');
+  //     history.push('/');
+  //     // window.location.reload();
+  //   } catch (err) {
+  //     setInProgress(false);
+  //     console.dir(err);
+  //   }
+  // };
+
+  ///////////////google login///////////////////////////
+  const clientId = '982300328780-hom5dl0i1hk439t3vlj37vntg42fljp2.apps.googleusercontent.com';
+
+  const onLoginSuccess = async res => {
+    setInProgress(true);
+    console.log('login success', res.profileObj);
+    // setUserGoogle(cur => ({
+    //   ...cur,
+    //   email: res.profileObj.email,
+    //   firstName: res.profileObj.givenName,
+    //   lastName: res.profileObj.familyName,
+    //   profilePic: res.profileObj.imageUrl
+    // }));
+
+    try {
+      const result = await axios.post('/login/google', {
+        username: res.profileObj.givenName,
+        password: res.profileObj.googleId,
+        email: res.profileObj.email,
+        firstName: res.profileObj.givenName,
+        lastName: res.profileObj.familyName,
+        profilePic: res.profileObj.imageUrl
+      });
+      setToken(result.data.token);
+      setUser(jwtDecode(result.data.token)); //obj from authcontroller
+      const decoded = jwtDecode(result.data.token);
+      console.log(decoded);
+      setUserRole(decoded.role);
+      // console.log(result.data.token);
+      setInProgress(false);
+      // setUserRole('');
+      history.push('/');
+      // window.location.reload();
+    } catch (err) {
+      setInProgress(false);
+      console.dir(err);
+    }
+  };
+
+  const onFailureSuccess = res => {
+    console.log('login failed', res);
+  };
+
+  //////////////////////////////////////////////////////
 
   return (
     <Box
@@ -124,10 +205,30 @@ function LoginInputForm() {
         </Box>
       ) : (
         <Box sx={{ width: '230px', display: 'flex', flexDirection: 'column', mt: '10px' }}>
-          <Button type="submit" variant="gradient">
+          <Button type="submit" variant="gradient" sx={{ mb: '10px' }}>
             Log In
           </Button>
-          <Button variant="gradient3" sx={{ mt: '.8rem' }}>
+
+          <GoogleLogin
+            render={renderProps => (
+              <Button
+                onClick={renderProps.onClick}
+                variant="gradient4"
+                disabled={renderProps.disabled}
+                sx={{ borderRadius: '20px' }}
+              >
+                <GoogleIcon sx={{ fontSize: '20px', mr: '10px' }} />
+                Login with google
+              </Button>
+            )}
+            clientId={clientId}
+            buttonText="Login"
+            onSuccess={onLoginSuccess}
+            onFailure={onFailureSuccess}
+            cookiePolicy={'single_host_origin'}
+          />
+
+          <Button variant="gradient3" sx={{ mt: '2rem' }}>
             <Link sx={{ textDecoration: 'none' }} href="/signup">
               Sign Up
             </Link>

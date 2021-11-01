@@ -71,11 +71,11 @@ function ProfileEditFrom() {
         isError = true;
         setInProgress(false);
       }
-      if (!userInput.password) {
-        setError(cur => ({ ...cur, password: 'password is required' }));
-        isError = true;
-        setInProgress(false);
-      }
+      // if (!userInput.password) {
+      //   setError(cur => ({ ...cur, password: 'password is required' }));
+      //   isError = true;
+      //   setInProgress(false);
+      // }
       if (!userInput.email) {
         setError(cur => ({ ...cur, email: 'email is required' }));
         isError = true;
@@ -91,7 +91,9 @@ function ProfileEditFrom() {
         const formData = new FormData();
 
         formData.append('username', userInput.username);
-        formData.append('password', userInput.password);
+        if (userInput.password) {
+          formData.append('password', userInput.password);
+        }
         formData.append('email', userInput.email);
         formData.append('firstName', userInput.firstName);
         formData.append('lastName', userInput.lastName);
@@ -116,6 +118,7 @@ function ProfileEditFrom() {
           showConfirmButton: false,
           timer: 1500
         });
+        window.location.reload();
       }
     } catch (err) {
       setInProgress(false);
@@ -155,7 +158,7 @@ function ProfileEditFrom() {
   const handleInputPassword = e => {
     setUserInput(cur => ({ ...cur, password: e.target.value }));
     if (e.target.value === '') {
-      setError(cur => ({ ...cur, password: 'password is required' }));
+      setError(cur => ({ ...cur, password: '' }));
     } else if (!passwordValidate.validateCharacter(e.target.value)) {
       setError(cur => ({
         ...cur,
@@ -301,33 +304,37 @@ function ProfileEditFrom() {
           />
           {/* {error.username && <p>{error.username}</p>} */}
 
-          <TextField
-            id="outlined-password-input"
-            type="password"
-            autoComplete="current-password"
-            label={isFocus.password ? 'Password' : ''}
-            sx={textFieldStyle}
-            placeholder={!userInput.password && 'Password'}
-            value={userInput.password}
-            error={error.password !== '' ? true : false}
-            helperText={error.password}
-            onFocus={() => setIsFocus(curr => ({ ...curr, password: true }))}
-            onBlur={() => setIsFocus(curr => ({ ...curr, password: false }))}
-            onChange={handleInputPassword}
-          />
+          {!userInput.isGoogleAccount && (
+            <TextField
+              id="outlined-password-input"
+              type="password"
+              autoComplete="current-password"
+              label={isFocus.password ? 'Password' : ''}
+              sx={textFieldStyle}
+              placeholder={!userInput.password && 'Password'}
+              value={userInput.password}
+              error={error.password !== '' ? true : false}
+              helperText={error.password}
+              onFocus={() => setIsFocus(curr => ({ ...curr, password: true }))}
+              onBlur={() => setIsFocus(curr => ({ ...curr, password: false }))}
+              onChange={handleInputPassword}
+            />
+          )}
 
-          <TextField
-            id="outlined-email-address-input"
-            label={isFocus.email ? 'Email Address' : ''}
-            sx={textFieldStyle}
-            placeholder={!userInput.email && 'Email Address'}
-            value={userInput.email}
-            error={error.email !== '' ? true : false}
-            helperText={error.email}
-            onFocus={() => setIsFocus(curr => ({ ...curr, email: true }))}
-            onBlur={() => setIsFocus(curr => ({ ...curr, email: false }))}
-            onChange={handleInputEmail}
-          />
+          {!userInput.isGoogleAccount && (
+            <TextField
+              id="outlined-email-address-input"
+              label={isFocus.email ? 'Email Address' : ''}
+              sx={textFieldStyle}
+              placeholder={!userInput.email && 'Email Address'}
+              value={userInput.email}
+              error={error.email !== '' ? true : false}
+              helperText={error.email}
+              onFocus={() => setIsFocus(curr => ({ ...curr, email: true }))}
+              onBlur={() => setIsFocus(curr => ({ ...curr, email: false }))}
+              onChange={handleInputEmail}
+            />
+          )}
 
           <TextField
             id="outlined-firstName-input"
