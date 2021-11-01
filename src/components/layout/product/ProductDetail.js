@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from '../../../config/axios';
 import { AuthContext } from '../../../contexts/AuthContext';
 import Script from 'react-load-script';
-import { Avatar, Button, Link } from '@mui/material';
+import { Avatar, Button, Link, Tooltip } from '@mui/material';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { useHistory, useParams } from 'react-router-dom';
 import { createdAgo } from '../../../services/getTimeService';
 import HistoryIcon from '@mui/icons-material/History';
+import LinkIcon from '@mui/icons-material/Link';
 
 function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle }) {
   const { user } = useContext(AuthContext);
@@ -21,7 +22,14 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
 
   // const defaulfProfile = "https://res.cloudinary.com/dl7u9oybl/image/upload/v1635217850/img-placeholder_rutnat.jpg";
 
-  const iconHeartStyle = { color: '#e91e63', ml: '10px' };
+  const iconHeartStyle = {
+    color: '#e91e63',
+    ml: '10px',
+    '&:hover': {
+      fontSize: '28px',
+      position: 'absolute'
+    }
+  };
 
   ///////////////set show button buy now////////////////////////
   let ispurchased = false;
@@ -172,6 +180,26 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           textAlign: 'end'
         }}
       >
+        <Tooltip title="Copy link">
+          <Button
+            sx={{
+              color: 'white',
+              m: '0px',
+              p: '0px 5px',
+              minWidth: 'auto',
+              '&:hover': {
+                background: 'rgba(255,255,255,0.1)'
+              }
+            }}
+            onClick={() => {
+              // navigator.clipboard.writeText(`http://localhost:3000/product/${product?.id}`);
+              navigator.clipboard.writeText(window.location.href);
+            }}
+          >
+            <LinkIcon />
+          </Button>
+        </Tooltip>
+
         {isLiked && (
           <Button onClick={handleClickLike} sx={{ p: '0', m: '0' }}>
             <FavoriteIcon sx={iconHeartStyle} />
