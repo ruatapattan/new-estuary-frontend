@@ -38,6 +38,8 @@ function SidebarPeopleItem({ item, type }) {
 		color: theme.palette.text.secondary,
 	}));
 
+	console.log(type);
+
 	const handleClickChat = () => {
 		handleClickOpenSidebarItem();
 		handleDrawerToggle();

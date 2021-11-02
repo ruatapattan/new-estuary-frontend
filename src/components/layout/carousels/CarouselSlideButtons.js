@@ -12,9 +12,11 @@ import { createdAgo } from "../../../services/getTimeService";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import axios from "../../../config/axios";
+import { SocketContext } from "../../../contexts/SocketContext";
 
 function CarouselSlideButtons({ item }) {
 	const { user } = useContext(AuthContext);
+	const { sendNotification } = useContext(SocketContext);
 	const [isLiked, setIsLiked] = useState(false);
 	const [currentLikeCount, setCurrentLikeCount] = useState(0);
 	const [usersLiked, setUsersLiked] = useState([]);
@@ -64,11 +66,27 @@ function CarouselSlideButtons({ item }) {
 	const handleClickLike = async () => {
 		if (filteredUsersLiked.length === 0) {
 			// alert("first like");
-			axios.post("/like", { productId: item.id }).then((res) => {
-				setIsLiked((cur) => !cur);
-				setCurrentLikeCount((cur) => cur + 1);
-				setFirstLike((cur) => !cur);
-			});
+			axios
+				.post("/like", { productId: item.id })
+				.then((res) => {
+					setIsLiked((cur) => !cur);
+					setCurrentLikeCount((cur) => cur + 1);
+					setFirstLike((cur) => !cur);
+					return res;
+				})
+				.then((res2) => {
+					alert("notify like");
+					console.log(res2);
+					sendNotification(
+						user.id,
+						user.username,
+						item.User.id,
+						"liked",
+						"product",
+						"likeId",
+						res2.data.likeId
+					);
+				});
 		} else {
 			// alert("not first");
 			axios.put(`/like/${filteredUsersLiked[0].id}`, { isLiked: !isLiked }).then((res) => {

@@ -19,6 +19,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Send from "@mui/icons-material/Send";
 import { ChatContext } from "../../contexts/ChatContext";
 import { AuthContext } from "../../contexts/AuthContext";
+import { SocketContext } from "../../contexts/SocketContext";
 function ChatContainer() {
 	const ChatBlob = styled(Box)(({ theme, who }) => ({
 		minWidth: "25%",
@@ -33,27 +34,33 @@ function ChatContainer() {
 
 	const { user } = useContext(AuthContext);
 	// const socketRef = useRef();
-	const socketRef = useRef(io.connect(API_URL));
+	// const socketRef = useRef(io.connect(API_URL));
 	const [chatLog, setChatLog] = useState([]);
 	const [sent, setSent] = useState(false);
 	const [membersInfo, setMembersInfo] = useState([]);
 	const [message, setMessage] = useState("");
 
+	// const { socketRef } = useContext(SocketContext);
+	const { socketState } = useContext(SocketContext);
+
 	console.log(chatRoomInfo);
 	useEffect(() => {
 		// console.log(isGroupChat);
-		socketRef.current = io.connect(API_URL);
+		// socketRef.current = io.connect(API_URL);
 		// if (user.id ===  )
-		socketRef.current.emit("join room", user.id, chatRoomInfo.id, isGroupChat);
+		// socketRef.current.emit("join room", user.id, chatRoomInfo.id, isGroupChat);
+		socketState.emit("join room", user.id, chatRoomInfo.id, isGroupChat);
 
-		socketRef.current.on("fetched log", (chatLog, chatMembers) => {
+		// socketRef.current.on("fetched log", (chatLog, chatMembers) => {
+		socketState.on("fetched log", (chatLog, chatMembers) => {
 			// alert("hi");
 			// console.log("fetched members", chatMembers);
 			setMembersInfo(chatMembers);
 			setChatLog(chatLog);
 		});
 
-		socketRef.current.on("n", (newMessage) => {
+		socketState.on("n", (newMessage) => {
+			// socketRef.current.on("n", (newMessage) => {
 			// alert("in event");
 			console.log(newMessage);
 			// const clone = [...chatLog];
@@ -93,7 +100,7 @@ function ChatContainer() {
 				isGroupChat,
 			};
 			// console.log(messageObj);
-			socketRef.current.emit("send message", messageObj);
+			socketState.emit("send message", messageObj);
 			setSent((cur) => !cur);
 			// id: recordedChat.id,
 			// createdAt: recordedChat.createdAt,
@@ -116,7 +123,8 @@ function ChatContainer() {
 
 	const handleLeaveChat = () => {
 		setChatRoomInfo({});
-		socketRef.current.emit("leave-room");
+		// socketState.current.emit("leave-room");
+		// socketRef.current.emit("leave-room");
 	};
 
 	return (
