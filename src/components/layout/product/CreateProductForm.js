@@ -47,8 +47,12 @@ function CreateProductForm() {
         setError((cur) => ({ ...cur, price: "price is required" }));
         isError = true;
       }
+      if (!userInput.coverPic) {
+        setError((cur) => ({ ...cur, coverPic: "Image is required" }));
+        isError = true;
+      }
 
-      if (error.name || error.category || error.price) {
+      if (error.name || error.category || error.price || error.coverPic) {
         isError = true;
       }
 
@@ -105,10 +109,26 @@ function CreateProductForm() {
     } else setError((cur) => ({ ...cur, price: "" }));
   };
 
+  const handleInputExternalLink = (e) => {
+    const URLrule =
+      "(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
+    const checkURL = new RegExp(URLrule);
+
+    setUserInput((cur) => ({ ...cur, externalLink: e.target.value }));
+    console.log(checkURL.test(e.target.value));
+
+    if (!checkURL.test(e.target.value)) {
+      setError((cur) => ({ ...cur, externalLink: "invalid URL" }));
+    } else setError((cur) => ({ ...cur, externalLink: "" }));
+  };
+
   //pic
   const handleChangePicProduct = (e) => {
     setUserInput((cur) => ({ ...cur, coverPic: e.target.files[0] }));
     setCoverPic(URL.createObjectURL(e.target.files[0]));
+    if (e.target.value === "") {
+      setError((cur) => ({ ...cur, coverPic: "image is required" }));
+    } else setError((cur) => ({ ...cur, coverPic: "" }));
   };
 
   //call backend category
@@ -161,7 +181,7 @@ function CreateProductForm() {
         Creact new Item
       </Box>
       <Box sx={{ paddingTop: "30px" }}>
-        <div
+        <Box
           style={{
             display: "flex",
             justifyContent: "center",
@@ -182,6 +202,16 @@ function CreateProductForm() {
             alt=""
             sx={{ mb: "25px" }}
           />
+        </Box>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "red",
+          }}
+        >
+          {error.coverPic}
         </div>
         <label htmlFor="contained-button-file">
           <Input
@@ -280,8 +310,10 @@ function CreateProductForm() {
           }
           multiline
           sx={textFieldStyle}
-          value={externalLink}
-          onChange={(e) => setExternalLink(e.target.value)}
+          value={userInput.externalLink}
+          error={error.externalLink && error.externalLink !== "" ? true : false}
+          helperText={error.externalLink}
+          onChange={handleInputExternalLink}
         />
 
         <Button
