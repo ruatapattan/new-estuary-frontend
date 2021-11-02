@@ -31,7 +31,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
   // console.log(toggleEditComment);
 
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -53,10 +53,10 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
     const callLikeComment = async () => {
       await axios
         .get(`/like/comment/${commentItem.id}`)
-        .then((res) => {
+        .then(res => {
           setLikeLists([...res.data.like]);
         })
-        .catch((err) => {
+        .catch(err => {
           // console.dir(err);
         });
     };
@@ -68,7 +68,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
   //  เช็คการไลค์
   let isLiked = false; // เปิด ปิด icon Like
   let filteredLikeList = []; // เก็บ
-  likeLists.forEach((item) => {
+  likeLists.forEach(item => {
     if (+item.commentId === +commentItem.id && +item.userId === +user.id) {
       // console.log('jjjjjjjjjjjj');
       // console.log('test1' + item.commentId);
@@ -84,16 +84,16 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
   // console.log(isLiked);
 
   // นับคนกด Like
-  const countLike = likeLists.filter((item) => item.status === true);
+  const countLike = likeLists.filter(item => item.status === true);
 
   const handleClickLike = async () => {
     if (filteredLikeList.length === 0) {
-      axios.post('/like', { commentId: commentItem.id }).then((res) => {
-        setToggleLikeComment((curr) => !curr);
+      axios.post('/like', { commentId: commentItem.id }).then(res => {
+        setToggleLikeComment(curr => !curr);
       });
     } else {
-      axios.put(`/like/${filteredLikeList[0].id}`, { isLiked: !filteredLikeList[0].status }).then((res) => {
-        setToggleLikeComment((curr) => !curr);
+      axios.put(`/like/${filteredLikeList[0].id}`, { isLiked: !filteredLikeList[0].status }).then(res => {
+        setToggleLikeComment(curr => !curr);
       });
     }
   };
@@ -106,7 +106,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
         {isLiked && <ThumbUpAltIcon onClick={handleClickLike} />}
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
+        <Typography sx={{ display: 'inline' }} variant="body2" color="text.disabled">
           {countLike.length}
         </Typography>
       </Grid>
@@ -114,32 +114,34 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
       <Grid item>
         {user.id === commentItem.User.id ? (
           <Button
-            id='demo-positioned-button'
-            aria-controls='demo-positioned-menu'
-            aria-haspopup='true'
+            id="demo-positioned-button"
+            aria-controls="demo-positioned-menu"
+            aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}>
+            onClick={handleClick}
+          >
             <MoreHorizIcon open={openDialog} setOpen={setOpenDialog} />
           </Button>
         ) : null}
 
         <Menu
-          id='demo-positioned-menu'
-          aria-labelledby='demo-positioned-button'
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'left',
+            horizontal: 'left'
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'left',
-          }}>
+            horizontal: 'left'
+          }}
+        >
           <MenuItem onClick={() => setOpenDialog(true)}>
             <ListItemIcon>
-              <EditIcon fontSize='small' />
+              <EditIcon fontSize="small" />
             </ListItemIcon>
             Edit
           </MenuItem>
@@ -151,14 +153,14 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
           />
           <MenuItem onClick={handleClickDelete}>
             <ListItemIcon>
-              <DeleteIcon fontSize='small' />
+              <DeleteIcon fontSize="small" />
             </ListItemIcon>
             Delete
           </MenuItem>
         </Menu>
       </Grid>
       <Grid item>
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
+        <Typography sx={{ display: 'inline' }} variant="body2" color="text.disabled">
           {new Intl.DateTimeFormat('en-US', { dateStyle: 'short' }).format(new Date(commentItem.createdAt))}
         </Typography>
       </Grid>

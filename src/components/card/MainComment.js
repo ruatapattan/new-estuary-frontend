@@ -10,7 +10,7 @@ import MainCommentAvatar from './MainCommentAvatar';
 import MainCommentContent from './MainCommentContent';
 import MainCommentbottom from './MainCommentbottom';
 
-function MainComment({ postItem, user, comment, setToggleEditComment }) {
+function MainComment({ postItem, user, comment, setToggleEditComment, product }) {
   // console.log(postItem);
   // console.log(comment);
 
@@ -21,7 +21,7 @@ function MainComment({ postItem, user, comment, setToggleEditComment }) {
   // const [comment, setComment] = useState([]);
 
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -44,9 +44,9 @@ function MainComment({ postItem, user, comment, setToggleEditComment }) {
 
   return (
     <>
-      {comment.map((commentItem) => (
+      {comment.map(commentItem => (
         <Stack>
-          <Stack justifyContent='space-between' direction='row' spacing={1} mb='10px' alignItems='center' p='10px'>
+          <Stack justifyContent="space-between" direction="row" spacing={1} mb="10px" alignItems="center" p="10px">
             <MainCommentAvatar profilePic={commentItem.User.profilePic} />
 
             <Paper sx={{ padding: '5px', width: '100%', background: '#f6f6f6' }} elevation={3}>
@@ -55,7 +55,7 @@ function MainComment({ postItem, user, comment, setToggleEditComment }) {
                 name={`${commentItem.User.firstName} ${commentItem.User.lastName}`}
               />
 
-              <Grid container spacing={5} pt='15px'>
+              <Grid container spacing={5} pt="15px">
                 <MainCommentbottom commentItem={commentItem} user={user} setToggleEditComment={setToggleEditComment} />
               </Grid>
             </Paper>
