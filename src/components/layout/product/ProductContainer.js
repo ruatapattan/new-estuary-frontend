@@ -186,6 +186,7 @@ function ProductContainer() {
             followingLists={followingLists}
             likeLists={likeLists}
             setToggle={setToggle}
+            comment={comment}
           />
 
           <Box

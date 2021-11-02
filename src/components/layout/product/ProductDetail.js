@@ -15,7 +15,7 @@ import { createdAgo } from '../../../services/getTimeService';
 import HistoryIcon from '@mui/icons-material/History';
 import LinkIcon from '@mui/icons-material/Link';
 
-function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle }) {
+function ProductDetail({ product, userDetail, purchasedLists, followingLists, likeLists, setToggle, comment }) {
   const { user } = useContext(AuthContext);
   const history = useHistory();
   const param = useParams();
@@ -312,8 +312,10 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           }
         }}
       >
-        <p>{countLike.length} favourites</p>
-        <p>1k comments</p>
+        {countLike.length > 1 ? <p>{countLike.length} favourites</p> : <p>{countLike.length} favourite</p>}
+
+        {comment.length > 1 ? <p>{comment.length} comments</p> : <p>{comment.length} comment</p>}
+
         <p>{purchasedLists?.length} sold</p>
       </Box>
 
