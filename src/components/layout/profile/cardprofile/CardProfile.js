@@ -67,7 +67,7 @@ function CardProfile({
   // too many rerender here
   useEffect(() => {
     setUsersLiked(item_usersLiked);
-    item_usersLiked?.map((elem) => {
+    item_usersLiked.map((elem) => {
       if (+elem.userId === +user?.id && elem.status === true) {
         setIsLiked(true);
       }
@@ -172,7 +172,7 @@ function CardProfile({
               {productName}
             </Typography>
             <Typography variant='body2' color='text.secondary'>
-              By: {User?.username}
+              By: {User.username}
             </Typography>
           </Box>
           <Box>

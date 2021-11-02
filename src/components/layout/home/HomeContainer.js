@@ -29,6 +29,9 @@ function HomeContainer() {
   //=========================================================== set State
   const [post, setPost] = useState([]);
   // const [toggle, setToggle] = useState(false);
+  const [togglePost, setTogglePost] = useState(false);
+  const [togglePostEdit, setTogglePostEdit] = useState(false);
+  // const [toggleEditPost, setToggle]
 
   //=========================================================== fetch post data
   useEffect(() => {
@@ -36,13 +39,17 @@ function HomeContainer() {
       try {
         const res = await axios.get('/post');
         setPost(res.data.post);
+        // console.log('tttttttttttttt');
+        console.log(res.data.post);
       } catch (err) {
         console.log(err);
       }
     };
     fetchPost();
-  }, []);
+  }, [togglePost, togglePostEdit]);
   //=========================================================
+
+  // setToggleSetPost(post);
 
   return (
     <>
@@ -55,9 +62,9 @@ function HomeContainer() {
           width: { xs: '100%', md: '60%' },
           mt: '20px',
         }}>
-        <CreatePost />
+        <CreatePost setTogglePost={setTogglePost} />
         {post.map((postItem) => (
-          <PostCard key={postItem.id} postItem={postItem} />
+          <PostCard key={postItem.id} postItem={postItem} setTogglePostEdit={setTogglePostEdit} />
         ))}
       </Box>
     </>
