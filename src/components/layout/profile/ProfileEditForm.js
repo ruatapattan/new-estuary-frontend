@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, styled } from '@mui/system';
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, CircularProgress } from '@mui/material';
 import { useParams, useHistory } from 'react-router-dom';
 import axios from '../../../config/axios';
 import validator from 'validator';
@@ -10,6 +10,7 @@ import phoneValidate from '../../../services/phoneValidate';
 import Swal from 'sweetalert2';
 
 function ProfileEditFrom() {
+  const [inProgress, setInProgress] = useState(false);
   const param = useParams();
   const history = useHistory();
   const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
@@ -27,7 +28,12 @@ function ProfileEditFrom() {
     phone: false
   });
 
-  const [error, setError] = useState({});
+  const [error, setError] = useState({
+    username: '',
+    password: '',
+    email: '',
+    phone: ''
+  });
   const [userInput, setUserInput] = useState({});
   const [previewProfile, setPreviewProfile] = useState('');
   const [previewBanner, setPreviewBanner] = useState('');
@@ -55,32 +61,39 @@ function ProfileEditFrom() {
   ///////////// PUT Profile ///////////////////
   const handleSubmitEditProfile = async e => {
     e.preventDefault();
-    console.dir(userInput.bannerPic);
-    console.dir(typePic);
+    setInProgress(true);
+    // console.dir(userInput.bannerPic);
+    // console.dir(typePic);
     let isError = false;
     try {
       if (!userInput.username) {
         setError(cur => ({ ...cur, username: 'username is required' }));
         isError = true;
+        setInProgress(false);
       }
-      if (!userInput.password) {
-        setError(cur => ({ ...cur, password: 'password is required' }));
-        isError = true;
-      }
+      // if (!userInput.password) {
+      //   setError(cur => ({ ...cur, password: 'password is required' }));
+      //   isError = true;
+      //   setInProgress(false);
+      // }
       if (!userInput.email) {
         setError(cur => ({ ...cur, email: 'email is required' }));
         isError = true;
+        setInProgress(false);
       }
 
       if (error.username || error.password || error.email || error.phone) {
         isError = true;
+        setInProgress(false);
       }
 
       if (!isError) {
         const formData = new FormData();
 
         formData.append('username', userInput.username);
-        formData.append('password', userInput.password);
+        if (userInput.password) {
+          formData.append('password', userInput.password);
+        }
         formData.append('email', userInput.email);
         formData.append('firstName', userInput.firstName);
         formData.append('lastName', userInput.lastName);
@@ -98,14 +111,22 @@ function ProfileEditFrom() {
         //   pathname: '/profile',
         //   state: { message: 'Your account has been updated' }
         // });
+        setInProgress(false);
         await Swal.fire({
           icon: 'success',
           title: 'Edit profile successful',
           showConfirmButton: false,
           timer: 1500
         });
+        window.location.reload();
       }
     } catch (err) {
+      setInProgress(false);
+      console.dir(err.response);
+      if (err.response && err.response.status === 400 && err.response.data.name === 'passwordError') {
+        setError(cur => ({ ...cur, password: err.response.data.message }));
+      }
+
       // //username errors
       if (err.response && err.response.data.message.usernameSame) {
         setError(cur => ({ ...cur, username: err.response.data.message.usernameSame }));
@@ -117,7 +138,7 @@ function ProfileEditFrom() {
     }
   };
 
-  console.log(userInput.birthDate);
+  //   console.log(userInput.birthDate);
 
   //////////// check error frontend ///////////////////
   const handleInputUsername = e => {
@@ -137,7 +158,7 @@ function ProfileEditFrom() {
   const handleInputPassword = e => {
     setUserInput(cur => ({ ...cur, password: e.target.value }));
     if (e.target.value === '') {
-      setError(cur => ({ ...cur, password: 'password is required' }));
+      setError(cur => ({ ...cur, password: '' }));
     } else if (!passwordValidate.validateCharacter(e.target.value)) {
       setError(cur => ({
         ...cur,
@@ -283,33 +304,37 @@ function ProfileEditFrom() {
           />
           {/* {error.username && <p>{error.username}</p>} */}
 
-          <TextField
-            id="outlined-password-input"
-            type="password"
-            autoComplete="current-password"
-            label={isFocus.password ? 'Password' : ''}
-            sx={textFieldStyle}
-            placeholder={!userInput.password && 'Password'}
-            value={userInput.password}
-            error={error.password !== '' ? true : false}
-            helperText={error.password}
-            onFocus={() => setIsFocus(curr => ({ ...curr, password: true }))}
-            onBlur={() => setIsFocus(curr => ({ ...curr, password: false }))}
-            onChange={handleInputPassword}
-          />
+          {!userInput.isGoogleAccount && (
+            <TextField
+              id="outlined-password-input"
+              type="password"
+              autoComplete="current-password"
+              label={isFocus.password ? 'Password' : ''}
+              sx={textFieldStyle}
+              placeholder={!userInput.password && 'Password'}
+              value={userInput.password}
+              error={error.password !== '' ? true : false}
+              helperText={error.password}
+              onFocus={() => setIsFocus(curr => ({ ...curr, password: true }))}
+              onBlur={() => setIsFocus(curr => ({ ...curr, password: false }))}
+              onChange={handleInputPassword}
+            />
+          )}
 
-          <TextField
-            id="outlined-email-address-input"
-            label={isFocus.email ? 'Email Address' : ''}
-            sx={textFieldStyle}
-            placeholder={!userInput.email && 'Email Address'}
-            value={userInput.email}
-            error={error.email !== '' ? true : false}
-            helperText={error.email}
-            onFocus={() => setIsFocus(curr => ({ ...curr, email: true }))}
-            onBlur={() => setIsFocus(curr => ({ ...curr, email: false }))}
-            onChange={handleInputEmail}
-          />
+          {!userInput.isGoogleAccount && (
+            <TextField
+              id="outlined-email-address-input"
+              label={isFocus.email ? 'Email Address' : ''}
+              sx={textFieldStyle}
+              placeholder={!userInput.email && 'Email Address'}
+              value={userInput.email}
+              error={error.email !== '' ? true : false}
+              helperText={error.email}
+              onFocus={() => setIsFocus(curr => ({ ...curr, email: true }))}
+              onBlur={() => setIsFocus(curr => ({ ...curr, email: false }))}
+              onChange={handleInputEmail}
+            />
+          )}
 
           <TextField
             id="outlined-firstName-input"
@@ -431,9 +456,18 @@ function ProfileEditFrom() {
               </Button>
             </label>
           </Box>
-          <Button type="submit" variant="gradient" sx={{ color: 'white', p: '10px', width: { xs: '80%', sm: '70%' } }}>
-            Save
-          </Button>
+
+          {inProgress ? (
+            <CircularProgress sx={{ color: 'text.primary' }} />
+          ) : (
+            <Button
+              type="submit"
+              variant="gradient"
+              sx={{ color: 'white', p: '10px', width: { xs: '80%', sm: '70%' } }}
+            >
+              Save
+            </Button>
+          )}
         </Box>
       </Box>
       {/* </Grid> */}

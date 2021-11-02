@@ -167,21 +167,43 @@ function Banner() {
 						</>
 					)}
 
-					{ownedCommunity.length === 0 ? (
-						<Button
-							sx={{
-								// outline: "1px solid #708198",
-								width: "20ch",
-								textTransform: "none",
-								marginLeft: "0.5rem",
-							}}
-							variant="outlined"
-							aria-label="add to favorites"
-						>
-							<AddIcon sx={{ fontSize: "1.5rem", color: "#708198" }} />
-							<Typography sx={{ color: "text.primary" }}>No Community</Typography>
-						</Button>
-					) : isCommunityMember !== null ? (
+					{+user.id !== +param.id ? (
+						ownedCommunity.length === 0 ? (
+							<Button
+								sx={{
+									// outline: "1px solid #708198",
+									width: "20ch",
+									textTransform: "none",
+									marginLeft: "0.5rem",
+								}}
+								variant="outlined"
+								aria-label="add to favorites"
+							>
+								<AddIcon sx={{ fontSize: "1.5rem", color: "#708198" }} />
+								<Typography sx={{ color: "text.primary" }}>No Community</Typography>
+							</Button>
+						) : isCommunityMember !== null ? (
+							<Button
+								sx={{ width: "20ch", textTransform: "none", marginLeft: "0.5rem" }}
+								variant="gradient"
+								aria-label="add to favorites"
+								onClick={() => history.push(`/community/${ownedCommunity[0].communityId}`)}
+							>
+								<ForumIcon sx={{ fontSize: "1.5rem", color: "#242A38" }} />
+								<Typography sx={{ color: "#242A38" }}>Visit Community</Typography>
+							</Button>
+						) : (
+							<Button
+								sx={{ width: "20ch", textTransform: "none", marginLeft: "0.5rem" }}
+								variant="gradient"
+								aria-label="add to favorites"
+								onClick={handleJoinCommunity}
+							>
+								<AddIcon sx={{ fontSize: "1.5rem", color: "#242A38" }} />
+								<Typography sx={{ color: "#242A38" }}>Join Community</Typography>
+							</Button>
+						)
+					) : (
 						<Button
 							sx={{ width: "20ch", textTransform: "none", marginLeft: "0.5rem" }}
 							variant="gradient"
@@ -190,16 +212,6 @@ function Banner() {
 						>
 							<ForumIcon sx={{ fontSize: "1.5rem", color: "#242A38" }} />
 							<Typography sx={{ color: "#242A38" }}>Visit Community</Typography>
-						</Button>
-					) : (
-						<Button
-							sx={{ width: "20ch", textTransform: "none", marginLeft: "0.5rem" }}
-							variant="gradient"
-							aria-label="add to favorites"
-							onClick={handleJoinCommunity}
-						>
-							<AddIcon sx={{ fontSize: "1.5rem", color: "#242A38" }} />
-							<Typography sx={{ color: "#242A38" }}>Join Community</Typography>
 						</Button>
 					)}
 				</Box>

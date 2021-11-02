@@ -28,9 +28,9 @@ const routes = {
   guest: {
     route: [
       { path: '/login', component: Login },
-      { path: '/signup', component: Signup },
+      { path: '/signup', component: Signup }
     ],
-    redirect: '/',
+    redirect: '/login'
   },
   CLIENT: {
     route: [
@@ -41,10 +41,10 @@ const routes = {
       { path: '/profile/:id', component: Profile },
       { path: '/editproduct/:id', component: EditProductForm },
       { path: '/community', component: Community },
-      { path: '/', component: Home },
+      { path: '/', component: Home }
     ],
-    redirect: '/',
-  },
+    redirect: '/'
+  }
 };
 
 // export { allPages };

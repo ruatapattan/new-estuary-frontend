@@ -122,14 +122,14 @@ function ProfileForm() {
       justifyContent='flex-start'
       alignItems='center'
       sx={{ width: { xs: '90%', sm: '90%', md: '72%' } }}
-      border='5px solid pink'
+      // border="5px solid pink"
       backgroundColor='#EFF1F3'>
       <Box
         display='flex'
         justifyContent='center'
         alignItems='center'
         sx={{ width: { xs: '90%', sm: '90%', md: '90%' }, mt: '15px' }}
-        border='5px solid blue'
+        // border="5px solid blue"
         flexWrap='wrap'
 
         // height="5vh"

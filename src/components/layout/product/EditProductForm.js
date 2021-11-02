@@ -4,12 +4,14 @@ import MenuItem from "@mui/material/MenuItem";
 import { useHistory, useLocation } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Button, Input, TextField } from "@mui/material";
+import Swal from "sweetalert2";
+
 function EditProductForm() {
   const textFieldStyle = { width: { xs: "80%", sm: "70%" }, mb: "25px" };
   const location = useLocation();
   const history = useHistory();
 
-  const [category, setCategory] = useState(location.state.product.category.id);
+  const [category, setCategory] = useState(location.state.product.category);
   const [name, setName] = useState(location.state.product.productName);
   const [description, setDescription] = useState(
     location.state.product.description
@@ -21,7 +23,7 @@ function EditProductForm() {
     location.state.product.externalLink
   );
 
-  console.log(location.state.product.id);
+  console.log(location.state.product.category);
 
   const [optionCategory, setOptionCategory] = useState([]);
   useEffect(() => {
@@ -30,7 +32,7 @@ function EditProductForm() {
         const res = await axios.get("/category");
         const fetChcategorys = res.data.categorys;
         setOptionCategory(fetChcategorys);
-        // console.log(fetChcategorys);
+        console.log(fetChcategorys);
       } catch (err) {
         console.dir(err);
       }
@@ -79,7 +81,12 @@ function EditProductForm() {
       // });
 
       // console.log(res.data);
-
+      Swal.fire({
+        icon: "success",
+        title: "Successfully edited the product.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       history.push("/profile");
       window.location.reload();
     } catch (err) {
