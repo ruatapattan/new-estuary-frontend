@@ -1,12 +1,11 @@
 import React from 'react';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import CreatePost from '../../card/CreatePost';
-import PostCard from '../../card/PostCard';
 import { useState, useEffect } from 'react';
-import axios from '../../../config/axios';
+import axios from '../../config/axios';
+import PostCard from '../card/PostCard';
+import { useParams } from 'react-router-dom';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -19,20 +18,31 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-function CommunityContent() {
-  const [post, setPost] = useState([]);
+function PostContainer() {
+  //=========================================================== set State
+  const [postItem, setPostItem] = useState([]);
+  // const [toggle, setToggle] = useState(false);
+  const [togglePost, setToggleSetPost] = useState(false);
+  const param = useParams();
 
+  //=========================================================== fetch post data
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetchPostById = async () => {
       try {
-        const res = await axios.get('/post');
-        setPost(res.data.post);
+        // const res = await axios.get(`/post/${param.id}`);
+        const res = await axios.get(`/post/6`);
+        setPostItem(res.data.post);
+        console.log('lllllllllllllllllllll');
+        console.log(res.data.post);
       } catch (err) {
         console.log(err);
       }
     };
-    fetchPost();
+    fetchPostById();
   }, []);
+
+  //=========================================================
+
   return (
     <>
       <Box
@@ -44,18 +54,10 @@ function CommunityContent() {
           width: { xs: '100%', md: '60%' },
           mt: '20px',
         }}>
-        <Box mb='20px' width='100%' display='flex' justifyContent='center'>
-          <Typography variant='h3' component='h3' mb='20px'>
-            Community
-          </Typography>
-        </Box>
-        <CreatePost />
-        {post.map((postItem) => (
-          <PostCard key={postItem.id} postItem={postItem} />
-        ))}
+        {/* <PostCard /> */}
       </Box>
     </>
   );
 }
 
-export default CommunityContent;
+export default PostContainer;

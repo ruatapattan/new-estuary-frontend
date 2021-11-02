@@ -8,6 +8,7 @@ import TestPhoto from '../pages/TestPhoto';
 import Product from '../pages/Product';
 import EditProductForm from '../components/layout/product/EditProductForm';
 import Community from '../pages/Community';
+import Post from '../pages/Post';
 
 // const allPages = [
 //   { path: '/product/:id', component: Product },
@@ -34,6 +35,7 @@ const routes = {
   CLIENT: {
     route: [
       { path: '/product/:id', component: Product },
+      { path: '/post/:id', component: Post },
       { path: '/marketplace', component: MarketPlace },
       { path: '/rank', component: Rank },
       { path: '/profile/:id', component: Profile },

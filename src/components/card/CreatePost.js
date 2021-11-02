@@ -15,16 +15,20 @@ import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import axios from '../../config/axios';
 import { AuthContext } from '../../contexts/AuthContext';
+import InputAdornment from '@mui/material/InputAdornment';
+import RateReviewOutlinedIcon from '@mui/icons-material/RateReviewOutlined';
 
 // input
 const Input = styled('input')({
   display: 'none',
 });
 
-function CreatePost() {
+function CreatePost({ setTogglePost }) {
   //======================== (1) set ข้อมูลที่ใช้ ========================
   // เรียกข้อมูล user มาใช้
   const { user } = useContext(AuthContext);
+
+  console.log(user);
   // สร้าง state เก็บข้อมูล
   const [content, setContent] = useState('');
   const [sendPic, setSendPic] = useState([]);
@@ -75,30 +79,42 @@ function CreatePost() {
     setContent('');
     setSendPic([]);
     setPic([]);
+
+    setTogglePost((c) => !c);
   };
+
+  //=================================
 
   return (
     <Paper sx={{ p: '16px', width: '100%', mb: '20px' }}>
       {/* ================================================ */}
       <form onSubmit={handleSubmitCreatePost} enctype='multipart/form-data'>
-        <Stack justifyContent='space-between' direction='row' spacing={3}>
+        <Stack justifyContent='space-between' alignItems='center' direction='row' spacing={3}>
           <Avatar
             sx={{ bgcolor: purple[500] }}
             aria-label='recipe'
-            src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80'
+            src={user.profilePic}
             sx={{ width: 40, height: 40, mr: '16px' }}></Avatar>
           <TextField
             id='standard-basic'
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <RateReviewOutlinedIcon />
+                </InputAdornment>
+              ),
+            }}
             label='Create post'
             size='small'
-            variant='filled'
+            variant='standard'
             sx={{ width: '100%' }}
             name='content'
             type='text'
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-          <Button type='submit' variant='contained' endIcon={<SendIcon />} color='success' sx={{ height: '50%' }} />
+
+          <Button type='submit' variant='gradient' endIcon={<SendIcon />} sx={{ height: '50%' }} />
         </Stack>
         <Stack justifyContent='space-evenly' direction='row' alignItems='center' spacing={2} mt='10px'>
           <label htmlFor='icon-button-file'>
@@ -112,7 +128,15 @@ function CreatePost() {
             />
             {/* <input accept='image/*' id='icon-button-file' type='file' onChange={handleChangeFile} /> */}
             <IconButton color='primary' aria-label='upload picture' component='span'>
-              <InsertPhotoIcon sx={{ fontSize: 40, color: green[500] }} />
+              <InsertPhotoIcon
+                sx={{
+                  fontSize: 40,
+
+                  // color: green[500] ,
+                  background: `linear-gradient(90deg,  rgba(64,169,223,1) 20%,rgba(115,194,130,1) 100%)`,
+                  borderRadius: '8px',
+                }}
+              />
             </IconButton>
             <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
               Choose Photo
@@ -126,7 +150,7 @@ function CreatePost() {
               <Grid container display='flex' justifyContent='center' mt='10px'>
                 <>
                   <Grid item mr='15px'>
-                    <img src={p} style={{ width: '65px', height: '60px' }} />
+                    <img src={p} style={{ width: '125px', height: '120px' }} />
                   </Grid>
 
                   <Grid item>

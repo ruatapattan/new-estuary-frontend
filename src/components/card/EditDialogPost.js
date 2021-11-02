@@ -146,49 +146,51 @@ function EditDialogPost({ open, setOpen, postItem }) {
       {/* <MenuItem onClick={handleClickOpen}>Edit</MenuItem> */}
       <BootstrapDialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={open}>
         <BootstrapDialogTitle id='customized-dialog-title' onClose={handleClose}>
-          Edit Post
+          {/* Edit Post */}
+          <Typography variant='h5' gutterBottom component='div' color='#303030'>
+            Edit Post
+          </Typography>
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <form onSubmit={handleUpdatePost}>
             <Paper elevation={0} sx={{ p: '16px', width: '100%', mb: '20px' }}>
-              <Stack justifyContent='space-between' direction='row' spacing={3}>
-                <Avatar
-                  sx={{ bgcolor: purple[500] }}
-                  aria-label='recipe'
-                  src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80'
-                  sx={{ width: 40, height: 40, mr: '16px' }}></Avatar>
-                {/* <TextField
-                value={TestInput}
-                onChange={(e) => SetTestInput(e.target.value)}
-                id='standard-basic'
-                label='Edit post'
-                size='small'
-                variant='filled'
-                sx={{ width: '100%' }}
-              /> */}
-
-                <TextareaAutosize
-                  aria-label='minimum height'
-                  minRows={3}
-                  placeholder='Minimum 3 rows'
-                  style={{ width: 200 }}
-                  onChange={(e) => SetContent(e.target.value)}
-                  value={content}
-                />
-                <Button
-                  type='submit'
-                  variant='contained'
-                  endIcon={<SendIcon />}
-                  color='success'
-                  sx={{ height: '50%' }}
-                />
+              <Stack sx={{ display: 'flex', justifyContent: 'center', mb: '20px' }}>
+                <Stack sx={{ marginBottom: '20px' }}>
+                  <TextareaAutosize
+                    placeholder='...'
+                    style={{ width: 280 }}
+                    onChange={(e) => SetContent(e.target.value)}
+                    value={content}
+                    maxRows={6}
+                    aria-label='maximum height'
+                    placeholder='Maximum 4 rows'
+                    defaultValue='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                      ut labore et dolore magna aliqua.'
+                  />
+                </Stack>
+                <Stack>
+                  <Button
+                    type='submit'
+                    variant='gradient'
+                    endIcon={<SendIcon />}
+                    color='success'
+                    sx={{ height: '50%', width: '30%', margin: 'auto' }}
+                  />
+                </Stack>
               </Stack>
+
               <Stack justifyContent='space-evenly' direction='row' alignItems='center' spacing={2} mt='10px'>
                 <label htmlFor='icon-button'>
                   <Input accept='image/*' id='icon-button' type='file' onChange={handleChangeFile} multiple />
                   {/* <input multiple type='file' id='img' name='img' accept='image/*' onChange={handlepic} /> */}
                   <IconButton color='primary' aria-label='upload picture' component='span'>
-                    <InsertPhotoIcon sx={{ fontSize: 40, color: green[500] }} />
+                    <InsertPhotoIcon
+                      sx={{
+                        fontSize: 40,
+                        background: `linear-gradient(90deg,  rgba(64,169,223,1) 20%,rgba(115,194,130,1) 100%)`,
+                        borderRadius: '8px',
+                      }}
+                    />
                   </IconButton>
                   <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
                     Choose Photo
@@ -197,10 +199,10 @@ function EditDialogPost({ open, setOpen, postItem }) {
               </Stack>
 
               {pic.map((item) => (
-                <Grid container display='flex' justifyContent='center' mt='10px'>
+                <Grid container display='flex' justifyContent='center' alignItems='center' mt='10px'>
                   <>
                     <Grid item mr='15px'>
-                      <img src={item.pic} style={{ width: '65px', height: '60px' }} />
+                      <img src={item.pic} style={{ width: '125px', height: '115px' }} />
                     </Grid>
 
                     <Grid item>
@@ -218,7 +220,7 @@ function EditDialogPost({ open, setOpen, postItem }) {
                     <Grid container display='flex' justifyContent='center' mt='10px'>
                       <>
                         <Grid item mr='15px'>
-                          <img src={p} style={{ width: '65px', height: '60px' }} />
+                          <img src={p} style={{ width: '125px', height: '115px' }} />
                         </Grid>
 
                         <Grid item>

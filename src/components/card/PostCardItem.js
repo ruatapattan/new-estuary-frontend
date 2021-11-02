@@ -12,20 +12,25 @@ import PostCardItemContent from './PostCardItemContent';
 
 // =========================== function for carousel ======================================
 
-function PostCardItem({ postItem }) {
+function PostCardItem({ postItem, setTogglePostEdit }) {
   // console.log('xxxx', postItem);
-  const { User, PostPictures, createdAt, content } = postItem;
+  // const { User, PostPictures, createdAt, content } = postItem;
 
   return (
     <>
       {/* {post.map((item) => {
         return ( */}
-      <Card sx={{ padding: '10px', mb: '20px' }}>
-        <PostCardHeader postItem={postItem} />
+      <Card
+        sx={{
+          padding: '10px',
+        }}>
+        <PostCardHeader postItem={postItem} setTogglePostEdit={setTogglePostEdit} />
 
-        <PostCardContent content={content} />
+        <PostCardContent postItem={postItem} />
+        {/* <PostCardContent content={content} /> */}
 
-        <PostCardItemMedia PostPictures={PostPictures} />
+        {/* <PostCardItemMedia PostPictures={PostPictures} /> */}
+        <PostCardItemMedia postItem={postItem} />
 
         <PostCardBottom postItem={postItem} />
         {/* 

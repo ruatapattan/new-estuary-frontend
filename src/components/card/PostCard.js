@@ -30,7 +30,7 @@ import PostCardItem from './PostCardItem';
 // }
 // =========================== function for carousel ======================================
 
-function PostCard({ postItem }) {
+function PostCard({ postItem, setTogglePostEdit }) {
   // console.log(postItem);
   //===========================  setting carousel ======================================
   //   const settings = {
@@ -71,7 +71,7 @@ function PostCard({ postItem }) {
     <>
       <Grid container sx={{ mb: '20px' }}>
         <Grid item xs={12}>
-          <PostCardItem postItem={postItem} />
+          <PostCardItem postItem={postItem} setTogglePostEdit={setTogglePostEdit} />
         </Grid>
       </Grid>
     </>

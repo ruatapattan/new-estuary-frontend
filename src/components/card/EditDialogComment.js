@@ -13,6 +13,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../config/axios';
 import { AuthContext } from '../../contexts/AuthContext';
+import SendIcon from '@mui/icons-material/Send';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -51,7 +52,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-function EditDialogComment({ open, setOpen, commentItem, postItem }) {
+function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEditComment }) {
   const { user } = useContext(AuthContext);
 
   // console.log(postItem);
@@ -72,9 +73,12 @@ function EditDialogComment({ open, setOpen, commentItem, postItem }) {
   const handleSubmitUpdateComment = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/comment/${id}`, { content });
+      const res = await axios.put(`/comment/${id}`, { content });
+      // console.log(res.data);
+      setOpen(false);
+      setToggleEditComment((curr) => !curr);
     } catch (err) {
-      console.dir(err);
+      // console.dir(err);
     }
   };
 
@@ -83,9 +87,11 @@ function EditDialogComment({ open, setOpen, commentItem, postItem }) {
       <BootstrapDialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={open}>
         <form onSubmit={handleSubmitUpdateComment}>
           <BootstrapDialogTitle id='customized-dialog-title' onClose={handleClose}>
-            Edit comment
+            <Typography variant='h5' gutterBottom component='div' color='#303030'>
+              Edit Comment
+            </Typography>
           </BootstrapDialogTitle>
-          <DialogContent dividers>
+          <DialogContent dividers fullWidth={true} maxWidth={'md'}>
             <TextareaAutosize
               aria-label='minimum height'
               minRows={3}
@@ -96,9 +102,7 @@ function EditDialogComment({ open, setOpen, commentItem, postItem }) {
             />
           </DialogContent>
           <DialogActions>
-            <Button type='submit' autoFocus variant='contained' color='success'>
-              Save
-            </Button>
+            <Button type='submit' variant='gradient' endIcon={<SendIcon />} sx={{ height: '50%' }} />
           </DialogActions>
         </form>
       </BootstrapDialog>
