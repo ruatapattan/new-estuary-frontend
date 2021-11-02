@@ -8,14 +8,18 @@ import MenuItem from '@mui/material/MenuItem';
 import EditDialogPost from './EditDialogPost';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from '../../config/axios';
+import { AuthContext } from '../../contexts/AuthContext';
 
 function PostCardHeader({ postItem }) {
   const { createdAt, User } = postItem;
+
+  const { user } = useContext(AuthContext);
+  // console.log(user);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [ShowEditPost, setShowEditPost] = useState(false);
@@ -34,7 +38,6 @@ function PostCardHeader({ postItem }) {
   };
 
   const handleClickDelete = async () => {
-    // console.log('ttttttttttttttt');
     try {
       await axios.delete(`/post/${postItem.id}`);
     } catch (err) {
@@ -48,28 +51,29 @@ function PostCardHeader({ postItem }) {
         avatar={
           <Avatar
             aria-label='recipe'
-            src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
+            // src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
+            src={User.profilePic}
             sx={{ width: 40, height: 40 }}></Avatar>
         }
-        // title='Sarah'
-        title={User.firstName}
-        // subheader='September 14, 2016'
+        title={`${User.firstName} ${User.lastName} `}
         subheader={
           <Typography color='text.disabled' variant='body2'>
             {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(createdAt))}
           </Typography>
         }
-        // {page === 'mypost'? (): (null)}
         action={
           <div>
-            <Button
-              id='demo-positioned-button'
-              aria-controls='demo-positioned-menu'
-              aria-haspopup='true'
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}>
-              <MoreHorizIcon />
-            </Button>
+            {user.id === postItem.User.id ? (
+              <Button
+                id='demo-positioned-button'
+                aria-controls='demo-positioned-menu'
+                aria-haspopup='true'
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}>
+                <MoreHorizIcon />
+              </Button>
+            ) : null}
+
             <Menu
               id='demo-positioned-menu'
               aria-labelledby='demo-positioned-button'

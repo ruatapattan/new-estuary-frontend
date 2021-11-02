@@ -8,6 +8,7 @@ import TestPhoto from '../pages/TestPhoto';
 import Product from '../pages/Product';
 import EditProductForm from '../components/layout/product/EditProductForm';
 import Community from '../pages/Community';
+import Post from '../pages/Post';
 
 // const allPages = [
 //   { path: '/product/:id', component: Product },
@@ -27,22 +28,23 @@ const routes = {
   guest: {
     route: [
       { path: '/login', component: Login },
-      { path: '/signup', component: Signup },
+      { path: '/signup', component: Signup }
     ],
-    redirect: '/',
+    redirect: '/login'
   },
   CLIENT: {
     route: [
       { path: '/product/:id', component: Product },
+      { path: '/post/:id', component: Post },
       { path: '/marketplace', component: MarketPlace },
       { path: '/rank', component: Rank },
       { path: '/profile/:id', component: Profile },
       { path: '/editproduct/:id', component: EditProductForm },
       { path: '/community', component: Community },
-      { path: '/', component: Home },
+      { path: '/', component: Home }
     ],
-    redirect: '/',
-  },
+    redirect: '/'
+  }
 };
 
 // export { allPages };
