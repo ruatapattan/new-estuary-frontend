@@ -9,27 +9,6 @@ import { useContext } from "react";
 import SidebarPeopleItem from "./sidebarPeopleItem/SidebarPeopleItem";
 import { UserContext } from "../../../../../contexts/UserContext";
 
-const communityArr = [
-	{
-		id: "1",
-		name: "cgi",
-		profilePic: "https://res.cloudinary.com/dbaavttgh/image/upload/v1634099288/nps3akzuq75qpmgvddk3.png",
-	},
-	{
-		id: "2",
-		name: "jake's fanclub",
-	},
-	{
-		id: "3",
-		name: "yenkins advocates",
-	},
-	{
-		id: "4",
-		name: "songwiriting105",
-		profilePic: "https://res.cloudinary.com/dbaavttgh/image/upload/v1634107021/biaqxtxz0b47ndc6ybpj.jpg",
-	},
-];
-
 function SidebarCommunity() {
 	const { sidebarSocialList } = useContext(UserContext);
 

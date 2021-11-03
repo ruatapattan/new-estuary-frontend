@@ -86,6 +86,7 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 					state: { successMessage: "Account Created" },
 					form: "register page",
 				});
+				window.location.reload();
 			}
 		} catch (err) {
 			setInProgress(false);
@@ -97,7 +98,13 @@ function CreateCommunityBackdrop({ openBackdrop, handleCloseBackdrop }) {
 	return (
 		// onClick={handleCloseBackdrop}
 		<Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
-			<Box mt={4} width="50vw" height="80vh" position="absolute" zIndex="100000">
+			<Box
+				mt={4}
+				width={{ xs: "100vw", sm: "80vw", md: "50vw" }}
+				height="80vh"
+				position="absolute"
+				zIndex="100000"
+			>
 				<Button
 					onClick={handleCloseBackdrop}
 					sx={{ position: "absolute", right: "0", padding: "0", borderRadius: 0 }}

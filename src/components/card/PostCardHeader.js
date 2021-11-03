@@ -17,8 +17,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import Swal from 'sweetalert2';
 
 function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
-  // console.log(postItem);
-  // const { createdAt, User } = postItem;
+  const { createdAt, User } = postItem;
 
   const { user } = useContext(AuthContext);
   // console.log(user);
@@ -41,10 +40,6 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
 
   const handleClickDelete = async () => {
     try {
-      // const res = await axios.delete(`/post/${postItem.id}`);
-
-      // setTogglePostDelete((c) => !c);
-
       Swal.fire({
         title: 'Are you sure',
 
@@ -61,7 +56,7 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
         }
       });
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 
@@ -72,17 +67,13 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
           <Avatar
             aria-label='recipe'
             // src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
-            src={postItem?.User?.profilePic}
+            src={User.profilePic}
             sx={{ width: 40, height: 40 }}></Avatar>
         }
-        title={
-          <Typography variant='body3' color='#190505'>
-            {postItem.User.username}
-          </Typography>
-        }
+        title={User.username}
         subheader={
-          <Typography color='#65676b' variant='body2'>
-            {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(postItem.createdAt))}
+          <Typography color='text.disabled' variant='body2'>
+            {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(createdAt))}
           </Typography>
         }
         action={

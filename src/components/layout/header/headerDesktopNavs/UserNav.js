@@ -5,6 +5,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import { SocketContext } from "../../../../contexts/SocketContext";
+
 import axios from "../../../../config/axios";
 function UserNav({
 	handleProfileMenuOpen,
@@ -12,6 +14,7 @@ function UserNav({
 	handleChatLogMenuOpen,
 	handleNotificationMenuOpen,
 }) {
+	const { unreadNotificationCount, unreadChatCount } = useContext(SocketContext);
 	const menuId = "primary-search-account-menu";
 	const [userInfo, setUserInfo] = useState({});
 	const mobileMenuId = "primary-search-account-menu-mobile";
@@ -42,7 +45,7 @@ function UserNav({
 					color="inherit"
 					onClick={handleNotificationMenuOpen}
 				>
-					<Badge badgeContent={17} color="error">
+					<Badge badgeContent={unreadNotificationCount} color="error">
 						<NotificationsIcon />
 					</Badge>
 				</IconButton>
@@ -52,7 +55,7 @@ function UserNav({
 					color="inherit"
 					onClick={handleChatLogMenuOpen}
 				>
-					<Badge badgeContent={1} color="error">
+					<Badge badgeContent={unreadChatCount} color="error">
 						<TextsmsIcon />
 					</Badge>
 				</IconButton>

@@ -1,15 +1,15 @@
-import { CardMedia, Grid, Typography } from "@mui/material";
-import { Box, flexbox } from "@mui/system";
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "../../../config/axios";
-import { AuthContext } from "../../../contexts/AuthContext";
-import CreateComment from "../../card/CreateComment";
-import MainComment from "../../card/MainComment";
-import SubComment from "../../card/SubComment";
-import SideBarL from "../sidebar/SideBarL";
-import ProductDetail from "./ProductDetail";
-import ProductShow from "./ProductShow";
+import { CardMedia, Grid, Typography } from '@mui/material';
+import { Box, flexbox } from '@mui/system';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from '../../../config/axios';
+import { AuthContext } from '../../../contexts/AuthContext';
+import CreateComment from '../../card/CreateComment';
+import MainComment from '../../card/MainComment';
+import SubComment from '../../card/SubComment';
+import SideBarL from '../sidebar/SideBarL';
+import ProductDetail from './ProductDetail';
+import ProductShow from './ProductShow';
 
 // const product = {
 //   id: 1,
@@ -48,154 +48,176 @@ import ProductShow from "./ProductShow";
 // ];
 
 function ProductContainer() {
-	const [product, setProduct] = useState({});
-	const [userDetail, setUserDetail] = useState({});
-	const [purchasedLists, setPurchasedLists] = useState([]);
-	const [followingLists, setFollowingLists] = useState([]);
-	const [likeLists, setLikeLists] = useState([]);
+  const [product, setProduct] = useState({});
+  const [userDetail, setUserDetail] = useState({});
+  const [purchasedLists, setPurchasedLists] = useState([]);
+  const [followingLists, setFollowingLists] = useState([]);
+  const [likeLists, setLikeLists] = useState([]);
+  const [comment, setComment] = useState([]);
+  const [toggleComment, setToggleComment] = useState(false);
+  const [toggleLikeComment, setToggleLikeComment] = useState(false);
+  const [toggleEditComment, setToggleEditComment] = useState(false);
 
-	const { user } = useContext(AuthContext);
-	const param = useParams();
+  const { user } = useContext(AuthContext);
+  const param = useParams();
 
-	const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
-	useEffect(() => {
-		const callProduct = async () => {
-			await axios
-				.get(`/product/${param.id}`)
-				.then((res) => {
-					setProduct({ ...res.data.product });
-				})
-				.catch((err) => {
-					console.dir(err);
-				});
-		};
+  useEffect(() => {
+    const callProduct = async () => {
+      await axios
+        .get(`/product/${param.id}`)
+        .then(res => {
+          setProduct({ ...res.data.product });
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
-		const callUserDetail = async () => {
-			await axios
-				.get(`/profile/${user?.id}`)
-				.then((res) => {
-					setUserDetail({ ...res.data.user });
-				})
-				.catch((err) => {
-					console.dir(err);
-				});
-		};
+    const callUserDetail = async () => {
+      await axios
+        .get(`/profile/${user?.id}`)
+        .then(res => {
+          setUserDetail({ ...res.data.user });
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
-		const callPurchased = async () => {
-			await axios
-				.get(`/purchased/${param.id}`)
-				.then((res) => {
-					setPurchasedLists([...res.data.purchased]);
-				})
-				.catch((err) => {
-					console.dir(err);
-				});
-		};
+    const callPurchased = async () => {
+      await axios
+        .get(`/purchased/${param.id}`)
+        .then(res => {
+          setPurchasedLists([...res.data.purchased]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
-		const callSubscribed = async () => {
-			await axios
-				.get(`/following/follower/${user.id}`)
-				.then((res) => {
-					setFollowingLists([...res.data.following]);
-				})
-				.catch((err) => {
-					console.dir(err);
-				});
-		};
+    const callSubscribed = async () => {
+      await axios
+        .get(`/following/follower/${user.id}`)
+        .then(res => {
+          setFollowingLists([...res.data.following]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
-		const callLike = async () => {
-			await axios
-				.get(`/like/product/${param.id}`)
-				.then((res) => {
-					setLikeLists([...res.data.like]);
-				})
-				.catch((err) => {
-					console.dir(err);
-				});
-		};
+    const callLike = async () => {
+      await axios
+        .get(`/like/product/${param.id}`)
+        .then(res => {
+          setLikeLists([...res.data.like]);
+        })
+        .catch(err => {
+          console.dir(err);
+        });
+    };
 
-		callProduct();
-		callUserDetail();
-		callPurchased();
-		callSubscribed();
-		callLike();
-	}, [toggle]);
+    const fetchComment = async () => {
+      try {
+        const res = await axios.get(`/comment/product/${param.id}`);
+        setComment(res.data.comment);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-	// console.dir(product);
-	// console.dir(followingLists);
-	console.dir(likeLists);
+    callProduct();
+    callUserDetail();
+    callPurchased();
+    callSubscribed();
+    callLike();
+    fetchComment();
+  }, [toggle, toggleComment, toggleLikeComment, toggleEditComment]);
 
-	return (
-		<Box
-			sx={{
-				width: "100%",
-				// height: '100vh',
-				display: "flex",
-				backgroundColor: "#EFF1F3",
-			}}
-		>
-			<Grid
-				item
-				sx={{
-					width: { md: "25%", lg: "18%" },
-					display: { md: "flex", xs: "none" },
-				}}
-			>
-				<SideBarL />
-			</Grid>
+  // console.dir(product);
+  // console.dir(followingLists);
+  console.dir(comment);
 
-			<Box
-				sx={{
-					width: "100%",
-					backgroundColor: "#EFF1F3",
-					display: "flex",
-					justifyContent: "center",
-					border: "1px solid red",
-					// p: '80px 0px'
-				}}
-			>
-				<Box
-					sx={{
-						width: { md: "80%", xs: "100%" },
-						backgroundColor: "white",
-						boxShadow: 2,
-						p: { md: "50px", xs: "50px 0px" },
-					}}
-				>
-					<ProductShow product={product} />
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        minHeight: '100vh',
+        display: 'flex',
+        backgroundColor: '#EFF1F3'
+      }}
+    >
+      <Grid
+        item
+        sx={{
+          width: { md: '25%', lg: '18%' },
+          display: { md: 'flex', xs: 'none' }
+        }}
+      >
+        <SideBarL />
+      </Grid>
 
-					<ProductDetail
-						product={product}
-						userDetail={userDetail}
-						purchasedLists={purchasedLists}
-						followingLists={followingLists}
-						likeLists={likeLists}
-						setToggle={setToggle}
-					/>
+      <Box
+        sx={{
+          width: '100%',
+          backgroundColor: '#EFF1F3',
+          display: 'flex',
+          justifyContent: 'center'
+          //   border: '1px solid red'
+          // p: '80px 0px'
+        }}
+      >
+        <Box
+          sx={{
+            width: { md: '100%', xs: '90%' },
+            backgroundColor: 'white',
+            boxShadow: 2,
+            p: { md: '50px', xs: '50px 0px' }
+          }}
+        >
+          <ProductShow product={product} />
 
-					<Box
-						sx={{
-							width: "100%",
-							display: "flex",
-							flexDirection: "column",
-							// border: '1px solid red',
-							p: { md: "0px", xs: "20px" },
-							justifyContent: "flex-start",
-							"& p": {
-								m: "20px 50px",
-							},
-						}}
-					>
-						<p>comment</p>
-						<CreateComment />
-						<MainComment />
-						<SubComment />
-					</Box>
-				</Box>
-			</Box>
-		</Box>
-	);
+          <ProductDetail
+            product={product}
+            userDetail={userDetail}
+            purchasedLists={purchasedLists}
+            followingLists={followingLists}
+            likeLists={likeLists}
+            setToggle={setToggle}
+            comment={comment}
+          />
+
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              // border: '1px solid red',
+              p: { md: '0px', xs: '20px' },
+              justifyContent: 'flex-start',
+
+              '& p': {
+                m: '20px 50px'
+              }
+            }}
+          >
+            <p>comment</p>
+            <CreateComment user={user} product={product} setToggleComment={setToggleComment} />
+            <MainComment
+              product={product}
+              user={user}
+              comment={comment}
+              setToggleLikeComment={setToggleLikeComment}
+              setToggleEditComment={setToggleEditComment}
+            />
+            {/* <SubComment /> */}
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
 }
 
 export default ProductContainer;

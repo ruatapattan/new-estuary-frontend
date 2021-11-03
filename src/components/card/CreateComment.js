@@ -8,16 +8,53 @@ import { Box } from '@mui/system';
 import { Card } from '@mui/material';
 import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
+import { SocketContext } from '../../contexts/SocketContext';
 
 function CreateComment(props) {
-  const { user, postItem, setToggleComment } = props;
+  const { user, postItem, setToggleComment, product } = props;
+  const { sendNotification } = useContext(SocketContext);
+  console.log(product);
 
   // console.log(user.id);
   const [content, setContent] = useState('');
 
   const handleSubmitCreateComment = async (e) => {
     e.preventDefault();
-    const res = await axios.post('/comment', { content, userId: user.id, PostId: props.postItem.id });
+    const res = await axios.post('/comment', {
+      content,
+      userId: user.id,
+      PostId: props.postItem?.id,
+      ProductId: product?.id,
+    });
+
+    if (postItem) {
+      if (user.id !== postItem.User.id) {
+        alert('notify like');
+        sendNotification(
+          user.id,
+          user.username,
+          postItem.User.id,
+          'commented',
+          'post',
+          'commentId',
+          res.data.commentId,
+        );
+      }
+    } else if (product) {
+      if (user.id !== product.User.id) {
+        alert('notify like');
+        sendNotification(
+          user.id,
+          user.username,
+          product.User.id,
+          'commented',
+          'product',
+          'commentId',
+          res.data.commentId,
+        );
+      }
+    }
+
     setContent('');
     setToggleComment((c) => !c);
   };
@@ -32,10 +69,8 @@ function CreateComment(props) {
           </Grid>
           <Grid item xs={6} md={5}>
             <TextField
-              sx={{ color: 'orange' }}
               id='standard-basic'
-              label='comment...'
-              // placeholder='comment...'
+              label='comment'
               size='small'
               variant='standard'
               sx={{ width: '100%' }}

@@ -10,9 +10,9 @@ import MainCommentAvatar from './MainCommentAvatar';
 import MainCommentContent from './MainCommentContent';
 import MainCommentbottom from './MainCommentbottom';
 
-function MainComment({ postItem, user, comment, setToggleEditComment, setToggleDeleteComment }) {
+function MainComment({ postItem, user, comment, setToggleEditComment, product, setToggleDeleteComment }) {
   // console.log(postItem);
-  // console.log(comment);
+  console.log('comment', comment);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -40,7 +40,7 @@ function MainComment({ postItem, user, comment, setToggleEditComment, setToggleD
   //   fetchComment();
   // }, []);
 
-  // console.log(comment);
+  console.log('comment', comment);
 
   return (
     <>

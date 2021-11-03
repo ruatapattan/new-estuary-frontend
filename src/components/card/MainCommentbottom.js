@@ -1,4 +1,3 @@
-import React from 'react';
 import Typography from '@mui/material/Typography';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
@@ -11,17 +10,19 @@ import EditDialogComment from './EditDialogComment';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../../config/axios';
+import { SocketContext } from '../../contexts/SocketContext';
 import Swal from 'sweetalert2';
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
-  // console.log(commentItem.id);
+function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
+  console.log('commentItem', commentItem);
   // console.log(user);
+  const { sendNotification } = useContext(SocketContext);
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const [comment, setComment] = useState([]);
 
@@ -41,9 +42,6 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 
   const handleClickDelete = async () => {
     // console.log(commentItem?.id);
-
-    handleClose();
-
     try {
       Swal.fire({
         title: 'Are you sure',
@@ -60,12 +58,8 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
           setToggleDeleteComment((c) => !c);
         }
       });
-
-      // await axios.delete(`comment/${commentItem.id}`);
-
-      // setToggleDeleteComment((c) => !c);
     } catch (err) {
-      // console.log(err);
+      console.log(err);
     }
   };
 
@@ -110,9 +104,29 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 
   const handleClickLike = async () => {
     if (filteredLikeList.length === 0) {
-      axios.post('/like', { commentId: commentItem.id }).then((res) => {
-        setToggleLikeComment((curr) => !curr);
-      });
+      axios
+        .post('/like', { commentId: commentItem.id })
+        .then((res) => {
+          setToggleLikeComment((curr) => !curr);
+          return res;
+        })
+        .then((res2) => {
+          if (user.id !== commentItem.User.id) {
+            alert('notify like');
+            alert(res2.data.likeId);
+            console.log(res2);
+            sendNotification(
+              user.id,
+              user.username,
+              // item.User.id,
+              commentItem.User.id,
+              'liked',
+              'comment',
+              'likeId',
+              res2.data.likeId,
+            );
+          }
+        });
     } else {
       axios.put(`/like/${filteredLikeList[0].id}`, { isLiked: !filteredLikeList[0].status }).then((res) => {
         setToggleLikeComment((curr) => !curr);
@@ -129,7 +143,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {countLike.length ? countLike.length : null}
+          {countLike.length}
         </Typography>
       </Grid>
 
@@ -171,7 +185,6 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
             commentItem={commentItem}
             setToggleEditComment={setToggleEditComment}
           />
-
           <MenuItem onClick={handleClickDelete}>
             <ListItemIcon>
               <DeleteIcon fontSize='small' />
@@ -179,6 +192,11 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
             Delete
           </MenuItem>
         </Menu>
+      </Grid>
+      <Grid item>
+        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
+          {new Intl.DateTimeFormat('en-US', { dateStyle: 'short' }).format(new Date(commentItem.createdAt))}
+        </Typography>
       </Grid>
     </>
   );

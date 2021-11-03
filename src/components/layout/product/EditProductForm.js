@@ -23,7 +23,7 @@ function EditProductForm() {
     location.state.product.externalLink
   );
 
-  console.log(location.state.product.category);
+  console.log(location.state.category);
 
   const [optionCategory, setOptionCategory] = useState([]);
   useEffect(() => {

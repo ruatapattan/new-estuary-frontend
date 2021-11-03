@@ -10,6 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { useParams, useHistory } from "react-router-dom";
 import { Button, IconButton, Typography } from "@mui/material";
 import ForumIcon from "@mui/icons-material/Forum";
+import { SocketContext } from "../../../contexts/SocketContext";
+
 function Banner() {
 	const Name = styled("div")(({ theme }) => ({
 		fontSize: "1.5rem",
@@ -18,6 +20,7 @@ function Banner() {
 	}));
 	const history = useHistory();
 	let { user } = useContext(AuthContext);
+	const { sendNotification } = useContext(SocketContext);
 	const [followingLists, setFollowingLists] = useState([]);
 	const [ownedCommunity, setOwnedCommunity] = useState([]);
 	const [isCommunityMember, setIsCommunityMember] = useState({});
@@ -74,6 +77,8 @@ function Banner() {
 	}, []);
 
 	console.log(`communityIds`, ownedCommunity);
+	console.log(ownedCommunity);
+	console.log(ownedCommunity.length === 0);
 
 	// const product = 1;
 	// console.log(followingLists);
@@ -96,6 +101,19 @@ function Banner() {
 		if (filteredLikeList.length === 0) {
 			axios.post("/following", { followedId: param.id }).then((res) => {
 				setToggle((curr) => !curr);
+				if (user.id !== param.id) {
+					alert("notify like");
+					sendNotification(
+						user.id,
+						user.username,
+						param.id,
+						"followed",
+						"account",
+						"followingId",
+						res.data.followingId,
+						null
+					);
+				}
 			});
 		} else {
 			axios
@@ -117,6 +135,22 @@ function Banner() {
 		if (isCommunityMember === null) {
 			axios.post(`/community/${getUser.Members.communityId}/join`, { userId: user.id }).then((res) => {
 				setToggle((curr) => !curr);
+
+				if (user.id !== param.id) {
+					alert("notify like");
+					console.log(res);
+					sendNotification(
+						user.id,
+						user.username,
+						param.id,
+						"joined",
+						"community",
+						"communityId",
+						res.data.communityId,
+						null,
+						res.data.newMemberId
+					);
+				}
 			});
 		} else {
 			axios
@@ -203,6 +237,20 @@ function Banner() {
 								<Typography sx={{ color: "#242A38" }}>Join Community</Typography>
 							</Button>
 						)
+					) : ownedCommunity.length === 0 ? (
+						<Button
+							sx={{
+								// outline: "1px solid #708198",
+								width: "20ch",
+								textTransform: "none",
+								marginLeft: "0.5rem",
+							}}
+							variant="outlined"
+							aria-label="add to favorites"
+						>
+							<AddIcon sx={{ fontSize: "1.5rem", color: "#708198" }} />
+							<Typography sx={{ color: "text.primary" }}>No Community</Typography>
+						</Button>
 					) : (
 						<Button
 							sx={{ width: "20ch", textTransform: "none", marginLeft: "0.5rem" }}

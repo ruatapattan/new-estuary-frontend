@@ -20,18 +20,19 @@ import { createdAgo } from "../../../services/getTimeService";
 import { useContext, useEffect, useState } from "react";
 import axios from "../../../config/axios";
 import { useHistory } from "react-router-dom";
+import { SocketContext } from "../../../contexts/SocketContext";
 
 function MarketplaceProductItem({ item }) {
 	const history = useHistory();
-
+	const { sendNotification } = useContext(SocketContext);
 	const { user } = useContext(AuthContext);
 	const [isLiked, setIsLiked] = useState(false);
 	const [currentLikeCount, setCurrentLikeCount] = useState(0);
 	const [usersLiked, setUsersLiked] = useState([]);
 	const [firstLike, setFirstLike] = useState(false);
 	const [filteredUsersLiked, setFilteredUsersLiked] = useState([]);
-	// console.log(item.name, item.id, item);
-	// console.log(usersLiked);
+	console.log(item.name, item.id, item);
+	console.log("user", user);
 
 	// console.log("likecount", currentLikeCount);
 
@@ -68,19 +69,37 @@ function MarketplaceProductItem({ item }) {
 	}, [firstLike]);
 	// console.log(`effect ${item.name}`, usersLiked);
 
-	console.log("filteredLikes", item.name, filteredUsersLiked);
-	console.log("current user", user.username, "id", user.id);
+	// console.log("filteredLikes", item.name, filteredUsersLiked);
+	// console.log("current user", user.username, "id", user.id);
 
 	const handleClickLike = async () => {
 		if (filteredUsersLiked.length === 0) {
-			alert("first like");
-			axios.post("/like", { productId: item.id }).then((res) => {
-				setIsLiked((cur) => !cur);
-				setCurrentLikeCount((cur) => cur + 1);
-				setFirstLike((cur) => !cur);
-			});
+			// alert("first like");
+			axios
+				.post("/like", { productId: item.id })
+				.then((res) => {
+					setIsLiked((cur) => !cur);
+					setCurrentLikeCount((cur) => cur + 1);
+					setFirstLike((cur) => !cur);
+					return res;
+				})
+				.then((res2) => {
+					if (user.id !== item.User.id) {
+						alert("notify like");
+						console.log(res2);
+						sendNotification(
+							user.id,
+							user.username,
+							item.User.id,
+							"liked",
+							"product",
+							"likeId",
+							res2.data.likeId
+						);
+					}
+				});
 		} else {
-			alert("not first");
+			// alert("not first");
 			axios.put(`/like/${filteredUsersLiked[0].id}`, { isLiked: !isLiked }).then((res) => {
 				const currentType = isLiked;
 				setIsLiked((cur) => !cur);
