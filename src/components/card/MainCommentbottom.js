@@ -55,7 +55,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
         if (result.isConfirmed) {
           axios.delete(`comment/${commentItem.id}`);
 
-          setToggleDeleteComment((c) => !c);
+          // setToggleDeleteComment((c) => !c);
         }
       });
     } catch (err) {
