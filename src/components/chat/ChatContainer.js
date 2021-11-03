@@ -36,14 +36,16 @@ function ChatContainer() {
 	// const socketRef = useRef();
 	// const socketRef = useRef(io.connect(API_URL));
 	const [chatLog, setChatLog] = useState([]);
-	const [sent, setSent] = useState(false);
+	// const [sent, setSent] = useState(false);
 	const [membersInfo, setMembersInfo] = useState([]);
 	const [message, setMessage] = useState("");
+	const chatScrollRef = useRef();
 
 	// const { socketRef } = useContext(SocketContext);
 	const { socketState } = useContext(SocketContext);
 
 	console.log(chatRoomInfo);
+	// console.log("join room", user.id, chatRoomInfo.id, isGroupChat);
 	useEffect(() => {
 		// console.log(isGroupChat);
 		// socketRef.current = io.connect(API_URL);
@@ -72,6 +74,10 @@ function ChatContainer() {
 		// }, [socketRef]);
 	}, [chatRoomInfo]);
 
+	useEffect(() => {
+		chatScrollRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [chatLog]);
+
 	// useEffect(() => {
 	// 	// console.log("useeffect");
 	// 	socketRef.current.on("n", (newMessage) => {
@@ -99,14 +105,7 @@ function ChatContainer() {
 				roomId: chatRoomInfo.id,
 				isGroupChat,
 			};
-			// console.log(messageObj);
 			socketState.emit("send message", messageObj);
-			setSent((cur) => !cur);
-			// id: recordedChat.id,
-			// createdAt: recordedChat.createdAt,
-			// senderId: recordedChat.senderId,
-			// content: recordedChat.content,
-			setChatLog((cur) => [...cur, { senderId: user.id, content: message }]);
 			setMessage("");
 		}
 	}
@@ -199,7 +198,7 @@ function ChatContainer() {
 							if (item.senderId === user.id) {
 								return (
 									<>
-										<ListItem sx={{ display: "flex", justifyContent: "right" }}>
+										<ListItem ref={chatScrollRef} sx={{ display: "flex", justifyContent: "right" }}>
 											{/* <ListItemText
 												primary={item.body}
 												secondary="me"
@@ -210,13 +209,25 @@ function ChatContainer() {
 													display: "flex",
 													justifyContent: "right",
 													flexDirection: "column",
+													maxWidth: "80%",
+													overflow: "hidden",
 												}}
 											>
-												<ChatBlob who="me" display="flex" flexDirection="column">
+												<ChatBlob
+													sx={{ wordWrap: "break-word" }}
+													width="100%"
+													who="me"
+													display="flex"
+													flexDirection="column"
+												>
 													<Typography sx={{ textAlign: "right" }}>{item.content}</Typography>
 												</ChatBlob>
-												<Typography color="text.primary" sx={{ textAlign: "right" }}>
-													me
+												<Typography
+													sx={{ textAlign: "right" }}
+													variant="caption"
+													color="text.secondary"
+												>
+													{item.createdAt}
 												</Typography>
 											</Box>
 										</ListItem>
@@ -236,7 +247,7 @@ function ChatContainer() {
 							// console.log(chatterName);
 							return (
 								<>
-									<ListItem alignItems="flex-start">
+									<ListItem ref={chatScrollRef} alignItems="flex-start">
 										<ListItemAvatar>
 											<Avatar src={pfp} />
 										</ListItemAvatar>
@@ -250,12 +261,22 @@ function ChatContainer() {
 												display: "flex",
 												justifyContent: "right",
 												flexDirection: "column",
+												maxWidth: "80%",
 											}}
 										>
-											<ChatBlob display="flex" flexDirection="column">
-												<Typography sx={{ textAlign: "right" }}>{item.content}</Typography>
-											</ChatBlob>
 											<Typography color="text.primary">{chatterName}</Typography>
+
+											<ChatBlob
+												sx={{ wordWrap: "break-word" }}
+												width="100%"
+												display="flex"
+												flexDirection="column"
+											>
+												<Typography>{item.content}</Typography>
+											</ChatBlob>
+											<Typography variant="caption" color="text.secondary">
+												{item.createdAt}
+											</Typography>
 										</Box>
 									</ListItem>
 								</>

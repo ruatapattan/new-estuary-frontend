@@ -14,7 +14,7 @@ function UserNav({
 	handleChatLogMenuOpen,
 	handleNotificationMenuOpen,
 }) {
-	const { unreadNotificationCount } = useContext(SocketContext);
+	const { unreadNotificationCount, unreadChatCount } = useContext(SocketContext);
 	const menuId = "primary-search-account-menu";
 	const [userInfo, setUserInfo] = useState({});
 	const mobileMenuId = "primary-search-account-menu-mobile";
@@ -55,7 +55,7 @@ function UserNav({
 					color="inherit"
 					onClick={handleChatLogMenuOpen}
 				>
-					<Badge badgeContent={1} color="error">
+					<Badge badgeContent={unreadChatCount} color="error">
 						<TextsmsIcon />
 					</Badge>
 				</IconButton>

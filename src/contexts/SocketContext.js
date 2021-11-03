@@ -12,6 +12,7 @@ function SocketContextProvider(props) {
 	const [socketState, setSocketState] = useState(null);
 	const [userAdded, setUserAdded] = useState(false);
 	const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+	const [unreadChatCount, setUnreadChatCount] = useState(0);
 
 	useEffect(() => {
 		if (userRole !== "guest") {
@@ -34,6 +35,10 @@ function SocketContextProvider(props) {
 		setUnreadNotificationCount(0);
 		socketState.emit("notifications viewed", user.id);
 	};
+	const resetChatBadge = () => {
+		setUnreadChatCount(0);
+		socketState.emit("chat notifications viewed", user.id);
+	};
 
 	const sendNotification = (
 		senderId,
@@ -43,9 +48,20 @@ function SocketContextProvider(props) {
 		actionOn,
 		columnToSave,
 		columnToSaveId,
-		content
+		content,
+		newMemberId
 	) => {
-		console.log(senderId, senderName, receiverId, actionType, actionOn, columnToSave, columnToSaveId, content);
+		console.log(
+			senderId,
+			senderName,
+			receiverId,
+			actionType,
+			actionOn,
+			columnToSave,
+			columnToSaveId,
+			content,
+			newMemberId
+		);
 		socketState.emit("send notification", {
 			senderId,
 			senderName,
@@ -55,6 +71,7 @@ function SocketContextProvider(props) {
 			columnToSave,
 			columnToSaveId,
 			content,
+			newMemberId,
 		});
 	};
 
@@ -66,8 +83,11 @@ function SocketContextProvider(props) {
 				userAdded,
 				sendNotification,
 				resetNotificationBadge,
+				resetChatBadge,
 				unreadNotificationCount,
 				setUnreadNotificationCount,
+				unreadChatCount,
+				setUnreadChatCount,
 			}}
 		>
 			{props.children}

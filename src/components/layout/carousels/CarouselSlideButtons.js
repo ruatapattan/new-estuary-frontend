@@ -75,17 +75,19 @@ function CarouselSlideButtons({ item }) {
 					return res;
 				})
 				.then((res2) => {
-					alert("notify like");
-					console.log(res2);
-					sendNotification(
-						user.id,
-						user.username,
-						item.User.id,
-						"liked",
-						"product",
-						"likeId",
-						res2.data.likeId
-					);
+					if (user.id !== item.User.id) {
+						alert("notify like");
+						console.log(res2);
+						sendNotification(
+							user.id,
+							user.username,
+							item.User.id,
+							"liked",
+							"product",
+							"likeId",
+							res2.data.likeId
+						);
+					}
 				});
 		} else {
 			// alert("not first");

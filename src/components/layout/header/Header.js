@@ -29,29 +29,6 @@ import { ChatContext } from "../../../contexts/ChatContext";
 import SearchResultContainer from "./headerMenus/search/SearchResultContainer";
 import { SocketContext } from "../../../contexts/SocketContext";
 
-const MOCK_CHAT = [
-	{
-		name: "Jane",
-		content:
-			" — I'll be in your neighborhood doing errands this I'll be in your neighborhood	doing errands this I'll be in your neighborhood doing errands this",
-		profilePic: "",
-		chatRoomId: "1",
-	},
-	{
-		name: "Andy",
-		content:
-			" — Wish I could come, but I'm out of town this I'll be in your neighborhood doing errands this I'll be in your neighborhood doing errands this",
-		profilePic: "",
-		chatRoomId: "2",
-	},
-	{
-		name: "Sarah",
-		content: " — Do you have Paris recommendations? Have you ever…",
-		profilePic: "",
-		chatRoomId: "3",
-	},
-];
-
 const Search = styled("div")(({ theme }) => ({
 	position: "relative",
 	borderRadius: theme.shape.borderRadius,
@@ -104,7 +81,7 @@ export default function Header() {
 	const history = useHistory();
 	const [searchKeyword, setSearchKeyword] = useState("");
 	const [searchResult, setSearchResult] = useState([]);
-	const { resetNotificationBadge } = useContext(SocketContext);
+	const { resetNotificationBadge, resetChatBadge } = useContext(SocketContext);
 	// const isMenuOpen = Boolean(anchorEl);
 	// const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 	const location = useLocation();
@@ -130,6 +107,7 @@ export default function Header() {
 
 	//chat toggle
 	const handleChatLogMenuOpen = (event) => {
+		resetChatBadge();
 		setAnchorChatLogEl(event.currentTarget);
 	};
 
@@ -242,12 +220,7 @@ export default function Header() {
 			/>
 
 			{/* for chat */}
-			<LogMenu
-				log={MOCK_CHAT}
-				anchorLogEl={anchorChatLogEl}
-				handleLogMenuClose={handleChatLogMenuClose}
-				type="chat"
-			/>
+			<LogMenu anchorLogEl={anchorChatLogEl} handleLogMenuClose={handleChatLogMenuClose} type="chat" />
 
 			{/* for notification */}
 			<LogMenu
