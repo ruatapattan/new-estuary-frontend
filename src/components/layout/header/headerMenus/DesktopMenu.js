@@ -3,13 +3,18 @@ import { IconButton, Link, Menu, MenuItem } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
+import ForumIcon from "@mui/icons-material/Forum";
 import { useContext } from "react";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
 function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleToggleBackdrop }) {
+	const history = useHistory();
 	const menuId = "primary-search-account-menu";
 	const isMenuOpen = Boolean(anchorEl);
 	const { user } = useContext(AuthContext);
+
+	console.log(user.ownedCommunityId);
 
 	return (
 		<Menu
@@ -47,20 +52,37 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
 					<p>Profile</p>
 				</Link>
 			</MenuItem>
-			<MenuItem onClick={handleToggleBackdrop}>
-				<Box color="text.primary" underline="none" display="flex" alignItems="center">
-					<IconButton
-						size="large"
-						aria-label="account of current user"
-						aria-controls="primary-search-account-menu"
-						aria-haspopup="true"
-						color="inherit"
-					>
-						<AddIcon />
-					</IconButton>
-					<p>Create Community</p>
-				</Box>
-			</MenuItem>
+			{!user.ownedCommunityId ? (
+				<MenuItem onClick={handleToggleBackdrop}>
+					<Box color="text.primary" underline="none" display="flex" alignItems="center">
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="primary-search-account-menu"
+							aria-haspopup="true"
+							color="inherit"
+						>
+							<AddIcon />
+						</IconButton>
+						<p>Create Community</p>
+					</Box>
+				</MenuItem>
+			) : (
+				<MenuItem onClick={() => history.push(`/community/${user.ownedCommunityId}`)}>
+					<Box color="text.primary" underline="none" display="flex" alignItems="center">
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="primary-search-account-menu"
+							aria-haspopup="true"
+							color="inherit"
+						>
+							<ForumIcon />
+						</IconButton>
+						<p>My Community</p>
+					</Box>
+				</MenuItem>
+			)}
 			<MenuItem onClick={handleClickSignOut}>
 				{/* <Link href="#" underline="none" display="flex" alignItems="center"> */}
 				<IconButton
