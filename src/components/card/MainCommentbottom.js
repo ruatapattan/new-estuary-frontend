@@ -13,8 +13,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from 'react';
 import axios from '../../config/axios';
+import Swal from 'sweetalert2';
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
+function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
   // console.log(commentItem.id);
   // console.log(user);
 
@@ -40,10 +41,31 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 
   const handleClickDelete = async () => {
     // console.log(commentItem?.id);
+
+    handleClose();
+
     try {
-      await axios.delete(`comment/${commentItem.id}`);
+      Swal.fire({
+        title: 'Are you sure',
+
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(`comment/${commentItem.id}`);
+
+          setToggleDeleteComment((c) => !c);
+        }
+      });
+
+      // await axios.delete(`comment/${commentItem.id}`);
+
+      // setToggleDeleteComment((c) => !c);
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -107,7 +129,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {countLike.length}
+          {countLike.length ? countLike.length : null}
         </Typography>
       </Grid>
 
@@ -149,6 +171,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
             commentItem={commentItem}
             setToggleEditComment={setToggleEditComment}
           />
+
           <MenuItem onClick={handleClickDelete}>
             <ListItemIcon>
               <DeleteIcon fontSize='small' />
@@ -156,11 +179,6 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
             Delete
           </MenuItem>
         </Menu>
-      </Grid>
-      <Grid item>
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {new Intl.DateTimeFormat('en-US', { dateStyle: 'short' }).format(new Date(commentItem.createdAt))}
-        </Typography>
       </Grid>
     </>
   );

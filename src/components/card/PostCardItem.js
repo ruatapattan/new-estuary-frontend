@@ -12,7 +12,7 @@ import PostCardItemContent from './PostCardItemContent';
 
 // =========================== function for carousel ======================================
 
-function PostCardItem({ postItem, setTogglePostEdit }) {
+function PostCardItem({ postItem, setTogglePostEdit, setTogglePostDelete }) {
   // console.log('xxxx', postItem);
   // const { User, PostPictures, createdAt, content } = postItem;
 
@@ -24,7 +24,11 @@ function PostCardItem({ postItem, setTogglePostEdit }) {
         sx={{
           padding: '10px',
         }}>
-        <PostCardHeader postItem={postItem} setTogglePostEdit={setTogglePostEdit} />
+        <PostCardHeader
+          postItem={postItem}
+          setTogglePostEdit={setTogglePostEdit}
+          setTogglePostDelete={setTogglePostDelete}
+        />
 
         <PostCardContent postItem={postItem} />
         {/* <PostCardContent content={content} /> */}

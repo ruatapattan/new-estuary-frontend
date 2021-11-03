@@ -32,8 +32,10 @@ function CreateComment(props) {
           </Grid>
           <Grid item xs={6} md={5}>
             <TextField
+              sx={{ color: 'orange' }}
               id='standard-basic'
-              label='comment'
+              label='comment...'
+              // placeholder='comment...'
               size='small'
               variant='standard'
               sx={{ width: '100%' }}

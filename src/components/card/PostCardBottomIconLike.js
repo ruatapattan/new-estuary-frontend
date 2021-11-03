@@ -21,10 +21,10 @@ function PostCardBottomIconLike({ isLiked, countLike, postItem, filteredLikeList
   return (
     <Grid item>
       {isLiked && <ThumbUpAltIcon onClick={handleClickLike} />}
-      {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
+      {!isLiked && <ThumbUpOutlinedIcon color='primary' onClick={handleClickLike} />}
 
       <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-        {countLike.length}
+        {countLike.length ? countLike.length : null}
       </Typography>
     </Grid>
   );

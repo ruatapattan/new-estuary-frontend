@@ -13,6 +13,7 @@ import PostCardBottomIconComment from './PostCardBottomIconComment';
 import PostCardBottomIconLink from './PostCardBottomIconLink';
 import LinkDialog from './LinkDialog';
 import axios from '../../config/axios';
+import { Tooltip } from '@mui/material';
 
 function PostCardBottom({ postItem }) {
   const { user } = useContext(AuthContext);
@@ -22,6 +23,7 @@ function PostCardBottom({ postItem }) {
   const [likeLists, setLikeLists] = useState([]);
   const [toggleLike, setToggleLike] = useState(false);
   const [toggleEditComment, setToggleEditComment] = useState(false);
+  const [toggleDeleteComment, setToggleDeleteComment] = useState(false);
   // const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
   // แก้ path เขียน controller
@@ -109,7 +111,7 @@ function PostCardBottom({ postItem }) {
     // callLikeComment();
     fetchComment();
     callLike();
-  }, [toggleComment, toggleLike, toggleEditComment]);
+  }, [toggleComment, toggleLike, toggleEditComment, toggleDeleteComment]);
 
   return (
     <>
@@ -122,15 +124,32 @@ function PostCardBottom({ postItem }) {
           setToggleLike={setToggleLike}
         />
         <PostCardBottomIconComment comment={comment} />
-        <span onClick={() => setOpenDialog(true)}>
+        {/* <span onClick={() => setOpenDialog(true)}>
           <PostCardBottomIconLink />
         </span>
-        <LinkDialog open={openDialog} setOpen={setOpenDialog} />
+        <LinkDialog open={openDialog} setOpen={setOpenDialog} />  */}
+
+        <Tooltip title='Copy link'>
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.protocol}//${window.location.hostname}:${window.location.port}/post/${postItem.id}`,
+              );
+            }}>
+            <PostCardBottomIconLink />
+          </Button>
+        </Tooltip>
       </Grid>
       <CreateComment user={user} postItem={postItem} setToggleComment={setToggleComment} />
       {/* {openCreateComment ? <CreateComment user={user} postItem={postItem} /> : null} */}
 
-      <MainComment postItem={postItem} user={user} comment={comment} setToggleEditComment={setToggleEditComment} />
+      <MainComment
+        postItem={postItem}
+        user={user}
+        comment={comment}
+        setToggleEditComment={setToggleEditComment}
+        setToggleDeleteComment={setToggleDeleteComment}
+      />
     </>
   );
 }

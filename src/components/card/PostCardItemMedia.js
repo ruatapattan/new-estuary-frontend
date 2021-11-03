@@ -45,11 +45,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-function PostCardItemMedia({
-  // PostPictures
-
-  postItem,
-}) {
+function PostCardItemMedia({ postItem }) {
   //===========================  setting carousel ======================================
   const settings = {
     dots: true,
@@ -68,20 +64,20 @@ function PostCardItemMedia({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '300px',
+        width: '375px',
       }}>
       <Box
         style={{
-          width: '500px',
+          width: '375px',
           backgroundColor: '#f6f6f6',
         }}>
         <Slider {...settings}>
-          {postItem.PostPictures.map((item) => (
+          {postItem?.PostPictures.map((item) => (
             <CardMedia
               sx={{ width: '100%', objectFit: 'contain' }}
               component='img'
               // component={type}
-              height='300px'
+              height='375px'
               width='100%'
               // image={item.url}
               image={item.pic}

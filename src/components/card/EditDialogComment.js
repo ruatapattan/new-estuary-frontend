@@ -85,24 +85,25 @@ function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEdit
   return (
     <>
       <BootstrapDialog onClose={handleClose} aria-labelledby='customized-dialog-title' open={open}>
-        <form onSubmit={handleSubmitUpdateComment}>
+        <form onSubmit={handleSubmitUpdateComment} style={{ width: '30vw' }}>
           <BootstrapDialogTitle id='customized-dialog-title' onClose={handleClose}>
-            <Typography variant='h5' gutterBottom component='div' color='#303030'>
+            <Typography variant='h6' gutterBottom component='div' color='#303030'>
               Edit Comment
             </Typography>
           </BootstrapDialogTitle>
-          <DialogContent dividers fullWidth={true} maxWidth={'md'}>
+          <DialogContent dividers fullWidth={true} sx={{ display: 'flex', justifyContent: 'center' }}>
             <TextareaAutosize
               aria-label='minimum height'
-              minRows={3}
+              minRows={10}
+              maxRows={10}
               placeholder='Minimum 3 rows'
-              style={{ width: 200 }}
+              style={{ width: 250 }}
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
           </DialogContent>
-          <DialogActions>
-            <Button type='submit' variant='gradient' endIcon={<SendIcon />} sx={{ height: '50%' }} />
+          <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button type='submit' variant='gradient' endIcon={<SendIcon />} sx={{ height: '40px', width: '70%' }} />
           </DialogActions>
         </form>
       </BootstrapDialog>

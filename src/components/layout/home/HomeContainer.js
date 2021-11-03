@@ -5,8 +5,9 @@ import IconButton from '@mui/material/IconButton';
 import CreatePost from '../../card/CreatePost';
 import { useState, useEffect } from 'react';
 import axios from '../../../config/axios';
-
 import PostCard from '../../card/PostCard';
+import Delete from '@mui/icons-material/Delete';
+
 //=====================================================
 
 //====================================================
@@ -28,10 +29,10 @@ function HomeContainer() {
 
   //=========================================================== set State
   const [post, setPost] = useState([]);
-  // const [toggle, setToggle] = useState(false);
+  const [postfilter, setPostfilter] = useState([]);
   const [togglePost, setTogglePost] = useState(false);
   const [togglePostEdit, setTogglePostEdit] = useState(false);
-  // const [toggleEditPost, setToggle]
+  const [togglePostDelete, setTogglePostDelete] = useState(false);
 
   //=========================================================== fetch post data
   useEffect(() => {
@@ -40,16 +41,14 @@ function HomeContainer() {
         const res = await axios.get('/post');
         setPost(res.data.post);
         // console.log('tttttttttttttt');
-        console.log(res.data.post);
+        // console.log(res.data.post);
       } catch (err) {
         console.log(err);
       }
     };
     fetchPost();
-  }, [togglePost, togglePostEdit]);
+  }, [togglePost, togglePostEdit, togglePostDelete]);
   //=========================================================
-
-  // setToggleSetPost(post);
 
   return (
     <>
@@ -63,8 +62,14 @@ function HomeContainer() {
           mt: '20px',
         }}>
         <CreatePost setTogglePost={setTogglePost} />
+
         {post.map((postItem) => (
-          <PostCard key={postItem.id} postItem={postItem} setTogglePostEdit={setTogglePostEdit} />
+          <PostCard
+            key={postItem.id}
+            postItem={postItem}
+            setTogglePostEdit={setTogglePostEdit}
+            setTogglePostDelete={setTogglePostDelete}
+          />
         ))}
       </Box>
     </>

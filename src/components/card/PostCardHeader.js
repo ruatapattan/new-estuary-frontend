@@ -14,9 +14,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from '../../config/axios';
 import { AuthContext } from '../../contexts/AuthContext';
+import Swal from 'sweetalert2';
 
-function PostCardHeader({ postItem }) {
-  const { createdAt, User } = postItem;
+function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
+  // console.log(postItem);
+  // const { createdAt, User } = postItem;
 
   const { user } = useContext(AuthContext);
   // console.log(user);
@@ -39,9 +41,27 @@ function PostCardHeader({ postItem }) {
 
   const handleClickDelete = async () => {
     try {
-      await axios.delete(`/post/${postItem.id}`);
+      // const res = await axios.delete(`/post/${postItem.id}`);
+
+      // setTogglePostDelete((c) => !c);
+
+      Swal.fire({
+        title: 'Are you sure',
+
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios.delete(`/post/${postItem.id}`);
+
+          setTogglePostDelete((c) => !c);
+        }
+      });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
@@ -52,13 +72,17 @@ function PostCardHeader({ postItem }) {
           <Avatar
             aria-label='recipe'
             // src='https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=871&q=80'
-            src={User.profilePic}
+            src={postItem?.User?.profilePic}
             sx={{ width: 40, height: 40 }}></Avatar>
         }
-        title={`${User.firstName} ${User.lastName} `}
+        title={
+          <Typography variant='body3' color='#190505'>
+            {postItem.User.username}
+          </Typography>
+        }
         subheader={
-          <Typography color='text.disabled' variant='body2'>
-            {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(createdAt))}
+          <Typography color='#65676b' variant='body2'>
+            {new Intl.DateTimeFormat('en-US', { dateStyle: 'long' }).format(new Date(postItem.createdAt))}
           </Typography>
         }
         action={
@@ -94,7 +118,12 @@ function PostCardHeader({ postItem }) {
                 </ListItemIcon>
                 Edit
               </MenuItem>
-              <EditDialogPost open={openDialog} setOpen={setOpenDialog} postItem={postItem} />
+              <EditDialogPost
+                open={openDialog}
+                setOpen={setOpenDialog}
+                postItem={postItem}
+                setTogglePostEdit={setTogglePostEdit}
+              />
 
               <MenuItem onClick={handleClickDelete}>
                 <ListItemIcon>

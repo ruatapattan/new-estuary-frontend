@@ -10,7 +10,7 @@ import MainCommentAvatar from './MainCommentAvatar';
 import MainCommentContent from './MainCommentContent';
 import MainCommentbottom from './MainCommentbottom';
 
-function MainComment({ postItem, user, comment, setToggleEditComment }) {
+function MainComment({ postItem, user, comment, setToggleEditComment, setToggleDeleteComment }) {
   // console.log(postItem);
   // console.log(comment);
 
@@ -52,11 +52,17 @@ function MainComment({ postItem, user, comment, setToggleEditComment }) {
             <Paper sx={{ padding: '5px', width: '100%', background: '#f6f6f6' }} elevation={3}>
               <MainCommentContent
                 content={commentItem.content}
-                name={`${commentItem.User.firstName} ${commentItem.User.lastName}`}
+                name={commentItem.User.username}
+                time={commentItem.createdAt}
               />
 
               <Grid container spacing={5} pt='15px'>
-                <MainCommentbottom commentItem={commentItem} user={user} setToggleEditComment={setToggleEditComment} />
+                <MainCommentbottom
+                  commentItem={commentItem}
+                  user={user}
+                  setToggleEditComment={setToggleEditComment}
+                  setToggleDeleteComment={setToggleDeleteComment}
+                />
               </Grid>
             </Paper>
           </Stack>

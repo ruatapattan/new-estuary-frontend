@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
-import { Grid, Paper } from '@mui/material';
+import { CircularProgress, Grid, Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
@@ -21,7 +21,6 @@ import { green, purple, red } from '@mui/material/colors';
 import SendIcon from '@mui/icons-material/Send';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import axios from 'axios';
 
@@ -67,7 +66,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 // ============================================ EditDialogPost ============================================
-function EditDialogPost({ open, setOpen, postItem }) {
+function EditDialogPost({ open, setOpen, postItem, setTogglePostEdit }) {
   // console.log(postItem);
   const { PostPictures } = postItem;
 
@@ -82,8 +81,8 @@ function EditDialogPost({ open, setOpen, postItem }) {
 
   const [sendPic, setSendPic] = useState([]);
   const [previewpic, setPreviewPic] = useState([]); // ในเก็บตอน preview
-
   const [content, SetContent] = useState(postItem.content);
+  const [inProgress, setInProgress] = useState(false);
 
   // ====================== (2) function ดักเหตุการณ์ที่เกิดในช่อง input picture ========================
   const handleChangeFile = (e) => {
@@ -115,9 +114,6 @@ function EditDialogPost({ open, setOpen, postItem }) {
       setPic(newPic);
     }
 
-    // const formData = new FormData();
-    // formData.append('pic', pic);
-
     await axios.delete(`/post/postPicture/${idx}`);
   };
 
@@ -125,6 +121,7 @@ function EditDialogPost({ open, setOpen, postItem }) {
     // console.log('tttttttttttttttttttt');
 
     e.preventDefault();
+    setInProgress(true);
     const formData = new FormData();
     // 1. content
     formData.append('content', content);
@@ -139,6 +136,9 @@ function EditDialogPost({ open, setOpen, postItem }) {
 
     // ส่งไป Backend
     await axios.put(`/post`, formData);
+    setInProgress(false);
+    setOpen(false);
+    setTogglePostEdit((c) => !c);
   };
 
   return (
@@ -152,86 +152,93 @@ function EditDialogPost({ open, setOpen, postItem }) {
           </Typography>
         </BootstrapDialogTitle>
         <DialogContent dividers>
-          <form onSubmit={handleUpdatePost}>
-            <Paper elevation={0} sx={{ p: '16px', width: '100%', mb: '20px' }}>
-              <Stack sx={{ display: 'flex', justifyContent: 'center', mb: '20px' }}>
-                <Stack sx={{ marginBottom: '20px' }}>
-                  <TextareaAutosize
-                    placeholder='...'
-                    style={{ width: 280 }}
-                    onChange={(e) => SetContent(e.target.value)}
-                    value={content}
-                    maxRows={6}
-                    aria-label='maximum height'
-                    placeholder='Maximum 4 rows'
-                    defaultValue='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          <form onSubmit={handleUpdatePost} style={{ width: '400px', padding: '16px', marginBottom: '20px' }}>
+            {/* <Paper elevation={0} sx={{ p: '16px', width: '375px', mb: '20px' }}> */}
+            <Stack sx={{ display: 'flex', justifyContent: 'center', mb: '10px' }}>
+              <Stack sx={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+                <Typography color='#303030' sx={{ mb: '10px' }} variant='h5'>
+                  Content :
+                </Typography>
+                <TextareaAutosize
+                  placeholder='...'
+                  onChange={(e) => SetContent(e.target.value)}
+                  value={content}
+                  minRows={8}
+                  maxRows={8}
+                  aria-label='maximum height'
+                  placeholder='Maximum 4 rows'
+                  defaultValue='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                       ut labore et dolore magna aliqua.'
-                  />
-                </Stack>
-                <Stack>
+                />
+              </Stack>
+              <Stack>
+                {inProgress ? (
+                  <CircularProgress sx={{ color: 'text.primary' }} />
+                ) : (
                   <Button
                     type='submit'
                     variant='gradient'
                     endIcon={<SendIcon />}
                     color='success'
-                    sx={{ height: '50%', width: '30%', margin: 'auto' }}
+                    sx={{ height: '40px', width: '60%', margin: 'auto' }}
                   />
-                </Stack>
+                )}
               </Stack>
+            </Stack>
 
-              <Stack justifyContent='space-evenly' direction='row' alignItems='center' spacing={2} mt='10px'>
-                <label htmlFor='icon-button'>
-                  <Input accept='image/*' id='icon-button' type='file' onChange={handleChangeFile} multiple />
-                  {/* <input multiple type='file' id='img' name='img' accept='image/*' onChange={handlepic} /> */}
-                  <IconButton color='primary' aria-label='upload picture' component='span'>
-                    <InsertPhotoIcon
-                      sx={{
-                        fontSize: 40,
-                        background: `linear-gradient(90deg,  rgba(64,169,223,1) 20%,rgba(115,194,130,1) 100%)`,
-                        borderRadius: '8px',
-                      }}
-                    />
-                  </IconButton>
-                  <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-                    Choose Photo
-                  </Typography>
-                </label>
-              </Stack>
+            <Stack justifyContent='space-evenly' direction='row' alignItems='center' spacing={2} mt='10px'>
+              <label htmlFor='icon-button'>
+                <Input accept='image/*' id='icon-button' type='file' onChange={handleChangeFile} multiple />
+                {/* <input multiple type='file' id='img' name='img' accept='image/*' onChange={handlepic} /> */}
+                <IconButton color='primary' aria-label='upload picture' component='span'>
+                  <InsertPhotoIcon
+                    sx={{
+                      fontSize: 40,
+                      background: `linear-gradient(90deg,  rgba(64,169,223,1) 20%,rgba(115,194,130,1) 100%)`,
+                      borderRadius: '8px',
+                    }}
+                  />
+                </IconButton>
+                <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
+                  Choose Photo
+                </Typography>
+              </label>
+            </Stack>
 
-              {pic.map((item) => (
-                <Grid container display='flex' justifyContent='center' alignItems='center' mt='10px'>
-                  <>
-                    <Grid item mr='15px'>
-                      <img src={item.pic} style={{ width: '125px', height: '115px' }} />
-                    </Grid>
-
-                    <Grid item>
-                      {/* <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(i)} /> */}
-                      <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(item.id)} />
-                    </Grid>
-                  </>
-                </Grid>
-              ))}
-
-              {/* preview */}
-              {!!previewpic.length && (
+            {pic.map((item) => (
+              <Grid container display='flex' justifyContent='center' alignItems='center' mt='10px'>
                 <>
-                  {previewpic.map((p, i) => (
-                    <Grid container display='flex' justifyContent='center' mt='10px'>
-                      <>
-                        <Grid item mr='15px'>
-                          <img src={p} style={{ width: '125px', height: '115px' }} />
-                        </Grid>
+                  <Grid item mr='15px'>
+                    <img src={item.pic} style={{ width: '125px', height: '115px' }} />
+                  </Grid>
 
-                        <Grid item>
-                          <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(i)} />
-                        </Grid>
-                      </>
-                    </Grid>
-                  ))}
+                  <Grid item>
+                    {/* <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(i)} /> */}
+                    <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(item.id)} />
+                  </Grid>
                 </>
-              )}
-            </Paper>
+              </Grid>
+            ))}
+
+            {/* preview */}
+            {!!previewpic.length && (
+              <>
+                {previewpic.map((p, i) => (
+                  <Grid container display='flex' justifyContent='center' mt='10px'>
+                    <>
+                      <Grid item mr='15px'>
+                        <img src={p} style={{ width: '125px', height: '115px' }} />
+                      </Grid>
+
+                      <Grid item>
+                        <CancelIcon sx={{ fontSize: 25, color: red[400] }} onClick={() => onRemove(i)} />
+                      </Grid>
+                    </>
+                  </Grid>
+                ))}
+              </>
+            )}
+            {/* </Paper> */}
           </form>
         </DialogContent>
       </BootstrapDialog>

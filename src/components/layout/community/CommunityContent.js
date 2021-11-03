@@ -7,6 +7,7 @@ import CreatePost from '../../card/CreatePost';
 import PostCard from '../../card/PostCard';
 import { useState, useEffect } from 'react';
 import axios from '../../../config/axios';
+import { useParams } from 'react-router-dom';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -20,19 +21,39 @@ const ExpandMore = styled((props) => {
 }));
 
 function CommunityContent() {
+  const param = useParams();
   const [post, setPost] = useState([]);
+  const [togglePostCommunity, setTogglePostCommunity] = useState(false);
+  const [communityName, setCommunityName] = useState('');
+  // console.log('******************************');
+  // console.log(post);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get('/post');
-        setPost(res.data.post);
+        const res = await axios.get(`/postCommunity/${param.id}`);
+        setPost(res.data.postCommunity);
       } catch (err) {
         console.log(err);
       }
     };
+    const fetchNameCommunity = async () => {
+      try {
+        const res = await axios.get(`/postCommunity/communityName/${param.id}`);
+        //localhost:8000/postCommunity/communityName/6
+        http: setCommunityName(res.data.communityName);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchNameCommunity();
     fetchPost();
-  }, []);
+  }, [togglePostCommunity]);
+
+  // console.log('**********');
+  // console.log(communityName);
+
   return (
     <>
       <Box
@@ -44,12 +65,14 @@ function CommunityContent() {
           width: { xs: '100%', md: '60%' },
           mt: '20px',
         }}>
-        <Box mb='20px' width='100%' display='flex' justifyContent='center'>
-          <Typography variant='h3' component='h3' mb='20px'>
-            Community
+        <Box mb='20px' width='100%' display='flex' justifyContent='center' alignItems='flex-start'>
+          <Typography variant='h2' component='h3' mb='20px'>
+            {/* Community */}
+            {/* {post[0]?.Community?.name} */}
+            {communityName.name}
           </Typography>
         </Box>
-        <CreatePost />
+        <CreatePost communityId={param.id} setTogglePostCommunity={setTogglePostCommunity} />
         {post.map((postItem) => (
           <PostCard key={postItem.id} postItem={postItem} />
         ))}

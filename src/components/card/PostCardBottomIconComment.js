@@ -12,10 +12,10 @@ function PostCardBottomIconComment({ comment }) {
     <>
       {/* {comment.map((commentItem) => ( */}
       <Grid item>
-        <ChatBubbleOutlineOutlinedIcon />
+        <ChatBubbleOutlineOutlinedIcon color='primary' />
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
           {/* 5 */}
-          {comment.length}
+          {comment.length ? comment.length : null}
           {/* {commentItem.lenght} */}
         </Typography>
       </Grid>

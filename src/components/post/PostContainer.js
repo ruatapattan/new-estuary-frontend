@@ -24,22 +24,46 @@ function PostContainer() {
   // const [toggle, setToggle] = useState(false);
   const [togglePost, setToggleSetPost] = useState(false);
   const param = useParams();
+  const [togglePostEdit, setTogglePostEdit] = useState(false);
+  const [togglePostDelete, setTogglePostDelete] = useState(false);
 
   //=========================================================== fetch post data
+
+  // useEffect(() => {
+  //   const fetchPostById = async () => {
+  //     try {
+  //       // const res = await axios.get(`/post/${param.id}`);
+  //       // const res = await axios.get(`/post/${param.id}`);
+  //       console.log('#################');
+  //       console.log(param.id);
+  //       // setPostItem(res.data.post);
+  //       // console.log('lllllllllllllllllllll');
+  //       // console.log(res.data.post);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   fetchPostById();
+  // }, [togglePost, togglePostEdit, togglePostDelete]);
+
   useEffect(() => {
     const fetchPostById = async () => {
       try {
-        // const res = await axios.get(`/post/${param.id}`);
-        const res = await axios.get(`/post/6`);
+        const res = await axios.get(`/post/${param.id}`);
         setPostItem(res.data.post);
-        console.log('lllllllllllllllllllll');
-        console.log(res.data.post);
+        // console.log('*************');
+        // console.log(res.data.post);
+        // console.log('*************');
+        // console.log(postItem);
       } catch (err) {
         console.log(err);
       }
     };
     fetchPostById();
-  }, []);
+  }, [togglePost, togglePostEdit, togglePostDelete]);
+  //=========================================================
+
+  // console.log(postItem);
 
   //=========================================================
 
@@ -54,7 +78,14 @@ function PostContainer() {
           width: { xs: '100%', md: '60%' },
           mt: '20px',
         }}>
-        {/* <PostCard /> */}
+        {/* check ค่า */}
+        {postItem.id ? (
+          <PostCard
+            postItem={postItem}
+            setTogglePostEdit={setTogglePostEdit}
+            setTogglePostDelete={setTogglePostDelete}
+          />
+        ) : null}
       </Box>
     </>
   );
