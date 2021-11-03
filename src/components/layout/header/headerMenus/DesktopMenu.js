@@ -4,17 +4,25 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import ForumIcon from "@mui/icons-material/Forum";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import axios from "../../../../config/axios";
 
 function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleToggleBackdrop }) {
 	const history = useHistory();
 	const menuId = "primary-search-account-menu";
 	const isMenuOpen = Boolean(anchorEl);
 	const { user } = useContext(AuthContext);
+	const [ownedCommunityId, setOwnedCommunityId] = useState(null);
 
-	console.log(user.ownedCommunityId);
+	useEffect(() => {
+		const fetch = async () => {
+			const ownedCommunityId = await axios.get(`/user/${user.id}/ownedCommunity`);
+			setOwnedCommunityId(ownedCommunityId.data.ownedCommunityId);
+		};
+		fetch();
+	}, [user]);
 
 	return (
 		<Menu
@@ -52,7 +60,7 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
 					<p>Profile</p>
 				</Link>
 			</MenuItem>
-			{!user.ownedCommunityId ? (
+			{!ownedCommunityId ? (
 				<MenuItem onClick={handleToggleBackdrop}>
 					<Box color="text.primary" underline="none" display="flex" alignItems="center">
 						<IconButton
@@ -68,7 +76,7 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
 					</Box>
 				</MenuItem>
 			) : (
-				<MenuItem onClick={() => history.push(`/community/${user.ownedCommunityId}`)}>
+				<MenuItem onClick={() => history.push(`/community/${ownedCommunityId}`)}>
 					<Box color="text.primary" underline="none" display="flex" alignItems="center">
 						<IconButton
 							size="large"
