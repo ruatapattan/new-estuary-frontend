@@ -30,20 +30,23 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 
   const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
+  const [clickCloseMenu, setClickCloseMenu] = useState(false);
+
   // console.log(toggleEditComment);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
+    setClickCloseMenu((cur) => !cur);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const handleClickEdit = () => {
-    handleClose();
-    setOpenDialog(true);
-  };
+  // const handleClickEdit = () => {
+  //   handleClose();
+  //   setOpenDialog(true);
+  // };
   const handleClickDelete = async () => {
     // console.log(commentItem?.id);
     handleClose();
@@ -138,6 +141,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
       });
     }
   };
+  console.log(`clickCloseMenu`, clickCloseMenu);
 
   return (
     <>
@@ -163,44 +167,44 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
             <MoreHorizIcon open={openDialog} setOpen={setOpenDialog} />
           </Button>
         ) : null}
+        {clickCloseMenu && (
+          <Menu
+            id='demo-positioned-menu'
+            aria-labelledby='demo-positioned-button'
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}>
+            <MenuItem onClick={() => setOpenDialog(true)}>
+              <ListItemIcon>
+                <EditIcon fontSize='small' />
+              </ListItemIcon>
+              Edit
+            </MenuItem>
 
-        <Menu
-          id='demo-positioned-menu'
-          aria-labelledby='demo-positioned-button'
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}>
-          <MenuItem onClick={() => setOpenDialog(true)}>
-            <ListItemIcon>
-              <EditIcon fontSize='small' />
-            </ListItemIcon>
-            Edit
-          </MenuItem>
-          <EditDialogComment
-            // onClick={() => handleClose()}
+            <MenuItem onClick={handleClickDelete}>
+              <ListItemIcon>
+                <DeleteIcon fontSize='small' />
+              </ListItemIcon>
+              Delete
+            </MenuItem>
+          </Menu>
+        )}
 
-            // onClick={handleClose}
-            // handleCloseMenu={handleClose}
-            open={openDialog}
-            setOpen={setOpenDialog}
-            commentItem={commentItem}
-            setToggleEditComment={setToggleEditComment}
-          />
-          <MenuItem onClick={handleClickDelete}>
-            <ListItemIcon>
-              <DeleteIcon fontSize='small' />
-            </ListItemIcon>
-            Delete
-          </MenuItem>
-        </Menu>
+        <EditDialogComment
+          open={openDialog}
+          setOpen={setOpenDialog}
+          commentItem={commentItem}
+          setToggleEditComment={setToggleEditComment}
+          setClickCloseMenu={setClickCloseMenu}
+        />
       </Grid>
     </>
   );

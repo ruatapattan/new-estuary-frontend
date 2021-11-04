@@ -66,12 +66,13 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 // ============================================ EditDialogPost ============================================
-function EditDialogPost({ open, setOpen, postItem, setTogglePostEdit }) {
+function EditDialogPost({ open, setOpen, postItem, setTogglePostEdit, setClickCloseMenu }) {
   // console.log(postItem);
   const { PostPictures } = postItem;
 
   const handleClose = () => {
     setOpen(false);
+    setClickCloseMenu((cur) => !cur);
   };
 
   //=================================================== (1) State Pic
@@ -138,6 +139,7 @@ function EditDialogPost({ open, setOpen, postItem, setTogglePostEdit }) {
     await axios.put(`/post`, formData);
     setInProgress(false);
     setOpen(false);
+    setClickCloseMenu((cur) => !cur);
     setTogglePostEdit((c) => !c);
   };
 

@@ -52,7 +52,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEditComment }) {
+function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEditComment, setClickCloseMenu }) {
   const { user } = useContext(AuthContext);
 
   // console.log(postItem);
@@ -72,6 +72,7 @@ function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEdit
   // }, []);
 
   const handleClose = () => {
+    setClickCloseMenu((cur) => !cur);
     setOpen(false);
   };
 
@@ -82,6 +83,7 @@ function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEdit
       const res = await axios.put(`/comment/${id}`, { content });
       // console.log(res.data);
       setOpen(false);
+      setClickCloseMenu((cur) => !cur);
       setToggleEditComment((curr) => !curr);
     } catch (err) {
       // console.dir(err);

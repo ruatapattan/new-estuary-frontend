@@ -26,8 +26,10 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
   const [ShowEditPost, setShowEditPost] = useState(false);
   const open = Boolean(anchorEl);
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [clickCloseMenu, setClickCloseMenu] = useState(false);
 
   const handleClick = (event) => {
+    setClickCloseMenu((cur) => !cur);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -90,40 +92,43 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
               </Button>
             ) : null}
 
-            <Menu
-              id='demo-positioned-menu'
-              aria-labelledby='demo-positioned-button'
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}>
-              <MenuItem onClick={() => setOpenDialog(true)}>
-                <ListItemIcon>
-                  <EditIcon fontSize='small' />
-                </ListItemIcon>
-                Edit
-              </MenuItem>
-              <EditDialogPost
-                open={openDialog}
-                setOpen={setOpenDialog}
-                postItem={postItem}
-                setTogglePostEdit={setTogglePostEdit}
-              />
+            {clickCloseMenu && (
+              <Menu
+                id='demo-positioned-menu'
+                aria-labelledby='demo-positioned-button'
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}>
+                <MenuItem onClick={() => setOpenDialog(true)}>
+                  <ListItemIcon>
+                    <EditIcon fontSize='small' />
+                  </ListItemIcon>
+                  Edit
+                </MenuItem>
 
-              <MenuItem onClick={handleClickDelete}>
-                <ListItemIcon>
-                  <DeleteIcon fontSize='small' />
-                </ListItemIcon>
-                Delete
-              </MenuItem>
-            </Menu>
+                <MenuItem onClick={handleClickDelete}>
+                  <ListItemIcon>
+                    <DeleteIcon fontSize='small' />
+                  </ListItemIcon>
+                  Delete
+                </MenuItem>
+              </Menu>
+            )}
+            <EditDialogPost
+              open={openDialog}
+              setOpen={setOpenDialog}
+              postItem={postItem}
+              setTogglePostEdit={setTogglePostEdit}
+              setClickCloseMenu={setClickCloseMenu}
+            />
           </div>
         }
       />
