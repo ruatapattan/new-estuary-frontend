@@ -137,7 +137,7 @@ function CardProfile({
         minWidth: '250px'
       }}
     >
-      <CardActionArea onClick={() => history.push(`/product/${id}`)}>
+      <CardActionArea>
         <CardHeader
           action={
             <div>
@@ -183,7 +183,13 @@ function CardProfile({
           }
         />
 
-        <CardMedia component="img" height="194" image={picProduct} alt="Paella dish" />
+        <CardMedia
+          onClick={() => history.push(`/product/${id}`)}
+          component="img"
+          height="194"
+          image={picProduct}
+          alt="Paella dish"
+        />
 
         <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box>
