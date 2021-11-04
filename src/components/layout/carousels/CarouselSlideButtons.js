@@ -76,7 +76,7 @@ function CarouselSlideButtons({ item }) {
 				})
 				.then((res2) => {
 					if (user.id !== item.User.id) {
-						alert("notify like");
+						// alert("notify like");
 						console.log(res2);
 						sendNotification(
 							user.id,

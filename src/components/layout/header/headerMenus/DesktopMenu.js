@@ -17,11 +17,13 @@ function DesktopMenu({ anchorEl, handleMenuClose, handleClickSignOut, handleTogg
 	const [ownedCommunityId, setOwnedCommunityId] = useState(null);
 
 	useEffect(() => {
-		const fetch = async () => {
-			const ownedCommunityId = await axios.get(`/user/${user.id}/ownedCommunity`);
-			setOwnedCommunityId(ownedCommunityId.data.ownedCommunityId);
-		};
-		fetch();
+		if (user) {
+			const fetch = async () => {
+				const ownedCommunityId = await axios.get(`/user/${user.id}/ownedCommunity`);
+				setOwnedCommunityId(ownedCommunityId.data.ownedCommunityId);
+			};
+			fetch();
+		}
 	}, [user]);
 
 	return (
