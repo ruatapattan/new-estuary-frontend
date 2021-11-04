@@ -39,6 +39,7 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
   };
 
   const handleClickDelete = async () => {
+    handleClose();
     try {
       Swal.fire({
         title: 'Are you sure',
@@ -50,9 +51,9 @@ function PostCardHeader({ postItem, setTogglePostEdit, setTogglePostDelete }) {
         confirmButtonText: 'Yes',
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.delete(`/post/${postItem.id}`);
-
-          setTogglePostDelete((c) => !c);
+          axios.delete(`/post/${postItem.id}`).then(() => {
+            setTogglePostDelete((c) => !c);
+          });
         }
       });
     } catch (err) {

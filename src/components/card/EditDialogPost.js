@@ -119,7 +119,7 @@ function EditDialogPost({ open, setOpen, postItem, setTogglePostEdit }) {
 
   const handleUpdatePost = async (e) => {
     // console.log('tttttttttttttttttttt');
-
+    // handleClose();
     e.preventDefault();
     setInProgress(true);
     const formData = new FormData();

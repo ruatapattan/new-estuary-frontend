@@ -66,11 +66,17 @@ function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEdit
   //   const handleClickOpen = () => {
   //     setOpen(true);
   //   };
+
+  // useEffect(() => {
+  //   handleCloseMenu();
+  // }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleSubmitUpdateComment = async (e) => {
+    handleClose();
     e.preventDefault();
     try {
       const res = await axios.put(`/comment/${id}`, { content });

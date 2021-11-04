@@ -15,7 +15,7 @@ import axios from '../../config/axios';
 import { SocketContext } from '../../contexts/SocketContext';
 import Swal from 'sweetalert2';
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
+function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
   console.log('commentItem', commentItem);
   // console.log(user);
   const { sendNotification } = useContext(SocketContext);
@@ -40,8 +40,13 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
     setAnchorEl(null);
   };
 
+  const handleClickEdit = () => {
+    handleClose();
+    setOpenDialog(true);
+  };
   const handleClickDelete = async () => {
     // console.log(commentItem?.id);
+    handleClose();
     try {
       Swal.fire({
         title: 'Are you sure',
@@ -53,9 +58,9 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
         confirmButtonText: 'Yes',
       }).then((result) => {
         if (result.isConfirmed) {
-          axios.delete(`comment/${commentItem.id}`);
-
-          // setToggleDeleteComment((c) => !c);
+          axios.delete(`comment/${commentItem.id}`).then(() => {
+            setToggleDeleteComment((c) => !c);
+          });
         }
       });
     } catch (err) {
@@ -180,6 +185,10 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
             Edit
           </MenuItem>
           <EditDialogComment
+            // onClick={() => handleClose()}
+
+            // onClick={handleClose}
+            // handleCloseMenu={handleClose}
             open={openDialog}
             setOpen={setOpenDialog}
             commentItem={commentItem}
@@ -192,11 +201,6 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
             Delete
           </MenuItem>
         </Menu>
-      </Grid>
-      <Grid item>
-        <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {new Intl.DateTimeFormat('en-US', { dateStyle: 'short' }).format(new Date(commentItem.createdAt))}
-        </Typography>
       </Grid>
     </>
   );
