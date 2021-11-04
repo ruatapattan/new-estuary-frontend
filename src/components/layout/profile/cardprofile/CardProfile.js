@@ -1,5 +1,15 @@
 import React from 'react';
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
+import {
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Tooltip,
+  Typography
+} from '@mui/material';
+
 import CardHeader from '@mui/material/CardHeader';
 import { Box, display } from '@mui/system';
 import Button from '@mui/material/Button';
@@ -30,7 +40,7 @@ function CardProfile({
   category,
   createdAt,
   Likes,
-  item_usersLiked,
+  item_usersLiked
 }) {
   const product = {
     id,
@@ -39,13 +49,13 @@ function CardProfile({
     price,
     externalLink,
     description,
-    category,
+    category
   };
 
   // console.log(id);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -58,6 +68,7 @@ function CardProfile({
   const [currentLikeCount, setCurrentLikeCount] = useState(0);
   const [usersLiked, setUsersLiked] = useState([]);
   const [firstLike, setFirstLike] = useState(false);
+  const history = useHistory();
 
   // console.log(item.name, item.id, item);
   console.log('usersliked', usersLiked);
@@ -67,7 +78,7 @@ function CardProfile({
   // too many rerender here
   useEffect(() => {
     setUsersLiked(item_usersLiked);
-    item_usersLiked.map((elem) => {
+    item_usersLiked.map(elem => {
       if (+elem.userId === +user?.id && elem.status === true) {
         setIsLiked(true);
       }
@@ -91,23 +102,23 @@ function CardProfile({
   const handleClickLike = async () => {
     if (usersLiked.length === 0) {
       alert('first like');
-      axios.post('/like', { productId: id }).then((res) => {
-        setIsLiked((cur) => !cur);
-        setCurrentLikeCount((cur) => cur + 1);
-        setFirstLike((cur) => !cur);
+      axios.post('/like', { productId: id }).then(res => {
+        setIsLiked(cur => !cur);
+        setCurrentLikeCount(cur => cur + 1);
+        setFirstLike(cur => !cur);
       });
     } else {
-      usersLiked.map((elem) => {
+      usersLiked.map(elem => {
         if (+elem.userId === +user.id) {
-          axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then((res) => {
+          axios.put(`/like/${elem.id}`, { isLiked: !isLiked }).then(res => {
             const currentType = isLiked;
-            setIsLiked((cur) => !cur);
-            setCurrentLikeCount((cur) => (currentType ? cur - 1 : cur + 1));
+            setIsLiked(cur => !cur);
+            setCurrentLikeCount(cur => (currentType ? cur - 1 : cur + 1));
           });
         } else {
-          axios.post('/like', { productId: id }).then((res) => {
-            setIsLiked((cur) => !cur);
-            setCurrentLikeCount((cur) => cur + 1);
+          axios.post('/like', { productId: id }).then(res => {
+            setIsLiked(cur => !cur);
+            setCurrentLikeCount(cur => cur + 1);
           });
         }
       });
@@ -123,63 +134,77 @@ function CardProfile({
         margin: 2,
         display: 'flex',
         flexWrap: 'wrap',
-        minWidth: '250px',
-      }}>
+        minWidth: '250px'
+      }}
+    >
       <CardActionArea>
         <CardHeader
           action={
             <div>
-              <Button
-                id='demo-positioned-button'
-                aria-controls='demo-positioned-menu'
-                aria-haspopup='true'
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}>
-                <MoreHorizIcon />
-              </Button>
-              <Menu
-                id='demo-positioned-menu'
-                aria-labelledby='demo-positioned-button'
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}>
-                <Link
-                  to={{
-                    pathname: `/editproduct/${id}`,
-                    state: { product },
-                  }}>
-                  <MenuItem onClick={handleClose}>Edit</MenuItem>
-                </Link>
-                <MenuItem onClick={() => handleClickDelete(id)}>Delete</MenuItem>
-              </Menu>
+              {User.id == user.id && (
+                <>
+                  <Button
+                    id="demo-positioned-button"
+                    aria-controls="demo-positioned-menu"
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <MoreHorizIcon />
+                  </Button>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left'
+                    }}
+                  >
+                    <Link
+                      to={{
+                        pathname: `/editproduct/${id}`,
+                        state: { product }
+                      }}
+                    >
+                      <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    </Link>
+                    <MenuItem onClick={() => handleClickDelete(id)}>Delete</MenuItem>
+                  </Menu>
+                </>
+              )}
             </div>
           }
         />
 
-        <CardMedia component='img' height='194' image={picProduct} alt='Paella dish' />
+        <CardMedia
+          onClick={() => history.push(`/product/${id}`)}
+          component="img"
+          height="194"
+          image={picProduct}
+          alt="Paella dish"
+        />
 
         <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Box>
-            <Typography color='text.primary' gutterBottom variant='h5' component='div'>
+            <Typography color="text.primary" gutterBottom variant="h5" component="div">
               {productName}
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               By: {User.username}
             </Typography>
           </Box>
           <Box>
-            <Typography color='text.secondary' gutterBottom variant='body1' component='div'>
+            <Typography color="text.secondary" gutterBottom variant="body1" component="div">
               Price
             </Typography>
-            <Typography variant='body2' color='text.secondary'>
+            <Typography variant="body2" color="text.secondary">
               {+price} {`\u0E3F`}
             </Typography>
           </Box>
@@ -193,10 +218,11 @@ function CardProfile({
           justifyContent: 'space-between',
 
           paddingX: '0.5rem',
-          width: '100%',
-        }}>
+          width: '100%'
+        }}
+      >
         <Box>
-          <IconButton aria-label='add to favorites'>
+          <IconButton aria-label="add to favorites">
             {isLiked ? (
               <FavoriteIcon sx={{ fontSize: '1.5rem', color: 'red' }} onClick={handleClickLike} />
             ) : (
@@ -204,23 +230,38 @@ function CardProfile({
             )}
             <Typography>{currentLikeCount}</Typography>
           </IconButton>
-          <IconButton aria-label='share'>
+
+          {/* <IconButton aria-label="share">
             <ShareIcon sx={{ fontSize: '1.5rem' }} />
-          </IconButton>
+          </IconButton> */}
+
+          <Tooltip title="Copy link">
+            <IconButton
+              aria-label="share"
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `${window.location.protocol}//${window.location.hostname}:${window.location.port}/product/${id}`
+                );
+              }}
+            >
+              <ShareIcon sx={{ fontSize: '1.5rem' }} />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box>
           {Math.round(createdAgo(createdAt).time)} {createdAgo(createdAt).unit} Ago
         </Box>
       </CardActions>
       <Typography
-        variant='body2'
-        color='text.secondary'
+        variant="body2"
+        color="text.secondary"
         sx={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           paddingBottom: '0.5rem',
-          margin: '1rem',
-        }}>
+          margin: '1rem'
+        }}
+      >
         {description === 'undefined' ? 'No description ' : description}
       </Typography>
     </Card>

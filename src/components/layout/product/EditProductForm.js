@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from '../../../config/axios';
 import MenuItem from '@mui/material/MenuItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Box } from '@mui/system';
 import { Button, Input, TextField } from '@mui/material';
 import Swal from 'sweetalert2';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 function EditProductForm() {
   const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
   const location = useLocation();
   const history = useHistory();
-
+  const { user } = useContext(AuthContext);
   const [category, setCategory] = useState(location.state.product.category);
   const [name, setName] = useState(location.state.product.productName);
   const [description, setDescription] = useState(location.state.product.description);
@@ -83,7 +84,7 @@ function EditProductForm() {
         showConfirmButton: false,
         timer: 1500
       });
-      history.push('/profile');
+      history.push(`/profile/${user.id}`);
       window.location.reload();
     } catch (err) {
       console.log(err);

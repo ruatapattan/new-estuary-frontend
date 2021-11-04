@@ -411,7 +411,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
             }}
           >
             <p>Price:</p>
-            <p>{product?.price} Bath</p>
+            <p>{product?.price} Baht</p>
           </Box>
         </Box>
         {ispurchased && (
