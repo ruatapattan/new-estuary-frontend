@@ -4,7 +4,7 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import Typography from '@mui/material/Typography';
 import { useState, useContext } from 'react';
 
-function PostCardBottomIconComment({ comment }) {
+function PostCardBottomIconComment({ comment, setClickOpenComment }) {
   // console.log(comment);
   const [openMainComment, setMainComment] = useState(false);
 
@@ -12,7 +12,7 @@ function PostCardBottomIconComment({ comment }) {
     <>
       {/* {comment.map((commentItem) => ( */}
       <Grid item>
-        <ChatBubbleOutlineOutlinedIcon color='primary' />
+        <ChatBubbleOutlineOutlinedIcon color='primary' onClick={() => setClickOpenComment((cur) => !cur)} />
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
           {/* 5 */}
           {comment.length ? comment.length : null}
