@@ -163,7 +163,7 @@ function WalletForm() {
         <hr />
 
         <p>Total balance</p>
-        <h2>{user.wallet} Bath</h2>
+        <h2>{user.wallet} Baht</h2>
 
         {/* ////////////////Omise/////////////////// */}
         {/* <form id="checkoutForm" method="POST" action="/charge">
