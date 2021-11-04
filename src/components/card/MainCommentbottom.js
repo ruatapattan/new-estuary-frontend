@@ -152,7 +152,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {countLike.length}
+          {countLike.length > 0 && countLike.length}
         </Typography>
       </Grid>
 
