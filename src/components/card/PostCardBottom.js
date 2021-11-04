@@ -46,19 +46,6 @@ function PostCardBottom({ postItem }) {
   // }, [toggleLike]);
 
   //  เช็คการไลค์
-  let isLiked = false; // เปิด ปิด icon Like
-  let filteredLikeList = []; // เก็บ
-  likeLists.forEach((item) => {
-    if (+item.postId === +postItem.id && +item.userId === +user.id) {
-      if (item.status) {
-        isLiked = true;
-      }
-      filteredLikeList.push(item);
-    }
-  });
-
-  // นับคนกด Like
-  const countLike = likeLists.filter((item) => item.status === true);
 
   // console.log(postItem);
 
@@ -79,6 +66,7 @@ function PostCardBottom({ postItem }) {
   // ============================================
 
   useEffect(() => {
+    // alert('1');
     const fetchComment = async () => {
       try {
         const res = await axios.get(`/comment/${postItem.id}`);
@@ -117,13 +105,7 @@ function PostCardBottom({ postItem }) {
   return (
     <>
       <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
-        <PostCardBottomIconLike
-          postItem={postItem}
-          isLiked={isLiked}
-          countLike={countLike}
-          filteredLikeList={filteredLikeList}
-          setToggleLike={setToggleLike}
-        />
+        <PostCardBottomIconLike postItem={postItem} setToggleLike={setToggleLike} likeLists={likeLists} />
         <PostCardBottomIconComment comment={comment} setClickOpenComment={setClickOpenComment} />
         {/* <span onClick={() => setOpenDialog(true)}>
           <PostCardBottomIconLink />
@@ -146,6 +128,7 @@ function PostCardBottom({ postItem }) {
 
       {clickOpenComment ? (
         <MainComment
+          toggleComment={toggleComment}
           postItem={postItem}
           user={user}
           comment={comment}

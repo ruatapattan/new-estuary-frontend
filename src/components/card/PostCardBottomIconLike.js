@@ -7,11 +7,25 @@ import axios from '../../config/axios';
 import { SocketContext } from '../../contexts/SocketContext';
 import { AuthContext } from '../../contexts/AuthContext';
 
-function PostCardBottomIconLike({ isLiked, countLike, postItem, filteredLikeList, setToggleLike }) {
+function PostCardBottomIconLike({ postItem, setToggleLike, likeLists }) {
   const { sendNotification } = useContext(SocketContext);
   const { user } = useContext(AuthContext);
 
-  console.log('postitem', postItem);
+  // console.log('postitem', postItem);
+
+  let isLiked = false; // เปิด ปิด icon Like
+  let filteredLikeList = []; // เก็บ
+  likeLists.forEach((item) => {
+    if (+item.postId === +postItem.id && +item.userId === +user.id) {
+      if (item.status) {
+        isLiked = true;
+      }
+      filteredLikeList.push(item);
+    }
+  });
+
+  // นับคนกด Like
+  const countLike = likeLists.filter((item) => item.status === true);
 
   const handleClickLike = async () => {
     if (filteredLikeList.length === 0) {

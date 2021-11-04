@@ -10,9 +10,17 @@ import MainCommentAvatar from './MainCommentAvatar';
 import MainCommentContent from './MainCommentContent';
 import MainCommentbottom from './MainCommentbottom';
 
-function MainComment({ postItem, user, comment, setToggleEditComment, product, setToggleDeleteComment }) {
+function MainComment({
+  postItem,
+  user,
+  comment,
+  setToggleEditComment,
+  product,
+  setToggleDeleteComment,
+  toggleComment,
+}) {
   // console.log(postItem);
-  console.log('comment', comment);
+  // console.log('comment', comment);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -58,6 +66,8 @@ function MainComment({ postItem, user, comment, setToggleEditComment, product, s
 
               <Grid container spacing={5} pt='15px'>
                 <MainCommentbottom
+                  comment={comment}
+                  toggleComment={toggleComment}
                   commentItem={commentItem}
                   user={user}
                   setToggleEditComment={setToggleEditComment}

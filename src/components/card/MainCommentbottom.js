@@ -15,7 +15,14 @@ import axios from '../../config/axios';
 import { SocketContext } from '../../contexts/SocketContext';
 import Swal from 'sweetalert2';
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
+function MainCommentbottom({
+  comment,
+  commentItem,
+  user,
+  setToggleEditComment,
+  setToggleDeleteComment,
+  toggleComment,
+}) {
   console.log('commentItem', commentItem);
   // console.log(user);
   const { sendNotification } = useContext(SocketContext);
@@ -24,7 +31,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 
   const [openDialog, setOpenDialog] = useState(false);
 
-  const [comment, setComment] = useState([]);
+  // const [comment, setComment] = useState([]);
 
   const [likeLists, setLikeLists] = useState([]);
 
@@ -74,6 +81,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
   // =========================== Like
 
   useEffect(() => {
+    console.log('loged', commentItem.id);
     const callLikeComment = async () => {
       await axios
         .get(`/like/comment/${commentItem.id}`)
@@ -86,7 +94,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
     };
 
     callLikeComment();
-  }, [toggleLikeComment]);
+  }, [toggleLikeComment, comment]);
 
   // console.dir(likeLists);
   //  เช็คการไลค์
@@ -152,6 +160,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
+          {/* {countLike.length} */}
           {countLike.length > 0 && countLike.length}
         </Typography>
       </Grid>
