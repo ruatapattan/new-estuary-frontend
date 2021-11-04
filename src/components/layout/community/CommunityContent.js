@@ -25,6 +25,7 @@ function CommunityContent() {
   const [post, setPost] = useState([]);
   const [togglePostCommunity, setTogglePostCommunity] = useState(false);
   const [communityName, setCommunityName] = useState('');
+  const [togglePostDelete, setTogglePostDelete] = useState(false);
   // console.log('******************************');
   // console.log(post);
 
@@ -49,7 +50,7 @@ function CommunityContent() {
 
     fetchNameCommunity();
     fetchPost();
-  }, [togglePostCommunity]);
+  }, [togglePostCommunity, togglePostDelete]);
 
   // console.log('**********');
   // console.log(communityName);
@@ -74,7 +75,7 @@ function CommunityContent() {
         </Box>
         <CreatePost communityId={param.id} setTogglePostCommunity={setTogglePostCommunity} />
         {post.map((postItem) => (
-          <PostCard key={postItem.id} postItem={postItem} />
+          <PostCard key={postItem.id} postItem={postItem} setTogglePostDelete={setTogglePostDelete} />
         ))}
       </Box>
     </>

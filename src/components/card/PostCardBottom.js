@@ -25,7 +25,9 @@ function PostCardBottom({ postItem }) {
   const [toggleEditComment, setToggleEditComment] = useState(false);
   const [toggleDeleteComment, setToggleDeleteComment] = useState(false);
   const [clickOpenComment, setClickOpenComment] = useState(false);
-  // const [toggleLikeComment, setToggleLikeComment] = useState(false);
+  const [toggleLikeComment, setToggleLikeComment] = useState(false);
+  const [likeListsComment, setLikeListsComment] = useState([]);
+  const [likeComment, setLikeComment] = useState([]);
 
   // แก้ path เขียน controller
 
@@ -71,6 +73,8 @@ function PostCardBottom({ postItem }) {
       try {
         const res = await axios.get(`/comment/${postItem.id}`);
         setComment(res.data.comment);
+        // console.log('this is comment');
+        // console.log(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -80,6 +84,7 @@ function PostCardBottom({ postItem }) {
         .get(`/like/post/${postItem.id}`)
         .then((res) => {
           setLikeLists([...res.data.like]);
+          setLikeComment(comment.Likes);
         })
         .catch((err) => {
           console.dir(err);
@@ -100,7 +105,17 @@ function PostCardBottom({ postItem }) {
     // callLikeComment();
     fetchComment();
     callLike();
-  }, [toggleComment, toggleLike, toggleEditComment, toggleDeleteComment]);
+  }, [toggleComment, toggleLike, toggleEditComment, toggleDeleteComment, toggleLikeComment]);
+
+  // console.log(postItem);
+
+  console.log('**************99999');
+  console.log(comment);
+  // console.log('**************');
+
+  // console.log('#############');
+  // console.log(likeComment);
+  // console.log('#############');
 
   return (
     <>
@@ -134,6 +149,8 @@ function PostCardBottom({ postItem }) {
           comment={comment}
           setToggleEditComment={setToggleEditComment}
           setToggleDeleteComment={setToggleDeleteComment}
+          likeListsComment={likeListsComment}
+          setToggleLikeComment={setToggleLikeComment}
         />
       ) : null}
     </>

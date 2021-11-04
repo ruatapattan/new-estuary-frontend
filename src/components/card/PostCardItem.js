@@ -15,6 +15,7 @@ import PostCardItemContent from './PostCardItemContent';
 function PostCardItem({ postItem, setTogglePostEdit, setTogglePostDelete }) {
   // console.log('xxxx', postItem);
   // const { User, PostPictures, createdAt, content } = postItem;
+  // console.log(postItem);
 
   return (
     <>

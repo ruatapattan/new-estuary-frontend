@@ -23,7 +23,7 @@ function MainCommentbottom({
   setToggleDeleteComment,
   toggleComment,
 }) {
-  console.log('commentItem', commentItem);
+  // console.log('commentItem', commentItem);
   // console.log(user);
   const { sendNotification } = useContext(SocketContext);
 
@@ -32,14 +32,13 @@ function MainCommentbottom({
   const [openDialog, setOpenDialog] = useState(false);
 
   // const [comment, setComment] = useState([]);
+  console.log(`commentItem`, commentItem);
 
   const [likeLists, setLikeLists] = useState([]);
 
   const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
   const [clickCloseMenu, setClickCloseMenu] = useState(false);
-
-  // console.log(toggleEditComment);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -50,10 +49,6 @@ function MainCommentbottom({
     setAnchorEl(null);
   };
 
-  // const handleClickEdit = () => {
-  //   handleClose();
-  //   setOpenDialog(true);
-  // };
   const handleClickDelete = async () => {
     // console.log(commentItem?.id);
     handleClose();
@@ -89,31 +84,24 @@ function MainCommentbottom({
           setLikeLists([...res.data.like]);
         })
         .catch((err) => {
-          // console.dir(err);
+          console.dir(err);
         });
     };
 
     callLikeComment();
   }, [toggleLikeComment, comment]);
 
-  // console.dir(likeLists);
   //  เช็คการไลค์
   let isLiked = false; // เปิด ปิด icon Like
   let filteredLikeList = []; // เก็บ
   likeLists.forEach((item) => {
     if (+item.commentId === +commentItem.id && +item.userId === +user.id) {
-      // console.log('jjjjjjjjjjjj');
-      // console.log('test1' + item.commentId);
-      // console.log('test2' + commentItem.id);
-
       if (item.status) {
         isLiked = true;
       }
       filteredLikeList.push(item);
     }
   });
-
-  // console.log(isLiked);
 
   // นับคนกด Like
   const countLike = likeLists.filter((item) => item.status === true);
@@ -154,14 +142,11 @@ function MainCommentbottom({
   return (
     <>
       <Grid item>
-        {/* <ThumbUpOutlinedIcon /> */}
-
         {isLiked && <ThumbUpAltIcon onClick={handleClickLike} />}
         {!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
-          {/* {countLike.length} */}
-          {countLike.length > 0 && countLike.length}
+          {likeLists && countLike.length > 0 && countLike.length}
         </Typography>
       </Grid>
 
@@ -176,6 +161,7 @@ function MainCommentbottom({
             <MoreHorizIcon open={openDialog} setOpen={setOpenDialog} />
           </Button>
         ) : null}
+
         {clickCloseMenu && (
           <Menu
             id='demo-positioned-menu'

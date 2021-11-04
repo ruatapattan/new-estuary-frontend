@@ -20,7 +20,7 @@ function MainComment({
   toggleComment,
 }) {
   // console.log(postItem);
-  // console.log('comment', comment);
+  console.log('comment', comment);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -36,31 +36,17 @@ function MainComment({
     setAnchorEl(null);
   };
 
-  // useEffect(() => {
-  //   const fetchComment = async () => {
-  //     try {
-  //       const res = await axios.get(`/comment/${postItem.id}`);
-  //       setComment(res.data.comment);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   fetchComment();
-  // }, []);
-
-  console.log('comment', comment);
-
   return (
     <>
-      {comment.map((commentItem) => (
+      {comment?.map((commentItem) => (
         <Stack>
           <Stack justifyContent='space-between' direction='row' spacing={1} mb='10px' alignItems='center' p='10px'>
-            <MainCommentAvatar profilePic={commentItem.User.profilePic} />
+            <MainCommentAvatar profilePic={commentItem?.User?.profilePic} />
 
             <Paper sx={{ padding: '5px', width: '100%', background: '#f6f6f6' }} elevation={3}>
               <MainCommentContent
                 content={commentItem.content}
-                name={commentItem.User.username}
+                name={commentItem?.User?.username}
                 time={commentItem.createdAt}
               />
 

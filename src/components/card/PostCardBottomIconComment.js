@@ -15,7 +15,7 @@ function PostCardBottomIconComment({ comment, setClickOpenComment }) {
         <ChatBubbleOutlineOutlinedIcon color='primary' onClick={() => setClickOpenComment((cur) => !cur)} />
         <Typography sx={{ display: 'inline' }} variant='body2' color='text.disabled'>
           {/* 5 */}
-          {comment.length ? comment.length : null}
+          {comment?.length ? comment?.length : null}
           {/* {commentItem.lenght} */}
         </Typography>
       </Grid>
