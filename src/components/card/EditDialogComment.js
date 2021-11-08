@@ -83,7 +83,7 @@ function EditDialogComment({ open, setOpen, commentItem, postItem, setToggleEdit
       const res = await axios.put(`/comment/${id}`, { content });
       // console.log(res.data);
       setOpen(false);
-      setClickCloseMenu((cur) => !cur);
+      setClickCloseMenu(false);
       setToggleEditComment((curr) => !curr);
     } catch (err) {
       // console.dir(err);

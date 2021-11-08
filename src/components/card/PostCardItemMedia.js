@@ -70,11 +70,12 @@ function PostCardItemMedia({ postItem }) {
         style={{
           width: '375px',
           backgroundColor: '#f6f6f6',
+          objectFit: 'cover',
         }}>
         <Slider {...settings}>
           {postItem?.PostPictures.map((item) => (
             <CardMedia
-              sx={{ width: '100%', objectFit: 'contain' }}
+              // sx={{ width: '100%', objectFit: 'contain' }}
               component='img'
               // component={type}
               height='375px'

@@ -15,8 +15,15 @@ import axios from "../../config/axios";
 import { SocketContext } from "../../contexts/SocketContext";
 import Swal from "sweetalert2";
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
-	console.log("commentItem", commentItem);
+function MainCommentbottom({
+	comment,
+	commentItem,
+	user,
+	setToggleEditComment,
+	setToggleDeleteComment,
+	toggleComment,
+}) {
+	// console.log('commentItem', commentItem);
 	// console.log(user);
 	const { sendNotification } = useContext(SocketContext);
 
@@ -24,15 +31,14 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 
 	const [openDialog, setOpenDialog] = useState(false);
 
-	const [comment, setComment] = useState([]);
+	// const [comment, setComment] = useState([]);
+	console.log(`commentItem`, commentItem);
 
 	const [likeLists, setLikeLists] = useState([]);
 
 	const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
 	const [clickCloseMenu, setClickCloseMenu] = useState(false);
-
-	// console.log(toggleEditComment);
 
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
@@ -43,10 +49,6 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 		setAnchorEl(null);
 	};
 
-	// const handleClickEdit = () => {
-	//   handleClose();
-	//   setOpenDialog(true);
-	// };
 	const handleClickDelete = async () => {
 		// console.log(commentItem?.id);
 		handleClose();
@@ -74,6 +76,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 	// =========================== Like
 
 	useEffect(() => {
+		console.log("loged", commentItem.id);
 		const callLikeComment = async () => {
 			await axios
 				.get(`/like/comment/${commentItem.id}`)
@@ -81,31 +84,24 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 					setLikeLists([...res.data.like]);
 				})
 				.catch((err) => {
-					// console.dir(err);
+					console.dir(err);
 				});
 		};
 
 		callLikeComment();
-	}, [toggleLikeComment]);
+	}, [toggleLikeComment, comment]);
 
-	// console.dir(likeLists);
 	//  เช็คการไลค์
 	let isLiked = false; // เปิด ปิด icon Like
 	let filteredLikeList = []; // เก็บ
 	likeLists.forEach((item) => {
 		if (+item.commentId === +commentItem.id && +item.userId === +user.id) {
-			// console.log('jjjjjjjjjjjj');
-			// console.log('test1' + item.commentId);
-			// console.log('test2' + commentItem.id);
-
 			if (item.status) {
 				isLiked = true;
 			}
 			filteredLikeList.push(item);
 		}
 	});
-
-	// console.log(isLiked);
 
 	// นับคนกด Like
 	const countLike = likeLists.filter((item) => item.status === true);
@@ -146,13 +142,11 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 	return (
 		<>
 			<Grid item>
-				{/* <ThumbUpOutlinedIcon /> */}
-
 				{isLiked && <ThumbUpAltIcon onClick={handleClickLike} />}
 				{!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
 				<Typography sx={{ display: "inline" }} variant="body2" color="text.disabled">
-					{countLike.length > 0 && countLike.length}
+					{likeLists && countLike.length > 0 && countLike.length}
 				</Typography>
 			</Grid>
 
@@ -168,6 +162,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleD
 						<MoreHorizIcon open={openDialog} setOpen={setOpenDialog} />
 					</Button>
 				) : null}
+
 				{clickCloseMenu && (
 					<Menu
 						id="demo-positioned-menu"
