@@ -260,9 +260,13 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
 					}}
 				>
 					<Avatar
+						onClick={() => history.push(`/profile/${product.User.id}`)}
 						aria-label="recipe"
 						src={product?.User?.profilePic ? product?.User?.profilePic : ""}
 						sx={{
+							"&:hover": {
+								cursor: "pointer",
+							},
 							width: "50px",
 							height: "50px",
 							mr: { md: "15px", xs: "20px" },

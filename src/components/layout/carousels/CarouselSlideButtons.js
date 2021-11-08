@@ -1,4 +1,13 @@
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from "@mui/material";
+import {
+	Card,
+	CardActionArea,
+	CardActions,
+	CardContent,
+	CardMedia,
+	IconButton,
+	Tooltip,
+	Typography,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import MarketProductCard from "../marketplace/MarketProductCard";
@@ -109,10 +118,18 @@ function CarouselSlideButtons({ item }) {
 				)}
 				<Typography>{currentLikeCount}</Typography>
 			</IconButton>
-			<IconButton aria-label="share">
-				<ShareIcon sx={{ fontSize: "1.5rem" }} />
-				{/* <Typography>{item.Shares}</Typography> */}
-			</IconButton>
+			<Tooltip title="Copy link">
+				<IconButton
+					aria-label="share"
+					onClick={() => {
+						navigator.clipboard.writeText(
+							`${window.location.protocol}//${window.location.hostname}:${window.location.port}/product/${item.id}`
+						);
+					}}
+				>
+					<ShareIcon sx={{ fontSize: "1.5rem" }} />
+				</IconButton>
+			</Tooltip>
 		</Box>
 	);
 }

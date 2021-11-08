@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Box } from "@mui/system";
-import { Button, Input, TextField } from "@mui/material";
+import { Button, Input, TextField, CircularProgress } from "@mui/material";
 import validator from "validator";
 import userValidate from "../../../services/userValidate";
 import axios from "../../../config/axios";
@@ -14,6 +14,7 @@ function CreateProductForm() {
 
 	const textFieldStyle = { width: { xs: "80%", sm: "70%" }, mb: "25px" };
 
+	const [inProgress, setInProgress] = useState(false);
 	const [coverPic, setCoverPic] = useState(null);
 	const [description, setDescription] = useState("");
 	const [externalLink, setExternalLink] = useState("");
@@ -29,31 +30,37 @@ function CreateProductForm() {
 
 	///////////// PUT Profile ///////////////////
 	const handleSubmitCreactProduct = async (e) => {
-		console.log("ccccc");
+		// console.log("ccccc");
 		e.preventDefault();
-		console.dir(userInput.coverPic);
+		setInProgress(true);
+		// console.dir(userInput.coverPic);
 
 		let isError = false;
 		try {
 			if (!userInput.name) {
 				setError((cur) => ({ ...cur, name: "name is required" }));
 				isError = true;
+				setInProgress(false);
 			}
 			if (!userInput.category) {
 				setError((cur) => ({ ...cur, category: "category is required" }));
 				isError = true;
+				setInProgress(false);
 			}
 			if (!userInput.price) {
 				setError((cur) => ({ ...cur, price: "price is required" }));
 				isError = true;
+				setInProgress(false);
 			}
 			if (!userInput.coverPic) {
 				setError((cur) => ({ ...cur, coverPic: "Image is required" }));
 				isError = true;
+				setInProgress(false);
 			}
 
 			if (error.name || error.category || error.price || error.coverPic) {
 				isError = true;
+				setInProgress(false);
 			}
 
 			if (!isError) {
@@ -76,6 +83,7 @@ function CreateProductForm() {
 				// 	pathname: `/product/${createdId.data.product.id}`,
 				// 	state: { message: "Your creactproduct success" },
 				// });
+				setInProgress(false);
 				Swal.fire({
 					icon: "success",
 					title: "Create a successful product",
@@ -84,7 +92,10 @@ function CreateProductForm() {
 				});
 				window.location.reload();
 			}
-		} catch (err) {}
+		} catch (err) {
+			setInProgress(false);
+			console.dir(err);
+		}
 	};
 
 	//check err
@@ -177,7 +188,7 @@ function CreateProductForm() {
 					mt: "65px",
 				}}
 			>
-				Create New Product
+				Create Product
 			</Box>
 			<Box sx={{ paddingTop: "30px" }}>
 				<Box
@@ -221,7 +232,7 @@ function CreateProductForm() {
 						onChange={handleChangePicProduct}
 					/>
 					<Button variant="contained" component="span" sx={{ width: "100%", bgcolor: "gray", mt: "15px" }}>
-						Upload Product Picture
+						Upload Product Image
 					</Button>
 				</label>
 			</Box>
@@ -305,13 +316,17 @@ function CreateProductForm() {
 					onChange={handleInputExternalLink}
 				/>
 
-				<Button
-					type="submit"
-					variant="gradient"
-					sx={{ color: "white", p: "10px", width: { xs: "80%", sm: "70%" } }}
-				>
-					Sale
-				</Button>
+				{inProgress ? (
+					<CircularProgress sx={{ color: "text.primary" }} />
+				) : (
+					<Button
+						type="submit"
+						variant="gradient"
+						sx={{ color: "white", p: "10px", width: { xs: "80%", sm: "70%" } }}
+					>
+						Sale
+					</Button>
+				)}
 			</Box>
 		</Box>
 	);

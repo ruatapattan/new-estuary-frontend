@@ -15,7 +15,7 @@ import axios from "../../config/axios";
 import { SocketContext } from "../../contexts/SocketContext";
 import Swal from "sweetalert2";
 
-function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
+function MainCommentbottom({ commentItem, user, setToggleEditComment, setToggleDeleteComment }) {
 	console.log("commentItem", commentItem);
 	// console.log(user);
 	const { sendNotification } = useContext(SocketContext);
@@ -30,18 +30,26 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 
 	const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
+	const [clickCloseMenu, setClickCloseMenu] = useState(false);
+
 	// console.log(toggleEditComment);
 
 	const open = Boolean(anchorEl);
 	const handleClick = (event) => {
+		setClickCloseMenu((cur) => !cur);
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	// const handleClickEdit = () => {
+	//   handleClose();
+	//   setOpenDialog(true);
+	// };
 	const handleClickDelete = async () => {
 		// console.log(commentItem?.id);
+		handleClose();
 		try {
 			Swal.fire({
 				title: "Are you sure",
@@ -53,9 +61,9 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 				confirmButtonText: "Yes",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					axios.delete(`comment/${commentItem.id}`);
-
-					// setToggleDeleteComment((c) => !c);
+					axios.delete(`comment/${commentItem.id}`).then(() => {
+						setToggleDeleteComment((c) => !c);
+					});
 				}
 			});
 		} catch (err) {
@@ -112,8 +120,8 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 				})
 				.then((res2) => {
 					if (user.id !== commentItem.User.id) {
-						// alert('notify like');
-						// alert(res2.data.likeId);
+						alert("notify like");
+						alert(res2.data.likeId);
 						console.log(res2);
 						sendNotification(
 							user.id,
@@ -133,6 +141,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 			});
 		}
 	};
+	console.log(`clickCloseMenu`, clickCloseMenu);
 
 	return (
 		<>
@@ -143,7 +152,7 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 				{!isLiked && <ThumbUpOutlinedIcon onClick={handleClickLike} />}
 
 				<Typography sx={{ display: "inline" }} variant="body2" color="text.disabled">
-					{countLike.length}
+					{countLike.length > 0 && countLike.length}
 				</Typography>
 			</Grid>
 
@@ -159,46 +168,45 @@ function MainCommentbottom({ commentItem, user, setToggleEditComment }) {
 						<MoreHorizIcon open={openDialog} setOpen={setOpenDialog} />
 					</Button>
 				) : null}
+				{clickCloseMenu && (
+					<Menu
+						id="demo-positioned-menu"
+						aria-labelledby="demo-positioned-button"
+						anchorEl={anchorEl}
+						open={open}
+						onClose={handleClose}
+						anchorOrigin={{
+							vertical: "top",
+							horizontal: "left",
+						}}
+						transformOrigin={{
+							vertical: "top",
+							horizontal: "left",
+						}}
+					>
+						<MenuItem onClick={() => setOpenDialog(true)}>
+							<ListItemIcon>
+								<EditIcon fontSize="small" />
+							</ListItemIcon>
+							Edit
+						</MenuItem>
 
-				<Menu
-					id="demo-positioned-menu"
-					aria-labelledby="demo-positioned-button"
-					anchorEl={anchorEl}
-					open={open}
-					onClose={handleClose}
-					anchorOrigin={{
-						vertical: "top",
-						horizontal: "left",
-					}}
-					transformOrigin={{
-						vertical: "top",
-						horizontal: "left",
-					}}
-				>
-					<MenuItem onClick={() => setOpenDialog(true)}>
-						<ListItemIcon>
-							<EditIcon fontSize="small" />
-						</ListItemIcon>
-						Edit
-					</MenuItem>
-					<EditDialogComment
-						open={openDialog}
-						setOpen={setOpenDialog}
-						commentItem={commentItem}
-						setToggleEditComment={setToggleEditComment}
-					/>
-					<MenuItem onClick={handleClickDelete}>
-						<ListItemIcon>
-							<DeleteIcon fontSize="small" />
-						</ListItemIcon>
-						Delete
-					</MenuItem>
-				</Menu>
-			</Grid>
-			<Grid item>
-				<Typography sx={{ display: "inline" }} variant="body2" color="text.disabled">
-					{new Intl.DateTimeFormat("en-US", { dateStyle: "short" }).format(new Date(commentItem.createdAt))}
-				</Typography>
+						<MenuItem onClick={handleClickDelete}>
+							<ListItemIcon>
+								<DeleteIcon fontSize="small" />
+							</ListItemIcon>
+							Delete
+						</MenuItem>
+					</Menu>
+				)}
+
+				<EditDialogComment
+					open={openDialog}
+					setOpen={setOpenDialog}
+					commentItem={commentItem}
+					setToggleEditComment={setToggleEditComment}
+					setClickCloseMenu={setClickCloseMenu}
+				/>
 			</Grid>
 		</>
 	);

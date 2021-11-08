@@ -9,17 +9,26 @@ import { Card } from "@mui/material";
 import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContext";
 import { SocketContext } from "../../contexts/SocketContext";
+import { isEmpty, isNumeric } from "validator";
 
 function CreateComment(props) {
 	const { user, postItem, setToggleComment, product } = props;
 	const { sendNotification } = useContext(SocketContext);
-	console.log(product);
+
+	// console.log(product);
 
 	// console.log(user.id);
 	const [content, setContent] = useState("");
+	const [errMsg, setErrMsg] = useState("");
 
 	const handleSubmitCreateComment = async (e) => {
 		e.preventDefault();
+
+		if (isEmpty(content)) {
+			setErrMsg("Incorect");
+			return;
+		}
+
 		const res = await axios.post("/comment", {
 			content,
 			userId: user.id,
@@ -70,6 +79,8 @@ function CreateComment(props) {
 					</Grid>
 					<Grid item xs={6} md={5}>
 						<TextField
+							error={errMsg !== ""}
+							helperText={errMsg.length > 0 ? errMsg : ""}
 							id="standard-basic"
 							label="comment"
 							size="small"

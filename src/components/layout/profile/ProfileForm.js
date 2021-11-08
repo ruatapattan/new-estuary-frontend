@@ -15,15 +15,15 @@ function ProfileForm() {
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25)
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
+      width: 'auto'
+    }
   }));
 
   const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -34,7 +34,7 @@ function ProfileForm() {
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   }));
 
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -46,9 +46,9 @@ function ProfileForm() {
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
+        width: '20ch'
+      }
+    }
   }));
 
   //call product
@@ -56,11 +56,11 @@ function ProfileForm() {
   const [toggle, setToggle] = useState(false);
   const [searchText, setSearchText] = useState('');
   console.log(`products`, products);
-  const handleClickDelete = async (id) => {
+  const handleClickDelete = async id => {
     try {
       console.log(id);
       await axios.delete(`/product/${id}`);
-      setToggle((c) => !c);
+      setToggle(c => !c);
     } catch (err) {
       console.log(err);
     }
@@ -81,7 +81,7 @@ function ProfileForm() {
     fetchProduct();
   }, [toggle]);
 
-  const handleEditProduct = async (products) => {
+  const handleEditProduct = async products => {
     const { coverPic, name, externalLink, description, price, hashtag, categoryId } = products;
     try {
       await axios.put(`/product/${products.id}`, {
@@ -91,9 +91,9 @@ function ProfileForm() {
         description,
         price,
         hashtag,
-        categoryId,
+        categoryId
       });
-      setToggle((c) => !c);
+      setToggle(c => !c);
     } catch (err) {
       console.log(err);
     }
@@ -102,35 +102,34 @@ function ProfileForm() {
   //search text
   console.log(products);
 
-  const handleChangeSearch = (e) => {
+  const handleChangeSearch = e => {
     setSearchText(e.target.value);
   };
 
   const filterProduct =
-    searchText === ''
-      ? products
-      : products.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
+    searchText === '' ? products : products.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
 
   console.log('filterProduct', filterProduct);
 
   return (
     <Box
-      className='BOXXXXXXXXX'
-      display='flex'
-      flexWrap='wrap'
-      flexDirection='column'
-      justifyContent='flex-start'
-      alignItems='center'
+      className="BOXXXXXXXXX"
+      display="flex"
+      flexWrap="wrap"
+      flexDirection="column"
+      justifyContent="flex-start"
+      alignItems="center"
       sx={{ width: { xs: '90%', sm: '90%', md: '72%' } }}
       // border="5px solid pink"
-      backgroundColor='#EFF1F3'>
+      backgroundColor="#EFF1F3"
+    >
       <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
         sx={{ width: { xs: '90%', sm: '90%', md: '90%' }, mt: '15px' }}
         // border="5px solid blue"
-        flexWrap='wrap'
+        flexWrap="wrap"
 
         // height="5vh"
       >
@@ -139,22 +138,23 @@ function ProfileForm() {
             m: {
               lg: '0px 0px 10px 0px',
               md: '0px 0px 10px 0px',
-              xs: '0px 0px 10px 0px',
+              xs: '0px 0px 10px 0px'
             },
-            width: { md: '250px', xs: '100%' },
-          }}>
+            width: { md: '250px', xs: '100%' }
+          }}
+        >
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
 
           <StyledInputBase
             autoFocus
-            placeholder='Search…'
+            placeholder="Search…"
             inputProps={{ 'aria-label': 'search' }}
             sx={{
               width: { md: '500px', xs: '100%' },
               height: '50px',
-              border: '1px groove',
+              border: '1px groove'
             }}
             value={searchText}
             onChange={handleChangeSearch}
@@ -167,9 +167,10 @@ function ProfileForm() {
           width: { xs: '90%', sm: '90%', md: '90%' },
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}>
-        {filterProduct.map((item) => (
+          justifyContent: 'center'
+        }}
+      >
+        {filterProduct.map(item => (
           <CardProfile
             key={item.id}
             id={item.id}

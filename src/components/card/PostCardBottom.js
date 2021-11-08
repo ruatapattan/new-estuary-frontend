@@ -24,6 +24,7 @@ function PostCardBottom({ postItem }) {
   const [toggleLike, setToggleLike] = useState(false);
   const [toggleEditComment, setToggleEditComment] = useState(false);
   const [toggleDeleteComment, setToggleDeleteComment] = useState(false);
+  const [clickOpenComment, setClickOpenComment] = useState(false);
   // const [toggleLikeComment, setToggleLikeComment] = useState(false);
 
   // แก้ path เขียน controller
@@ -123,7 +124,7 @@ function PostCardBottom({ postItem }) {
           filteredLikeList={filteredLikeList}
           setToggleLike={setToggleLike}
         />
-        <PostCardBottomIconComment comment={comment} />
+        <PostCardBottomIconComment comment={comment} setClickOpenComment={setClickOpenComment} />
         {/* <span onClick={() => setOpenDialog(true)}>
           <PostCardBottomIconLink />
         </span>
@@ -143,13 +144,15 @@ function PostCardBottom({ postItem }) {
       <CreateComment user={user} postItem={postItem} setToggleComment={setToggleComment} />
       {/* {openCreateComment ? <CreateComment user={user} postItem={postItem} /> : null} */}
 
-      <MainComment
-        postItem={postItem}
-        user={user}
-        comment={comment}
-        setToggleEditComment={setToggleEditComment}
-        setToggleDeleteComment={setToggleDeleteComment}
-      />
+      {clickOpenComment ? (
+        <MainComment
+          postItem={postItem}
+          user={user}
+          comment={comment}
+          setToggleEditComment={setToggleEditComment}
+          setToggleDeleteComment={setToggleDeleteComment}
+        />
+      ) : null}
     </>
   );
 }

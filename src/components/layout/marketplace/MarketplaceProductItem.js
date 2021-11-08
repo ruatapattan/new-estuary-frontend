@@ -9,6 +9,7 @@ import {
 	Grid,
 	IconButton,
 	Link,
+	Tooltip,
 	Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
@@ -161,10 +162,23 @@ function MarketplaceProductItem({ item }) {
 								)}
 								<Typography>{currentLikeCount}</Typography>
 							</IconButton>
-							<IconButton aria-label="share">
-								<ShareIcon sx={{ fontSize: "1.5rem" }} />
-								{/* <Typography>{item.Shares}</Typography> */}
-							</IconButton>
+
+							{/* <IconButton aria-label="share">
+                <ShareIcon sx={{ fontSize: '1.5rem' }} />
+              </IconButton> */}
+
+							<Tooltip title="Copy link">
+								<IconButton
+									aria-label="share"
+									onClick={() => {
+										navigator.clipboard.writeText(
+											`${window.location.protocol}//${window.location.hostname}:${window.location.port}/product/${item.id}`
+										);
+									}}
+								>
+									<ShareIcon sx={{ fontSize: "1.5rem" }} />
+								</IconButton>
+							</Tooltip>
 						</Box>
 						<Box>
 							{Math.round(createdAgo(item.createdAt).time)} {createdAgo(item.createdAt).unit} Ago
