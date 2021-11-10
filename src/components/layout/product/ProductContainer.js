@@ -57,6 +57,7 @@ function ProductContainer() {
   const [toggleComment, setToggleComment] = useState(false);
   const [toggleLikeComment, setToggleLikeComment] = useState(false);
   const [toggleEditComment, setToggleEditComment] = useState(false);
+  const [toggleDeleteComment, setToggleDeleteComment] = useState(false);
 
   const { user } = useContext(AuthContext);
   const param = useParams();
@@ -134,7 +135,7 @@ function ProductContainer() {
     callSubscribed();
     callLike();
     fetchComment();
-  }, [toggle, toggleComment, toggleLikeComment, toggleEditComment]);
+  }, [toggle, toggleComment, toggleLikeComment, toggleEditComment, toggleDeleteComment]);
 
   // console.dir(product);
   // console.dir(followingLists);
@@ -211,6 +212,7 @@ function ProductContainer() {
               comment={comment}
               setToggleLikeComment={setToggleLikeComment}
               setToggleEditComment={setToggleEditComment}
+              setToggleDeleteComment={setToggleDeleteComment}
             />
             {/* <SubComment /> */}
           </Box>
