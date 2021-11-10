@@ -1,331 +1,335 @@
-import React, { useState, useEffect } from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import { Box } from '@mui/system';
-import { Button, Input, TextField, CircularProgress } from '@mui/material';
-import validator from 'validator';
-import userValidate from '../../../services/userValidate';
-import axios from '../../../config/axios';
-import { useParams, useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from "react";
+import MenuItem from "@mui/material/MenuItem";
+import { Box } from "@mui/system";
+import { Button, Input, TextField, CircularProgress } from "@mui/material";
+import validator from "validator";
+import userValidate from "../../../services/userValidate";
+import axios from "../../../config/axios";
+import { useParams, useHistory } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function CreateProductForm() {
-  const param = useParams();
-  const history = useHistory();
+	const param = useParams();
+	const history = useHistory();
 
-  const textFieldStyle = { width: { xs: '80%', sm: '70%' }, mb: '25px' };
+	const textFieldStyle = { width: { xs: "80%", sm: "70%" }, mb: "25px" };
 
-  const [inProgress, setInProgress] = useState(false);
-  const [coverPic, setCoverPic] = useState(null);
-  const [description, setDescription] = useState('');
-  const [externalLink, setExternalLink] = useState('');
+	const [inProgress, setInProgress] = useState(false);
+	const [coverPic, setCoverPic] = useState(null);
+	const [description, setDescription] = useState("");
+	const [externalLink, setExternalLink] = useState("");
 
-  const [isFocus, setIsFocus] = useState({
-    productName: false,
-    price: false,
-    description: false
-  });
+	const [isFocus, setIsFocus] = useState({
+		productName: false,
+		price: false,
+		description: false,
+	});
 
-  const [error, setError] = useState({});
-  const [userInput, setUserInput] = useState({});
+	const [error, setError] = useState({});
+	const [userInput, setUserInput] = useState({});
 
-  ///////////// PUT Profile ///////////////////
-  const handleSubmitCreactProduct = async e => {
-    // console.log("ccccc");
-    e.preventDefault();
-    setInProgress(true);
-    // console.dir(userInput.coverPic);
+	///////////// PUT Profile ///////////////////
+	const handleSubmitCreactProduct = async (e) => {
+		// console.log("ccccc");
+		e.preventDefault();
+		setInProgress(true);
+		// console.dir(userInput.coverPic);
 
-    let isError = false;
-    try {
-      if (!userInput.name) {
-        setError(cur => ({ ...cur, name: 'name is required' }));
-        isError = true;
-        setInProgress(false);
-      }
-      if (!userInput.category) {
-        setError(cur => ({ ...cur, category: 'category is required' }));
-        isError = true;
-        setInProgress(false);
-      }
-      if (!userInput.price) {
-        setError(cur => ({ ...cur, price: 'price is required' }));
-        isError = true;
-        setInProgress(false);
-      }
-      if (!userInput.coverPic) {
-        setError(cur => ({ ...cur, coverPic: 'Image is required' }));
-        isError = true;
-        setInProgress(false);
-      }
+		let isError = false;
+		try {
+			if (!userInput.name) {
+				setError((cur) => ({ ...cur, name: "name is required" }));
+				isError = true;
+				setInProgress(false);
+			}
+			if (!userInput.category) {
+				setError((cur) => ({ ...cur, category: "category is required" }));
+				isError = true;
+				setInProgress(false);
+			}
+			if (!userInput.price) {
+				setError((cur) => ({ ...cur, price: "price is required" }));
+				isError = true;
+				setInProgress(false);
+			}
+			if (!userInput.coverPic) {
+				setError((cur) => ({ ...cur, coverPic: "Image is required" }));
+				isError = true;
+				setInProgress(false);
+			}
 
-      if (error.name || error.category || error.price || error.coverPic) {
-        isError = true;
-        setInProgress(false);
-      }
+			if (error.name || error.category || error.price || error.coverPic) {
+				isError = true;
+				setInProgress(false);
+			}
 
-      if (!isError) {
-        const formData = new FormData();
+			if (!isError) {
+				const formData = new FormData();
 
-        formData.append('name', userInput.name);
-        // formData.append("description", userInput.description);
-        formData.append('description', description);
-        formData.append('categoryId', userInput.category);
-        formData.append('price', userInput.price);
-        formData.append('coverPic', userInput.coverPic);
-        // formData.append("externalLink", userInput.externalLink);
-        formData.append('externalLink', externalLink);
-        formData.append('hashtag', 'link to product');
+				formData.append("name", userInput.name);
+				// formData.append("description", userInput.description);
+				formData.append("description", description);
+				formData.append("categoryId", userInput.category);
+				formData.append("price", userInput.price);
+				formData.append("coverPic", userInput.coverPic);
+				// formData.append("externalLink", userInput.externalLink);
+				formData.append("externalLink", externalLink);
+				formData.append("hashtag", "link to product");
 
-        // console.dir(formData);
-        const createdId = await axios.post(`/product`, formData);
+				// console.dir(formData);
+				const createdId = await axios.post(`/product`, formData);
 
-        // history.push({
-        // 	pathname: `/product/${createdId.data.product.id}`,
-        // 	state: { message: "Your creactproduct success" },
-        // });
-        setInProgress(false);
-        Swal.fire({
-          icon: 'success',
-          title: 'Create a successful product',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        window.location.reload();
-      }
-    } catch (err) {
-      setInProgress(false);
-      console.dir(err);
-    }
-  };
+				// history.push({
+				// 	pathname: `/product/${createdId.data.product.id}`,
+				// 	state: { message: "Your creactproduct success" },
+				// });
+				setInProgress(false);
+				Swal.fire({
+					icon: "success",
+					title: "Create a successful product",
+					showConfirmButton: false,
+					timer: 1500,
+				});
+				window.location.reload();
+			}
+		} catch (err) {
+			setInProgress(false);
+			console.dir(err);
+		}
+	};
 
-  //check err
-  const handleInputProductName = e => {
-    setUserInput(cur => ({ ...cur, name: e.target.value }));
-    if (e.target.value === '') {
-      setError(cur => ({ ...cur, name: 'name is required' }));
-    } else setError(cur => ({ ...cur, name: '' }));
-  };
+	//check err
+	const handleInputProductName = (e) => {
+		setUserInput((cur) => ({ ...cur, name: e.target.value }));
+		if (e.target.value === "") {
+			setError((cur) => ({ ...cur, name: "name is required" }));
+		} else setError((cur) => ({ ...cur, name: "" }));
+	};
 
-  const handleInputCategory = e => {
-    setUserInput(cur => ({ ...cur, category: e.target.value }));
-    if (e.target.value === '') {
-      setError(cur => ({ ...cur, category: 'Please select a category' }));
-    } else setError(cur => ({ ...cur, category: '' }));
-  };
+	const handleInputCategory = (e) => {
+		setUserInput((cur) => ({ ...cur, category: e.target.value }));
+		if (e.target.value === "") {
+			setError((cur) => ({ ...cur, category: "Please select a category" }));
+		} else setError((cur) => ({ ...cur, category: "" }));
+	};
 
-  const handleInputPrice = e => {
-    setUserInput(cur => ({ ...cur, price: e.target.value }));
-    if (e.target.value === '') {
-      setError(cur => ({ ...cur, price: 'price is required' }));
-    } else setError(cur => ({ ...cur, price: '' }));
-  };
+	const handleInputPrice = (e) => {
+		setUserInput((cur) => ({ ...cur, price: e.target.value }));
+		if (e.target.value === "") {
+			setError((cur) => ({ ...cur, price: "price is required" }));
+		} else setError((cur) => ({ ...cur, price: "" }));
+	};
 
-  const handleInputExternalLink = e => {
-    const URLrule = '(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)';
-    const checkURL = new RegExp(URLrule);
+	const handleInputExternalLink = (e) => {
+		const URLrule = "(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\+~#?&//=]*)";
+		const checkURL = new RegExp(URLrule);
 
-    setUserInput(cur => ({ ...cur, externalLink: e.target.value }));
-    console.log(checkURL.test(e.target.value));
+		setUserInput((cur) => ({ ...cur, externalLink: e.target.value }));
+		console.log(checkURL.test(e.target.value));
 
-    if (!checkURL.test(e.target.value)) {
-      setError(cur => ({ ...cur, externalLink: 'invalid URL' }));
-    } else setError(cur => ({ ...cur, externalLink: '' }));
-  };
+		if (!checkURL.test(e.target.value)) {
+			setError((cur) => ({ ...cur, externalLink: "invalid URL" }));
+		} else setError((cur) => ({ ...cur, externalLink: "" }));
+	};
 
-  //pic
-  const handleChangePicProduct = e => {
-    setUserInput(cur => ({ ...cur, coverPic: e.target.files[0] }));
-    setCoverPic(URL.createObjectURL(e.target.files[0]));
-    if (e.target.value === '') {
-      setError(cur => ({ ...cur, coverPic: 'image is required' }));
-    } else setError(cur => ({ ...cur, coverPic: '' }));
-  };
+	//pic
+	const handleChangePicProduct = (e) => {
+		setUserInput((cur) => ({ ...cur, coverPic: e.target.files[0] }));
+		setCoverPic(URL.createObjectURL(e.target.files[0]));
+		if (e.target.value === "") {
+			setError((cur) => ({ ...cur, coverPic: "image is required" }));
+		} else setError((cur) => ({ ...cur, coverPic: "" }));
+	};
 
-  //call backend category
-  const [optionCategory, setOptionCategory] = useState([]);
-  useEffect(() => {
-    const fetchCategory = async () => {
-      try {
-        const res = await axios.get('/category');
-        const fetChcategorys = res.data.categorys;
-        setOptionCategory(fetChcategorys.filter(item => item.name !== 'all'));
-        console.log(fetChcategorys);
-      } catch (err) {
-        console.dir(err);
-      }
-    };
-    fetchCategory();
-  }, []);
+	//call backend category
+	const [optionCategory, setOptionCategory] = useState([]);
+	useEffect(() => {
+		const fetchCategory = async () => {
+			try {
+				const res = await axios.get("/category");
+				const fetChcategorys = res.data.categorys;
+				setOptionCategory(fetChcategorys.filter((item) => item.name !== "all"));
+				console.log(fetChcategorys);
+			} catch (err) {
+				console.dir(err);
+			}
+		};
+		fetchCategory();
+	}, []);
 
-  console.log(optionCategory);
+	console.log(optionCategory);
 
-  return (
-    <Box
-      sx={{
-        width: { md: '72%', sm: '100%', xs: '100%' },
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        height: '90%',
-        marginLeft: '10rem'
-        // border: '1px solid red'
-      }}
-    >
-      <Box
-        sx={{
-          // height: '6%',
-          // width: '70%',
-          width: { xs: '100%', sm: '100%', md: '100%' },
+	return (
+		<Box
+			sx={{
+				width: { md: "72%", sm: "100%", xs: "100%" },
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+				justifyContent: "center",
+				backgroundColor: "white",
+				height: "90%",
+				marginLeft: "10rem",
+				// border: '1px solid red'
+			}}
+		>
+			<Box
+				sx={{
+					// height: '6%',
+					// width: '70%',
+					width: { xs: "100%", sm: "100%", md: "100%" },
 
-          backgroundColor: '#232836',
-          color: 'white',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '20px 50px',
-          mt: '65px'
-        }}
-      >
-        Creact new Item
-      </Box>
-      <Box sx={{ paddingTop: '30px' }}>
-        <Box
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <img
-            style={{
-              width: '80%'
-            }}
-            src={
-              coverPic
-                ? coverPic
-                : userInput.coverPic
-                ? userInput.coverPic
-                : 'https://res.cloudinary.com/duca0jbyn/image/upload/v1635160655/1478594_uop0jq.png'
-            }
-            alt=""
-            sx={{ mb: '25px' }}
-          />
-        </Box>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'red'
-          }}
-        >
-          {error.coverPic}
-        </div>
-        <label htmlFor="contained-button-file">
-          <Input
-            id="contained-button-file"
-            multiple
-            type="file"
-            sx={{ display: 'none' }}
-            onChange={handleChangePicProduct}
-          />
-          <Button variant="contained" component="span" sx={{ width: '100%', bgcolor: 'gray', mt: '15px' }}>
-            Upload Profile
-          </Button>
-        </label>
-      </Box>
+					backgroundColor: "#232836",
+					color: "white",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					padding: "20px 50px",
+					mt: "65px",
+				}}
+			>
+				Create Product
+			</Box>
+			<Box sx={{ paddingTop: "30px" }}>
+				<Box
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<img
+						style={{
+							width: "80%",
+						}}
+						src={
+							coverPic
+								? coverPic
+								: userInput.coverPic
+								? userInput.coverPic
+								: "https://res.cloudinary.com/duca0jbyn/image/upload/v1635160655/1478594_uop0jq.png"
+						}
+						alt=""
+						sx={{ mb: "25px" }}
+					/>
+				</Box>
+				<div
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						color: "red",
+					}}
+				>
+					{error.coverPic}
+				</div>
+				<label htmlFor="contained-button-file">
+					<Input
+						id="contained-button-file"
+						multiple
+						type="file"
+						sx={{ display: "none" }}
+						onChange={handleChangePicProduct}
+					/>
+					<Button variant="contained" component="span" sx={{ width: "100%", bgcolor: "gray", mt: "15px" }}>
+						Upload Product Image
+					</Button>
+				</label>
+			</Box>
 
-      <Box
-        sx={{
-          width: { xs: '90%', sm: '90%', md: '70%' },
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          backgroundColor: 'white',
-          padding: '80px 0px',
-          mb: '80px'
-        }}
-        component="form"
-        onSubmit={handleSubmitCreactProduct}
-      >
-        <TextField
-          id="outlined-productName-input"
-          label={isFocus.name ? 'Name' : ''}
-          sx={textFieldStyle}
-          placeholder={!userInput.name && 'Name'}
-          value={userInput.name}
-          error={error.name && error.name !== '' ? true : false}
-          helperText={error.name}
-          onFocus={() => setIsFocus(curr => ({ ...curr, name: true }))}
-          onBlur={() => setIsFocus(curr => ({ ...curr, name: false }))}
-          onChange={handleInputProductName}
-        />
+			<Box
+				sx={{
+					width: { xs: "90%", sm: "90%", md: "70%" },
+					display: "flex",
+					flexDirection: "column",
+					alignItems: "center",
+					backgroundColor: "white",
+					padding: "80px 0px",
+					mb: "80px",
+				}}
+				component="form"
+				onSubmit={handleSubmitCreactProduct}
+			>
+				<TextField
+					id="outlined-productName-input"
+					label={isFocus.name ? "Name" : ""}
+					sx={textFieldStyle}
+					placeholder={!userInput.name && "Name"}
+					value={userInput.name}
+					error={error.name && error.name !== "" ? true : false}
+					helperText={error.name}
+					onFocus={() => setIsFocus((curr) => ({ ...curr, name: true }))}
+					onBlur={() => setIsFocus((curr) => ({ ...curr, name: false }))}
+					onChange={handleInputProductName}
+				/>
 
-        <TextField
-          id="standard-multiline-static"
-          label={isFocus.description ? 'Description' : ''}
-          placeholder={!userInput.description && 'Description'}
-          onFocus={() => setIsFocus(curr => ({ ...curr, description: true }))}
-          onBlur={() => setIsFocus(curr => ({ ...curr, description: false }))}
-          multiline
-          sx={textFieldStyle}
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-        />
+				<TextField
+					id="standard-multiline-static"
+					label={isFocus.description ? "Description" : ""}
+					placeholder={!userInput.description && "Description"}
+					onFocus={() => setIsFocus((curr) => ({ ...curr, description: true }))}
+					onBlur={() => setIsFocus((curr) => ({ ...curr, description: false }))}
+					multiline
+					sx={textFieldStyle}
+					value={description}
+					onChange={(e) => setDescription(e.target.value)}
+				/>
 
-        <TextField
-          id="outlined-select-currency"
-          select
-          label="Select category"
-          sx={textFieldStyle}
-          error={error.category && error.category !== '' ? true : false}
-          helperText={error.category}
-          value={userInput.category}
-          onChange={handleInputCategory}
-        >
-          {optionCategory.map(item => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          label={isFocus.price ? 'Price' : ''}
-          placeholder={!userInput.price && 'Price'}
-          onFocus={() => setIsFocus(curr => ({ ...curr, price: true }))}
-          onBlur={() => setIsFocus(curr => ({ ...curr, price: false }))}
-          sx={textFieldStyle}
-          value={userInput.price}
-          error={error.price && error.price !== '' ? true : false}
-          helperText={error.price}
-          onChange={handleInputPrice}
-        />
-        <TextField
-          id="standard-multiline-static"
-          label={isFocus.externalLink ? 'External Link' : ''}
-          placeholder={!userInput.externalLink && 'Example : www.yourwebsite.com'}
-          onFocus={() => setIsFocus(curr => ({ ...curr, externalLink: true }))}
-          onBlur={() => setIsFocus(curr => ({ ...curr, externalLink: false }))}
-          multiline
-          sx={textFieldStyle}
-          value={userInput.externalLink}
-          error={error.externalLink && error.externalLink !== '' ? true : false}
-          helperText={error.externalLink}
-          onChange={handleInputExternalLink}
-        />
+				<TextField
+					id="outlined-select-currency"
+					select
+					label="Select category"
+					sx={textFieldStyle}
+					error={error.category && error.category !== "" ? true : false}
+					helperText={error.category}
+					value={userInput.category}
+					onChange={handleInputCategory}
+				>
+					{optionCategory.map((item) => (
+						<MenuItem key={item.id} value={item.id}>
+							{item.name}
+						</MenuItem>
+					))}
+				</TextField>
+				<TextField
+					label={isFocus.price ? "Price" : ""}
+					placeholder={!userInput.price && "Price"}
+					onFocus={() => setIsFocus((curr) => ({ ...curr, price: true }))}
+					onBlur={() => setIsFocus((curr) => ({ ...curr, price: false }))}
+					sx={textFieldStyle}
+					value={userInput.price}
+					error={error.price && error.price !== "" ? true : false}
+					helperText={error.price}
+					onChange={handleInputPrice}
+				/>
+				<TextField
+					id="standard-multiline-static"
+					label={isFocus.externalLink ? "External Link" : ""}
+					placeholder={!userInput.externalLink && "Example : www.yourwebsite.com"}
+					onFocus={() => setIsFocus((curr) => ({ ...curr, externalLink: true }))}
+					onBlur={() => setIsFocus((curr) => ({ ...curr, externalLink: false }))}
+					multiline
+					sx={textFieldStyle}
+					value={userInput.externalLink}
+					error={error.externalLink && error.externalLink !== "" ? true : false}
+					helperText={error.externalLink}
+					onChange={handleInputExternalLink}
+				/>
 
-        {inProgress ? (
-          <CircularProgress sx={{ color: 'text.primary' }} />
-        ) : (
-          <Button type="submit" variant="gradient" sx={{ color: 'white', p: '10px', width: { xs: '80%', sm: '70%' } }}>
-            Sale
-          </Button>
-        )}
-      </Box>
-    </Box>
-  );
+				{inProgress ? (
+					<CircularProgress sx={{ color: "text.primary" }} />
+				) : (
+					<Button
+						type="submit"
+						variant="gradient"
+						sx={{ color: "white", p: "10px", width: { xs: "80%", sm: "70%" } }}
+					>
+						Sale
+					</Button>
+				)}
+			</Box>
+		</Box>
+	);
 }
 
 export default CreateProductForm;

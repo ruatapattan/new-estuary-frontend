@@ -25,7 +25,9 @@ function PostCardBottom({ postItem }) {
   const [toggleEditComment, setToggleEditComment] = useState(false);
   const [toggleDeleteComment, setToggleDeleteComment] = useState(false);
   const [clickOpenComment, setClickOpenComment] = useState(false);
-  // const [toggleLikeComment, setToggleLikeComment] = useState(false);
+  const [toggleLikeComment, setToggleLikeComment] = useState(false);
+  const [likeListsComment, setLikeListsComment] = useState([]);
+  const [likeComment, setLikeComment] = useState([]);
 
   // แก้ path เขียน controller
 
@@ -46,19 +48,6 @@ function PostCardBottom({ postItem }) {
   // }, [toggleLike]);
 
   //  เช็คการไลค์
-  let isLiked = false; // เปิด ปิด icon Like
-  let filteredLikeList = []; // เก็บ
-  likeLists.forEach((item) => {
-    if (+item.postId === +postItem.id && +item.userId === +user.id) {
-      if (item.status) {
-        isLiked = true;
-      }
-      filteredLikeList.push(item);
-    }
-  });
-
-  // นับคนกด Like
-  const countLike = likeLists.filter((item) => item.status === true);
 
   // console.log(postItem);
 
@@ -79,10 +68,13 @@ function PostCardBottom({ postItem }) {
   // ============================================
 
   useEffect(() => {
+    // alert('1');
     const fetchComment = async () => {
       try {
         const res = await axios.get(`/comment/${postItem.id}`);
         setComment(res.data.comment);
+        // console.log('this is comment');
+        // console.log(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -92,6 +84,7 @@ function PostCardBottom({ postItem }) {
         .get(`/like/post/${postItem.id}`)
         .then((res) => {
           setLikeLists([...res.data.like]);
+          setLikeComment(comment.Likes);
         })
         .catch((err) => {
           console.dir(err);
@@ -112,18 +105,22 @@ function PostCardBottom({ postItem }) {
     // callLikeComment();
     fetchComment();
     callLike();
-  }, [toggleComment, toggleLike, toggleEditComment, toggleDeleteComment]);
+  }, [toggleComment, toggleLike, toggleEditComment, toggleDeleteComment, toggleLikeComment]);
+
+  // console.log(postItem);
+
+  console.log('**************99999');
+  console.log(comment);
+  // console.log('**************');
+
+  // console.log('#############');
+  // console.log(likeComment);
+  // console.log('#############');
 
   return (
     <>
       <Grid container sx={{ display: 'flex', justifyContent: 'space-evenly', mt: '10px', p: '16px' }}>
-        <PostCardBottomIconLike
-          postItem={postItem}
-          isLiked={isLiked}
-          countLike={countLike}
-          filteredLikeList={filteredLikeList}
-          setToggleLike={setToggleLike}
-        />
+        <PostCardBottomIconLike postItem={postItem} setToggleLike={setToggleLike} likeLists={likeLists} />
         <PostCardBottomIconComment comment={comment} setClickOpenComment={setClickOpenComment} />
         {/* <span onClick={() => setOpenDialog(true)}>
           <PostCardBottomIconLink />
@@ -146,11 +143,14 @@ function PostCardBottom({ postItem }) {
 
       {clickOpenComment ? (
         <MainComment
+          toggleComment={toggleComment}
           postItem={postItem}
           user={user}
           comment={comment}
           setToggleEditComment={setToggleEditComment}
           setToggleDeleteComment={setToggleDeleteComment}
+          likeListsComment={likeListsComment}
+          setToggleLikeComment={setToggleLikeComment}
         />
       ) : null}
     </>

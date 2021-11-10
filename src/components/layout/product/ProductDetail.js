@@ -167,7 +167,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           return res;
         })
         .then(res2 => {
-          alert('notify like');
+          // alert("notify like");
           //   console.log(res2);
           sendNotification(user.id, user.username, product.userId, 'liked', 'product', 'likeId', res2.data.likeId);
         });
@@ -256,6 +256,9 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
             aria-label="recipe"
             src={product?.User?.profilePic ? product?.User?.profilePic : ''}
             sx={{
+              '&:hover': {
+                cursor: 'pointer'
+              },
               width: '50px',
               height: '50px',
               mr: { md: '15px', xs: '20px' }

@@ -5,9 +5,6 @@ import Grid from '@mui/material/Grid';
 import PostCardItem from './PostCardItem';
 
 function PostCard({ postItem, setTogglePostEdit, setTogglePostDelete }) {
-  // console.log('**********************');
-  // console.log(postItem);
-
   return (
     <>
       <Grid container sx={{ mb: '20px' }}>

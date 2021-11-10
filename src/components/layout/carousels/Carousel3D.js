@@ -20,6 +20,22 @@ function Carousel3D({ trendingCreators }) {
 		nextArrow: <SampleNextArrow />,
 		prevArrow: <SamplePrevArrow />,
 		beforeChange: (cur, next) => setImgIdx(next),
+		responsive: [
+			// {
+			// 	breakpoint: 900,
+			// 	settings: {
+			// 		slidesToShow: slides > 1 ? slides - 1 : 1,
+			// 		slidesToScroll: slides > 1 ? slides - 1 : 1,
+			// 		// initialSlide: 2,
+			// 	},
+			// },
+			{
+				breakpoint: 480,
+				settings: {
+					slidesToShow: 1,
+				},
+			},
+		],
 	};
 	console.log(trendingCreators);
 
