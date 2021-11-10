@@ -252,6 +252,7 @@ function ProductDetail({ product, userDetail, purchasedLists, followingLists, li
           }}
         >
           <Avatar
+            onClick={() => history.push(`/profile/${product.User.id}`)}
             aria-label="recipe"
             src={product?.User?.profilePic ? product?.User?.profilePic : ''}
             sx={{
